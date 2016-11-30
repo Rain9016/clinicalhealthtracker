@@ -1,18 +1,17 @@
 //
-//  CustomTabBarController.swift
-//  app
+//  CustomBarController.swift
+//  workexperience
 //
-//  Created by untitled on 29/11/16.
+//  Created by untitled on 30/11/16.
 //  Copyright © 2016 untitled. All rights reserved.
 //
 
 import UIKit
 
 class CustomTabBarController: UITabBarController {
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
         let controller = HomeController() //references QuestionnaireQuestionsController.swift
         let navigationController = UINavigationController.init(rootViewController: controller)
         navigationController.title = "Home"

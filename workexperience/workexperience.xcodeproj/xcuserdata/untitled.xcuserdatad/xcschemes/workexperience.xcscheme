@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "C398DA241DECF67A004650A4"
-               BuildableName = "app.app"
-               BlueprintName = "app"
-               ReferencedContainer = "container:app.xcodeproj">
+               BlueprintIdentifier = "C34CEEBE1DEEA4C200F839D9"
+               BuildableName = "workexperience.app"
+               BlueprintName = "workexperience"
+               ReferencedContainer = "container:workexperience.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -32,10 +32,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "C398DA241DECF67A004650A4"
-            BuildableName = "app.app"
-            BlueprintName = "app"
-            ReferencedContainer = "container:app.xcodeproj">
+            BlueprintIdentifier = "C34CEEBE1DEEA4C200F839D9"
+            BuildableName = "workexperience.app"
+            BlueprintName = "workexperience"
+            ReferencedContainer = "container:workexperience.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -55,10 +55,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "C398DA241DECF67A004650A4"
-            BuildableName = "app.app"
-            BlueprintName = "app"
-            ReferencedContainer = "container:app.xcodeproj">
+            BlueprintIdentifier = "C34CEEBE1DEEA4C200F839D9"
+            BuildableName = "workexperience.app"
+            BlueprintName = "workexperience"
+            ReferencedContainer = "container:workexperience.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -74,10 +74,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "C398DA241DECF67A004650A4"
-            BuildableName = "app.app"
-            BlueprintName = "app"
-            ReferencedContainer = "container:app.xcodeproj">
+            BlueprintIdentifier = "C34CEEBE1DEEA4C200F839D9"
+            BuildableName = "workexperience.app"
+            BlueprintName = "workexperience"
+            ReferencedContainer = "container:workexperience.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

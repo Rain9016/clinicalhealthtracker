@@ -1,8 +1,8 @@
 //
-//  ViewController.swift
-//  app
+//  LoginController.swift
+//  workexperience
 //
-//  Created by Chris Hii on 29/11/16.
+//  Created by untitled on 30/11/16.
 //  Copyright © 2016 untitled. All rights reserved.
 //
 
@@ -103,5 +103,3 @@ extension UIViewController {
         view.endEditing(true)
     }
 }
-
-
