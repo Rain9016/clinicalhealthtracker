@@ -26,7 +26,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //  SET ROOT VIEW CONTROLLER  //
         ////////////////////////////////
         
-        window?.rootViewController = LoginController()
+        window?.rootViewController = CustomTabBarController()
         
         // Override point for customization after application launch.
         return true

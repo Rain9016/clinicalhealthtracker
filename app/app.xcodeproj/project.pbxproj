@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C34CEEAF1DED3B6500F839D9 /* QuestionnaireController1.swift in Sources */ = {isa = PBXBuildFile; fileRef = C34CEEAE1DED3B6500F839D9 /* QuestionnaireController1.swift */; };
+		C34CEEB11DED3CBE00F839D9 /* CustomTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C34CEEB01DED3CBE00F839D9 /* CustomTabBarController.swift */; };
+		C34CEEB31DED3FED00F839D9 /* HomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C34CEEB21DED3FED00F839D9 /* HomeController.swift */; };
 		C398DA291DECF67B004650A4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C398DA281DECF67B004650A4 /* AppDelegate.swift */; };
 		C398DA2B1DECF67B004650A4 /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C398DA2A1DECF67B004650A4 /* LoginController.swift */; };
 		C398DA301DECF67B004650A4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C398DA2F1DECF67B004650A4 /* Assets.xcassets */; };
@@ -14,6 +17,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C34CEEAE1DED3B6500F839D9 /* QuestionnaireController1.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuestionnaireController1.swift; sourceTree = "<group>"; };
+		C34CEEB01DED3CBE00F839D9 /* CustomTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomTabBarController.swift; sourceTree = "<group>"; };
+		C34CEEB21DED3FED00F839D9 /* HomeController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeController.swift; sourceTree = "<group>"; };
 		C398DA251DECF67B004650A4 /* app.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = app.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C398DA281DECF67B004650A4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C398DA2A1DECF67B004650A4 /* LoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
@@ -54,6 +60,9 @@
 			children = (
 				C398DA281DECF67B004650A4 /* AppDelegate.swift */,
 				C398DA2A1DECF67B004650A4 /* LoginController.swift */,
+				C34CEEAE1DED3B6500F839D9 /* QuestionnaireController1.swift */,
+				C34CEEB01DED3CBE00F839D9 /* CustomTabBarController.swift */,
+				C34CEEB21DED3FED00F839D9 /* HomeController.swift */,
 				C398DA2F1DECF67B004650A4 /* Assets.xcassets */,
 				C398DA311DECF67B004650A4 /* LaunchScreen.storyboard */,
 				C398DA341DECF67B004650A4 /* Info.plist */,
@@ -133,7 +142,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				C398DA2B1DECF67B004650A4 /* LoginController.swift in Sources */,
+				C34CEEAF1DED3B6500F839D9 /* QuestionnaireController1.swift in Sources */,
+				C34CEEB11DED3CBE00F839D9 /* CustomTabBarController.swift in Sources */,
 				C398DA291DECF67B004650A4 /* AppDelegate.swift in Sources */,
+				C34CEEB31DED3FED00F839D9 /* HomeController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
