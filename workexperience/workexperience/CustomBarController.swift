@@ -22,7 +22,7 @@ class CustomTabBarController: UITabBarController {
         navigationController2.title = "Questionnaires"
         navigationController2.tabBarItem.image = UIImage(named: "questionicon")
         
-        let walkTestController = UIViewController()
+        let walkTestController = WalkTestController()
         let navigationController3 = UINavigationController.init(rootViewController: walkTestController)
         navigationController3.title = "6MWT"
         navigationController3.tabBarItem.image = UIImage(named: "walkingicon")

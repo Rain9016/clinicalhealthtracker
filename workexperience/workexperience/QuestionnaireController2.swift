@@ -18,6 +18,8 @@ class QuestionnaireController2: UITableViewController {
     
     let answers = [["answer 1", "answer 2", "answer 3"], ["answer 4", "answer 5", "answer 6"], ["answer 7", "answer 8", "answer 9"], ["answer 10", "answer 11", "answer 12"]]
     
+    let questions = ["question 1", "question 2", "question 3", "question 4"]
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return answers[questionnaireNumber!].count
     }
@@ -26,6 +28,23 @@ class QuestionnaireController2: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         cell.textLabel?.text = questionnaires[questionnaireString!]?[questionNumber][indexPath.row]
         return cell
+    }
+
+    /*
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return questions[questionNumber]
+    }
+    */
+    
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let question = UILabel()
+        question.backgroundColor = UIColor.lightGray
+        question.text = questions[questionNumber]
+        //question.numberOfLines = 0
+        //question.lineBreakMode = .byWordWrapping
+        question.translatesAutoresizingMaskIntoConstraints = false
+        
+        return question
     }
     
     //when patient clicks on question, set answerSelected to true
@@ -47,13 +66,13 @@ class QuestionnaireController2: UITableViewController {
         return view
     }()
     
-    ////////////////////
-    //                //
-    //  BEGIN BUTTON  //
-    //                //
-    ////////////////////
+    ///////////////////
+    //               //
+    //  NEXT BUTTON  //
+    //               //
+    ///////////////////
     
-    let beginButton: UIButton = {
+    let nextButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Next", for: .normal)
         //button.backgroundColor = UIColor(r: 0, g: 122, b: 255)
@@ -62,11 +81,11 @@ class QuestionnaireController2: UITableViewController {
         return button
     }()
     
-    func setupBeginButton() {
-        beginButton.addTarget(self, action: #selector(handleBegin), for: UIControlEvents.touchUpInside)
+    func setupNextButton() {
+        nextButton.addTarget(self, action: #selector(handleNext), for: UIControlEvents.touchUpInside)
     }
     
-    func handleBegin(Sender: UIButton!) {
+    func handleNext(Sender: UIButton!) {
         if (questionNumber < (questionnaires[questionnaireString!]?.count)!-1 && answerSelected) {
             questionNumber = questionNumber + 1
             answerSelected = !answerSelected
@@ -80,6 +99,12 @@ class QuestionnaireController2: UITableViewController {
         
         view.backgroundColor = UIColor.white
         navigationItem.title = "Questions"
+        tableView.estimatedRowHeight = 1000 //must be provided for tableView.rowHeight to work. 100 is an arbitrary value
+        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.estimatedSectionHeaderHeight = 300
+        tableView.sectionHeaderHeight = UITableViewAutomaticDimension
+        
+        tableView.alwaysBounceVertical = false
         
         //this enables button animations, I don't know why.
         tableView.delaysContentTouches = false
@@ -88,8 +113,8 @@ class QuestionnaireController2: UITableViewController {
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         
         //set up begin button.
-        childView.addSubview(beginButton)
-        setupBeginButton()
+        childView.addSubview(nextButton)
+        setupNextButton()
         
         //add childView to tableView footer.
         tableView.tableFooterView = childView
