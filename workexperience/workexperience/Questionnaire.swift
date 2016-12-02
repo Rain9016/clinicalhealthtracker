@@ -9,5 +9,12 @@
 import Foundation
 
 class Questionnaire {
-    
+    var name: String?
+    var questions = [Questions]()
+}
+
+class Questions {
+    var type: String?
+    var question: String?
+    var answers = [String]()
 }

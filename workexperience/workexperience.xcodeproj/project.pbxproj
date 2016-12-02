@@ -16,7 +16,7 @@
 		C34CEEDB1DEEA5A200F839D9 /* QuestionnaireController1.swift in Sources */ = {isa = PBXBuildFile; fileRef = C34CEEDA1DEEA5A200F839D9 /* QuestionnaireController1.swift */; };
 		C34CEEDD1DEEA5BD00F839D9 /* QuestionnaireController2.swift in Sources */ = {isa = PBXBuildFile; fileRef = C34CEEDC1DEEA5BD00F839D9 /* QuestionnaireController2.swift */; };
 		C34CEEDF1DEEA5D600F839D9 /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C34CEEDE1DEEA5D600F839D9 /* LoginController.swift */; };
-		C34CEEE11DEF956200F839D9 /* TextFieldTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C34CEEE01DEF956200F839D9 /* TextFieldTableViewCell.swift */; };
+		C34CEEE11DEF956200F839D9 /* CustomTableViewCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = C34CEEE01DEF956200F839D9 /* CustomTableViewCells.swift */; };
 		C34CEEE31DEF96B900F839D9 /* WalkTestController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C34CEEE21DEF96B900F839D9 /* WalkTestController.swift */; };
 		C34CEEE51DEFD44900F839D9 /* Questionnaire.swift in Sources */ = {isa = PBXBuildFile; fileRef = C34CEEE41DEFD44900F839D9 /* Questionnaire.swift */; };
 /* End PBXBuildFile section */
@@ -33,7 +33,7 @@
 		C34CEEDA1DEEA5A200F839D9 /* QuestionnaireController1.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuestionnaireController1.swift; sourceTree = "<group>"; };
 		C34CEEDC1DEEA5BD00F839D9 /* QuestionnaireController2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuestionnaireController2.swift; sourceTree = "<group>"; };
 		C34CEEDE1DEEA5D600F839D9 /* LoginController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
-		C34CEEE01DEF956200F839D9 /* TextFieldTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextFieldTableViewCell.swift; sourceTree = "<group>"; };
+		C34CEEE01DEF956200F839D9 /* CustomTableViewCells.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomTableViewCells.swift; sourceTree = "<group>"; };
 		C34CEEE21DEF96B900F839D9 /* WalkTestController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WalkTestController.swift; sourceTree = "<group>"; };
 		C34CEEE41DEFD44900F839D9 /* Questionnaire.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Questionnaire.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -76,11 +76,11 @@
 				C34CEEDC1DEEA5BD00F839D9 /* QuestionnaireController2.swift */,
 				C34CEEE41DEFD44900F839D9 /* Questionnaire.swift */,
 				C34CEEE21DEF96B900F839D9 /* WalkTestController.swift */,
+				C34CEEE01DEF956200F839D9 /* CustomTableViewCells.swift */,
 				C34CEEC61DEEA4C200F839D9 /* Main.storyboard */,
 				C34CEEC91DEEA4C200F839D9 /* Assets.xcassets */,
 				C34CEECB1DEEA4C200F839D9 /* LaunchScreen.storyboard */,
 				C34CEECE1DEEA4C200F839D9 /* Info.plist */,
-				C34CEEE01DEF956200F839D9 /* TextFieldTableViewCell.swift */,
 			);
 			path = workexperience;
 			sourceTree = "<group>";
@@ -159,7 +159,7 @@
 			files = (
 				C34CEED91DEEA58B00F839D9 /* CustomBarController.swift in Sources */,
 				C34CEEDF1DEEA5D600F839D9 /* LoginController.swift in Sources */,
-				C34CEEE11DEF956200F839D9 /* TextFieldTableViewCell.swift in Sources */,
+				C34CEEE11DEF956200F839D9 /* CustomTableViewCells.swift in Sources */,
 				C34CEEDB1DEEA5A200F839D9 /* QuestionnaireController1.swift in Sources */,
 				C34CEEC31DEEA4C200F839D9 /* AppDelegate.swift in Sources */,
 				C34CEED71DEEA54A00F839D9 /* HomeController.swift in Sources */,

@@ -9,47 +9,58 @@
 import UIKit
 
 class QuestionnaireController2: UITableViewController {
-    
+    var questionnaire = Questionnaire()
     var questionnaireString: String?
     var questionnaireNumber: Int?
-    var questionnaires = [String: [[String]]]()
-    var questionNumber = 0
-    var answerSelected = false
-    
-    let answers = [["answer 1", "answer 2", "answer 3"], ["answer 4", "answer 5", "answer 6"], ["answer 7", "answer 8", "answer 9"], ["answer 10", "answer 11", "answer 12"]]
-    
-    let questions = ["question 1", "question 2", "question 3", "question 4"]
+    var currentQuestion = 0
+    var isAnswerSelected = false
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return answers[questionnaireNumber!].count
+        if questionnaire.questions[currentQuestion].answers.count > 0 {
+            return questionnaire.questions[currentQuestion].answers.count
+        } else {
+            return 1
+        }
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.textLabel?.text = questionnaires[questionnaireString!]?[questionNumber][indexPath.row]
-        return cell
+        //if question type is "slider"
+        if (questionnaire.questions[currentQuestion].type == "slider") {
+            let cell: SliderTableViewCell = self.tableView.dequeueReusableCell(withIdentifier: "sliderCell") as! SliderTableViewCell
+            cell.selectionStyle = UITableViewCellSelectionStyle.none
+            //cell.userInteractionEnabled = false
+            cell.add()
+            return cell
+        } else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+            cell.textLabel?.text = questionnaire.questions[currentQuestion].answers[indexPath.row]
+            cell.textLabel?.numberOfLines = 0;
+            cell.textLabel?.lineBreakMode = .byWordWrapping
+            return cell
+        }
     }
-
-    /*
-    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return questions[questionNumber]
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if (questionnaire.questions[currentQuestion].type == "slider") {
+            return 100
+        } else {
+            return tableView.rowHeight
+        }
     }
-    */
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let question = UILabel()
+        let question = CustomLabel()
         question.backgroundColor = UIColor.lightGray
-        question.text = questions[questionNumber]
-        //question.numberOfLines = 0
-        //question.lineBreakMode = .byWordWrapping
-        question.translatesAutoresizingMaskIntoConstraints = false
+        question.text = questionnaire.questions[currentQuestion].question
+        question.numberOfLines = 0
+        question.lineBreakMode = .byWordWrapping
         
         return question
     }
     
     //when patient clicks on question, set answerSelected to true
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        answerSelected = true
+        isAnswerSelected = true
     }
     
     ////////////////////////////////
@@ -86,31 +97,32 @@ class QuestionnaireController2: UITableViewController {
     }
     
     func handleNext(Sender: UIButton!) {
-        if (questionNumber < (questionnaires[questionnaireString!]?.count)!-1 && answerSelected) {
-            questionNumber = questionNumber + 1
-            answerSelected = !answerSelected
+        if (currentQuestion < questionnaire.questions.count - 1 && isAnswerSelected) {
+            currentQuestion = currentQuestion + 1
+            isAnswerSelected = !isAnswerSelected
             self.tableView.reloadData()
         }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        questionnaires[questionnaireString!] = [["answer 1", "answer 2", "answer 3"], ["answer 4", "answer 5", "answer 6"], ["answer 7", "answer 8", "answer 9"], ["answer 10", "answer 11", "answer 12"]]
-        
         view.backgroundColor = UIColor.white
         navigationItem.title = "Questions"
         tableView.estimatedRowHeight = 1000 //must be provided for tableView.rowHeight to work. 100 is an arbitrary value
         tableView.rowHeight = UITableViewAutomaticDimension
-        tableView.estimatedSectionHeaderHeight = 300
         tableView.sectionHeaderHeight = UITableViewAutomaticDimension
+        tableView.estimatedSectionHeaderHeight = 1000
         
+        //disable scrolling when content height is less than page height.
         tableView.alwaysBounceVertical = false
         
         //this enables button animations, I don't know why.
         tableView.delaysContentTouches = false
         
         //register table cell for reuse?
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        self.tableView.register(TextFieldTableViewCell.self, forCellReuseIdentifier: "textFieldCell")
+        self.tableView.register(SliderTableViewCell.self, forCellReuseIdentifier: "sliderCell")
         
         //set up begin button.
         childView.addSubview(nextButton)
@@ -118,8 +130,19 @@ class QuestionnaireController2: UITableViewController {
         
         //add childView to tableView footer.
         tableView.tableFooterView = childView
+    }
+}
+
+class CustomLabel: UILabel {
+    
+    var topInset: CGFloat = 0
+    var bottomInset: CGFloat = 0
+    var leftInset: CGFloat = 12
+    var rightInset: CGFloat = 12
+    
+    override func drawText(in rect: CGRect) {
+        let insets = UIEdgeInsets(top: topInset, left: leftInset, bottom: bottomInset, right: rightInset)
         
-        print(questionnaireString!)
-        print(questionnaireNumber!)
+        super.drawText(in: UIEdgeInsetsInsetRect(rect, insets))
     }
 }
