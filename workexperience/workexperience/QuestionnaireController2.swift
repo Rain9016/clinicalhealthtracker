@@ -13,7 +13,6 @@ class QuestionnaireController2: UITableViewController {
     var questionnaireString: String?
     var questionnaireNumber: Int?
     var currentQuestion = 0
-    var isAnswerSelected = false
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if questionnaire.questions[currentQuestion].answers.count > 0 {
@@ -29,7 +28,7 @@ class QuestionnaireController2: UITableViewController {
             let cell: SliderTableViewCell = self.tableView.dequeueReusableCell(withIdentifier: "sliderCell") as! SliderTableViewCell
             cell.selectionStyle = UITableViewCellSelectionStyle.none
             //cell.userInteractionEnabled = false
-            cell.add()
+            cell.add(title: "Health rating: ", minValue: 0, maxValue: 100)
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
@@ -50,17 +49,19 @@ class QuestionnaireController2: UITableViewController {
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let question = CustomLabel()
-        question.backgroundColor = UIColor.lightGray
+        question.backgroundColor = UIColor.white
         question.text = questionnaire.questions[currentQuestion].question
         question.numberOfLines = 0
         question.lineBreakMode = .byWordWrapping
+        question.font = UIFont.boldSystemFont(ofSize: 16.0)
         
         return question
     }
     
     //when patient clicks on question, set answerSelected to true
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        isAnswerSelected = true
+        nextButton.isEnabled = true
+        nextButton.alpha = 1;
     }
     
     ////////////////////////////////
@@ -84,11 +85,13 @@ class QuestionnaireController2: UITableViewController {
     ///////////////////
     
     let nextButton: UIButton = {
-        let button = UIButton(type: .system)
+        let button = UIButton(type: .custom)
         button.setTitle("Next", for: .normal)
-        //button.backgroundColor = UIColor(r: 0, g: 122, b: 255)
+        button.backgroundColor = UIColor(r: 0, g: 122, b: 255)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16.0)
         button.frame = CGRect(x: UIScreen.main.bounds.width-80, y: 0, width: 60, height: 40)
+        button.isEnabled = false
+        button.alpha = 0.5;
         return button
     }()
     
@@ -97,9 +100,10 @@ class QuestionnaireController2: UITableViewController {
     }
     
     func handleNext(Sender: UIButton!) {
-        if (currentQuestion < questionnaire.questions.count - 1 && isAnswerSelected) {
+        if (currentQuestion < questionnaire.questions.count - 1) {
             currentQuestion = currentQuestion + 1
-            isAnswerSelected = !isAnswerSelected
+            nextButton.isEnabled = false
+            nextButton.alpha = 0.5;
             self.tableView.reloadData()
         }
     }
@@ -107,7 +111,7 @@ class QuestionnaireController2: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.white
-        navigationItem.title = "Questions"
+        navigationItem.title = questionnaire.name
         tableView.estimatedRowHeight = 1000 //must be provided for tableView.rowHeight to work. 100 is an arbitrary value
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.sectionHeaderHeight = UITableViewAutomaticDimension
@@ -134,11 +138,11 @@ class QuestionnaireController2: UITableViewController {
 }
 
 class CustomLabel: UILabel {
-    
+    //put padding on the left and right sides of the label in the navigation header (top and bottom padding doesn't seem to work)
     var topInset: CGFloat = 0
     var bottomInset: CGFloat = 0
-    var leftInset: CGFloat = 12
-    var rightInset: CGFloat = 12
+    var leftInset: CGFloat = 15
+    var rightInset: CGFloat = 15
     
     override func drawText(in rect: CGRect) {
         let insets = UIEdgeInsets(top: topInset, left: leftInset, bottom: bottomInset, right: rightInset)

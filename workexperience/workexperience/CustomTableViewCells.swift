@@ -43,9 +43,10 @@ class TextFieldTableViewCell: UITableViewCell {
 }
 
 class SliderTableViewCell: UITableViewCell {
+    var title: String = "Slider value: "
+    
     let myLabel: UILabel = {
         let lbl = UILabel()
-        lbl.text = "Health rating: 50"
         lbl.sizeToFit()
         
         lbl.translatesAutoresizingMaskIntoConstraints = false
@@ -54,18 +55,20 @@ class SliderTableViewCell: UITableViewCell {
     
     let mySlider: UISlider = {
         let slider = UISlider()
-        slider.tag = 1
-        slider.minimumValue = 0
-        slider.maximumValue = 100
-        slider.isContinuous = true
-        //slider.tintColor = UIColor.red
-        slider.value = 50
+        slider.tag = 2
         
         slider.translatesAutoresizingMaskIntoConstraints = false
         return slider
     }()
     
-    public func add() {
+    public func add(title: String, minValue: Int, maxValue: Int) {
+        mySlider.minimumValue = Float(minValue)
+        mySlider.maximumValue = Float(maxValue)
+        mySlider.value = Float((minValue+maxValue)/2)
+        
+        self.title = title
+        myLabel.text = self.title + String(Int(mySlider.value))
+        
         self.addSubview(myLabel)
         
         myLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
@@ -73,7 +76,7 @@ class SliderTableViewCell: UITableViewCell {
 
         self.addSubview(mySlider)
         
-        mySlider.addTarget(self, action: #selector(handleSlider), for: UIControlEvents.touchUpInside)
+        mySlider.addTarget(self, action: #selector(handleSlider), for: UIControlEvents.valueChanged)
         
         //need x, y, width, height contraints
         mySlider.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
@@ -82,7 +85,7 @@ class SliderTableViewCell: UITableViewCell {
     }
     
     func handleSlider(sender: UISlider) {
-        myLabel.text = "Health rating: " + String(Int(sender.value))
+        myLabel.text = title + String(Int(mySlider.value))
     }
     
     override func awakeFromNib() {
