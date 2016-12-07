@@ -27,7 +27,12 @@ class CustomTabBarController: UITabBarController {
         navigationController3.title = "6MWT"
         navigationController3.tabBarItem.image = UIImage(named: "walkingicon")
         
+        let sixMinuteWalkTestController = SixMinuteWalkTestController()
+        let navigationController4 = UINavigationController.init(rootViewController: sixMinuteWalkTestController)
+        navigationController4.title = "6MWT"
+        navigationController4.tabBarItem.image = UIImage(named: "walkingicon")
         
-        viewControllers = [navigationController, navigationController2, navigationController3]
+        
+        viewControllers = [navigationController, navigationController2, navigationController3, navigationController4]
     }
 }
