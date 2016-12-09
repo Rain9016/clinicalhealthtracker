@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C311066D1DF4E37C00D48134 /* SixMinuteWalkTestController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C311066C1DF4E37C00D48134 /* SixMinuteWalkTestController.swift */; };
 		C34CEEC31DEEA4C200F839D9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C34CEEC21DEEA4C200F839D9 /* AppDelegate.swift */; };
 		C34CEEC81DEEA4C200F839D9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C34CEEC61DEEA4C200F839D9 /* Main.storyboard */; };
 		C34CEECA1DEEA4C200F839D9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C34CEEC91DEEA4C200F839D9 /* Assets.xcassets */; };
@@ -22,6 +23,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C311066C1DF4E37C00D48134 /* SixMinuteWalkTestController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SixMinuteWalkTestController.swift; sourceTree = "<group>"; };
 		C34CEEBF1DEEA4C200F839D9 /* workexperience.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = workexperience.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C34CEEC21DEEA4C200F839D9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C34CEEC71DEEA4C200F839D9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -76,6 +78,7 @@
 				C34CEEDC1DEEA5BD00F839D9 /* QuestionnaireController2.swift */,
 				C34CEEE41DEFD44900F839D9 /* Questionnaire.swift */,
 				C34CEEE21DEF96B900F839D9 /* WalkTestController.swift */,
+				C311066C1DF4E37C00D48134 /* SixMinuteWalkTestController.swift */,
 				C34CEEE01DEF956200F839D9 /* CustomTableViewCells.swift */,
 				C34CEEC61DEEA4C200F839D9 /* Main.storyboard */,
 				C34CEEC91DEEA4C200F839D9 /* Assets.xcassets */,
@@ -158,6 +161,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C34CEED91DEEA58B00F839D9 /* CustomBarController.swift in Sources */,
+				C311066D1DF4E37C00D48134 /* SixMinuteWalkTestController.swift in Sources */,
 				C34CEEDF1DEEA5D600F839D9 /* LoginController.swift in Sources */,
 				C34CEEE11DEF956200F839D9 /* CustomTableViewCells.swift in Sources */,
 				C34CEEDB1DEEA5A200F839D9 /* QuestionnaireController1.swift in Sources */,
