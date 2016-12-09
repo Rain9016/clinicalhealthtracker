@@ -9,27 +9,76 @@
 import UIKit
 
 class SixMinuteWalkTestController: UIViewController {
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        view.backgroundColor = UIColor.white
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    var timeRemaining: UILabel = {
+        let label = UILabel()
+        label.text = "06:00"
+        label.font = UIFont.systemFont(ofSize: 90)
+        label.textColor = UIColor.black
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    func setupTimeRemaining() {
+        timeRemaining.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        timeRemaining.topAnchor.constraint(equalTo: view.topAnchor, constant: 150).isActive = true
+        //timeRemaining.widthAnchor.constraint(equalToConstant: 30).isActive = true
+        //timeRemaining.heightAnchor.constraint(equalToConstant: 30).isActive = true
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    var startButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Start", for: .normal)
+        //button.backgroundColor = UIColor(r: 0, g: 122, b: 255)
+        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 40.0)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
+    func setupStartButton() {
+        startButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        startButton.topAnchor.constraint(equalTo: timeRemaining.bottomAnchor, constant: 20).isActive = true
+        startButton.widthAnchor.constraint(equalToConstant: 200)
+        startButton.heightAnchor.constraint(equalToConstant: 200)
     }
-    */
-
+    
+    var stopButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Stop", for: .normal)
+        //button.backgroundColor = UIColor(r: 0, g: 122, b: 255)
+        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 40.0)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.isEnabled = false
+        button.alpha = 0.5
+        return button
+    }()
+    
+    func setupStopButton() {
+        stopButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        stopButton.topAnchor.constraint(equalTo: startButton.bottomAnchor, constant: 10).isActive = true
+    }
+    
+    func secondsToMinutesSeconds(seconds: Int) -> (Int, Int) {
+        return ((seconds % 3600) / 60, (seconds % 3600) % 60)
+        
+        //let (h, m, s) = secondsToHoursMinutesSeconds (seconds)
+        //print ("\(h) Hours, \(m) Minutes, \(s) Seconds")
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        //setup table view
+        navigationItem.title = "6MWT"
+        //view.delaysContentTouches = false //this enables button animations, I don't know why.
+        
+        view.backgroundColor = UIColor.white
+        
+        //setup views
+        view.addSubview(timeRemaining)
+        setupTimeRemaining()
+        view.addSubview(startButton)
+        setupStartButton()
+        view.addSubview(stopButton)
+        setupStopButton()
+    }
 }
