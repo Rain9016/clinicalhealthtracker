@@ -7,11 +7,18 @@
 //
 
 import UIKit
+import CoreMotion
 
 class SixMinuteWalkTestController: UIViewController {
+    let activityManager = CMMotionActivityManager()
+    let pedometer = CMPedometer()
+    
     var timeRemaining = 0
     var timer = Timer()
     var timerTwo = Timer()
+    var steps = 0
+    var laps = 0
+    var distance = 0
     
     var timeRemainingLabel: UILabel = {
         let label = UILabel()
@@ -24,13 +31,54 @@ class SixMinuteWalkTestController: UIViewController {
     
     func setupTimeRemainingLabel() {
         timeRemainingLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        timeRemainingLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 150).isActive = true
+        timeRemainingLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 120).isActive = true
+    }
+    
+    var stepsLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Steps: 0"
+        label.font = UIFont.systemFont(ofSize: 16)
+        label.textColor = UIColor.black
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    func setupStepsLabel() {
+        stepsLabel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 60).isActive = true
+        stepsLabel.topAnchor.constraint(equalTo: timeRemainingLabel.bottomAnchor, constant: 20).isActive = true
+    }
+    
+    var lapsLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Laps: 0"
+        label.font = UIFont.systemFont(ofSize: 16)
+        label.textColor = UIColor.black
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    func setupLapsLabel() {
+        lapsLabel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 60).isActive = true
+        lapsLabel.topAnchor.constraint(equalTo: stepsLabel.bottomAnchor).isActive = true
+    }
+    
+    var distanceLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Distance: 0"
+        label.font = UIFont.systemFont(ofSize: 16)
+        label.textColor = UIColor.black
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    func setupDistanceLabel() {
+        distanceLabel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 60).isActive = true
+        distanceLabel.topAnchor.constraint(equalTo: lapsLabel.bottomAnchor).isActive = true
     }
     
     var startButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Start", for: .normal)
-        //button.backgroundColor = UIColor(r: 0, g: 122, b: 255)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 40.0)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -38,7 +86,8 @@ class SixMinuteWalkTestController: UIViewController {
     
     func setupStartButton() {
         startButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        startButton.topAnchor.constraint(equalTo: timeRemainingLabel.bottomAnchor, constant: 20).isActive = true
+        startButton.topAnchor.constraint(equalTo: distanceLabel.bottomAnchor, constant: 20).isActive = true
+        //startButton.topAnchor.constraint(equalTo: timeRemainingLabel.bottomAnchor, constant: 20).isActive = true
         
         startButton.addTarget(self, action: #selector(handleStart), for: UIControlEvents.touchUpInside)
     }
@@ -65,7 +114,6 @@ class SixMinuteWalkTestController: UIViewController {
     var stopButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Stop", for: .normal)
-        //button.backgroundColor = UIColor(r: 0, g: 122, b: 255)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 40.0)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -75,7 +123,7 @@ class SixMinuteWalkTestController: UIViewController {
     
     func setupStopButton() {
         stopButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        stopButton.topAnchor.constraint(equalTo: startButton.bottomAnchor, constant: 10).isActive = true
+        stopButton.topAnchor.constraint(equalTo: startButton.bottomAnchor).isActive = true
         
         stopButton.addTarget(self, action: #selector(handleStop), for: UIControlEvents.touchUpInside)
     }
@@ -126,6 +174,12 @@ class SixMinuteWalkTestController: UIViewController {
         //setup views
         view.addSubview(timeRemainingLabel)
         setupTimeRemainingLabel()
+        view.addSubview(stepsLabel)
+        setupStepsLabel()
+        view.addSubview(lapsLabel)
+        setupLapsLabel()
+        view.addSubview(distanceLabel)
+        setupDistanceLabel()
         view.addSubview(startButton)
         setupStartButton()
         view.addSubview(stopButton)
