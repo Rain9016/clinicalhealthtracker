@@ -10,6 +10,7 @@ import UIKit
 import CoreMotion
 
 class SixMinuteWalkTestController: UIViewController {
+    //To use the iphone's pedometer, you must edit the Info.plist file, and add "Privacy - Motion Usage Description" as a key, String as a type, and the message you want to show your user as a value.
     let activityManager = CMMotionActivityManager()
     let pedometer = CMPedometer()
     
@@ -22,7 +23,6 @@ class SixMinuteWalkTestController: UIViewController {
     
     var timeRemainingLabel: UILabel = {
         let label = UILabel()
-        label.text = "00:00"
         label.font = UIFont.systemFont(ofSize: 90)
         label.textColor = UIColor.black
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -34,9 +34,20 @@ class SixMinuteWalkTestController: UIViewController {
         timeRemainingLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 120).isActive = true
     }
     
+    func setTimeRemainingLabel(timeRemaining: Int) {
+        self.timeRemaining = timeRemaining
+        let (m, s) = secondsToMinutesSeconds(seconds: timeRemaining)
+        timeRemainingLabel.text = "\(timeText(m)):\(timeText(s))"
+    }
+    
+    ////////////////////////////////////
+    //                                //
+    //  STEPS, LAPS, DISTANCE LABELS  //
+    //                                //
+    ////////////////////////////////////
+    
     var stepsLabel: UILabel = {
         let label = UILabel()
-        label.text = "Steps: 0"
         label.font = UIFont.systemFont(ofSize: 16)
         label.textColor = UIColor.black
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -46,6 +57,10 @@ class SixMinuteWalkTestController: UIViewController {
     func setupStepsLabel() {
         stepsLabel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 60).isActive = true
         stepsLabel.topAnchor.constraint(equalTo: timeRemainingLabel.bottomAnchor, constant: 20).isActive = true
+    }
+    
+    func setStepsLabel(numberOfSteps: Int) {
+        stepsLabel.text = "Steps: \(numberOfSteps)"
     }
     
     var lapsLabel: UILabel = {
@@ -76,6 +91,12 @@ class SixMinuteWalkTestController: UIViewController {
         distanceLabel.topAnchor.constraint(equalTo: lapsLabel.bottomAnchor).isActive = true
     }
     
+    //////////////////////////////
+    //                          //
+    //  START AND STOP BUTTONS  //
+    //                          //
+    //////////////////////////////
+    
     var startButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Start", for: .normal)
@@ -95,20 +116,13 @@ class SixMinuteWalkTestController: UIViewController {
     func handleStart() {
         timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(countdown), userInfo: nil, repeats: true)
         
+        let currentTime = getCurrentLocalDate()
+        countSteps(time: currentTime)
+        
         startButton.isEnabled = false
         startButton.alpha = 0.5
         stopButton.isEnabled = true
         stopButton.alpha = 1
-    }
-    
-    func countdown() {
-        timeRemaining = timeRemaining - 1
-        let (m, s) = secondsToMinutesSeconds(seconds: timeRemaining)
-        timeRemainingLabel.text = "\(timeText(m)):\(timeText(s))"
-        
-        if (timeRemaining == 0) {
-            timer.invalidate()
-        }
     }
     
     var stopButton: UIButton = {
@@ -129,6 +143,7 @@ class SixMinuteWalkTestController: UIViewController {
     }
     
     func handleStop() {
+        pedometer.stopUpdates()
         timer.invalidate()
         reset()
         
@@ -137,19 +152,62 @@ class SixMinuteWalkTestController: UIViewController {
     }
     
     func reset() {
-        timeRemaining = 30
-        let (m, s) = secondsToMinutesSeconds(seconds: timeRemaining)
-        timeRemainingLabel.text = "\(timeText(m)):\(timeText(s))"
+        setTimeRemainingLabel(timeRemaining: 30)
+        setStepsLabel(numberOfSteps: 0)
         
         stopButton.isEnabled = false
         stopButton.alpha = 0.5
     }
     
-    //////////////////////////////////////
-    //                                  //
-    //  SECONDS TO MINUTES AND SECONDS  //
-    //                                  //
-    //////////////////////////////////////
+    ///////////////////////////////////
+    //                               //
+    //  PEDOMETER RELATED FUNCTIONS  //
+    //                               //
+    ///////////////////////////////////
+    
+    func countSteps(time: Date) {
+        if(CMPedometer.isStepCountingAvailable()){
+            pedometer.startUpdates(from: time) { (data: CMPedometerData?, error) -> Void in
+                DispatchQueue.main.async(execute: { () -> Void in
+                    if(error == nil){
+                        print("\(data!.numberOfSteps)")
+                        self.steps = Int(data!.numberOfSteps)
+                        self.setStepsLabel(numberOfSteps: Int(data!.numberOfSteps))
+                    } else {
+                        //could not start counting steps
+                    }
+                })
+            }
+        }
+    }
+    
+    ///////////////////////////////
+    //                           //
+    //  TIMER RELATED FUNCTIONS  //
+    //                           //
+    ///////////////////////////////
+    
+    func getCurrentLocalDate() -> Date {
+        let date = Date()
+        //let calendar = Calendar.current
+        
+        //let hour = calendar.component(.hour, from: date)
+        //let minute = calendar.component(.minute, from: date)
+        //let second = calendar.component(.second, from: date)
+        
+        return date
+    }
+    
+    func countdown() {
+        timeRemaining = timeRemaining - 1
+        let (m, s) = secondsToMinutesSeconds(seconds: timeRemaining)
+        timeRemainingLabel.text = "\(timeText(m)):\(timeText(s))"
+        
+        if (timeRemaining == 0) {
+            pedometer.stopUpdates()
+            timer.invalidate()
+        }
+    }
     
     func secondsToMinutesSeconds(seconds: Int) -> (Int, Int) {
         return ((seconds % 3600) / 60, (seconds % 3600) % 60)
@@ -158,6 +216,13 @@ class SixMinuteWalkTestController: UIViewController {
     func timeText(_ s: Int) -> String {
         return s < 10 ? "0\(s)" : "\(s)"
     }
+    
+    
+    ////////////////////
+    //                //
+    //  MAIN PROGRAM  //
+    //                //
+    ////////////////////
     
     override func viewDidLoad() {
         super.viewDidLoad()
