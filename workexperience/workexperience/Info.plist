@@ -39,5 +39,7 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSMotionUsageDescription</key>
+	<string>The &quot;six minute walk test&quot; requires use of your iPhone&apos;s pedometer data. Allow?</string>
 </dict>
 </plist>
