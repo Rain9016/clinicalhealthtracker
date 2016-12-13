@@ -9,6 +9,7 @@
 import UIKit
 import CoreMotion
 import CoreLocation
+import AVFoundation
 
 class SixMinuteWalkTestController: UIViewController, CLLocationManagerDelegate {
     //To use the iphone's pedometer, you must edit the Info.plist file, and add "Privacy - Motion Usage Description" as a key, String as a type, and the message you want to show your user as a value.
@@ -17,8 +18,11 @@ class SixMinuteWalkTestController: UIViewController, CLLocationManagerDelegate {
     var locationManager: CLLocationManager!
     
     var hasStarted = false
+    var steps = 0
+    var laps = 0
+    var distance = 0
     
-    //start heading variables
+    //heading variables
     let headingThreshold = 10
     var startHeading = 0
     var startHeadingMin = 0
@@ -27,14 +31,14 @@ class SixMinuteWalkTestController: UIViewController, CLLocationManagerDelegate {
     var returnHeadingMin = 0
     var returnHeadingMax = 0
     var currentHeading = 0
-    //end heading variables.
     
+    //timer variables
     var timeRemaining = 0
     var timer = Timer()
-    var timerTwo = Timer()
-    var steps = 0
-    var laps = 0
-    var distance = 0
+    
+    //audio variables
+    var audioPlayer = AVAudioPlayer()
+    var audioPath = ""
     
     var timeRemainingLabel: UILabel = {
         let label = UILabel()
@@ -92,6 +96,10 @@ class SixMinuteWalkTestController: UIViewController, CLLocationManagerDelegate {
         lapsLabel.topAnchor.constraint(equalTo: stepsLabel.bottomAnchor).isActive = true
     }
     
+    func setLapsLabel(numberOfLaps: Int) {
+        lapsLabel.text = "Steps: \(numberOfLaps)"
+    }
+    
     var distanceLabel: UILabel = {
         let label = UILabel()
         label.text = "Distance: 0"
@@ -129,12 +137,17 @@ class SixMinuteWalkTestController: UIViewController, CLLocationManagerDelegate {
     }
     
     func handleStart() {
-        setupHeadings()
+        locationManager.startUpdatingHeading()
+        
+        playAudio(name: "6MWT-intro")
+        while (audioPlayer.isPlaying) {}
+        playAudio(name: "6MWT-countdown-start")
+        while (audioPlayer.isPlaying) {}
 
         timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(countdown), userInfo: nil, repeats: true)
         
         let currentTime = getCurrentLocalDate()
-        countSteps(time: currentTime)
+        countSteps(from: currentTime)
         
         startButton.isEnabled = false
         startButton.alpha = 0.5
@@ -170,8 +183,15 @@ class SixMinuteWalkTestController: UIViewController, CLLocationManagerDelegate {
     }
     
     func reset() {
-        setTimeRemainingLabel(timeRemaining: 30)
-        setStepsLabel(numberOfSteps: 0)
+        hasStarted = false
+        steps = 0
+        laps = 0
+        distance = 0
+        timeRemaining = 30
+        
+        setTimeRemainingLabel(timeRemaining: timeRemaining)
+        setStepsLabel(numberOfSteps: steps)
+        setLapsLabel(numberOfLaps: laps)
         
         stopButton.isEnabled = false
         stopButton.alpha = 0.5
@@ -226,14 +246,12 @@ class SixMinuteWalkTestController: UIViewController, CLLocationManagerDelegate {
         if (returnHeadingMax > 360) {
             returnHeadingMax -= 360
         }
-        
-        hasStarted = true
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
         currentHeading = Int(newHeading.magneticHeading)
         //currentHeadingLabel.text = "Current heading: \(currentHeading)"
-        print(currentHeading)
+        //print(currentHeading)
     }
     
     ///////////////////////////////////
@@ -242,9 +260,9 @@ class SixMinuteWalkTestController: UIViewController, CLLocationManagerDelegate {
     //                               //
     ///////////////////////////////////
     
-    func countSteps(time: Date) {
+    func countSteps(from: Date) {
         if(CMPedometer.isStepCountingAvailable()){
-            pedometer.startUpdates(from: time) { (data: CMPedometerData?, error) -> Void in
+            pedometer.startUpdates(from: from) { (data: CMPedometerData?, error) -> Void in
                 DispatchQueue.main.async(execute: { () -> Void in
                     if(error == nil){
                         print("\(data!.numberOfSteps)")
@@ -276,33 +294,64 @@ class SixMinuteWalkTestController: UIViewController, CLLocationManagerDelegate {
     }
     
     func countdown() {
+        if (!hasStarted) {
+            setupHeadings()
+            hasStarted = true
+        }
+        
         timeRemaining = timeRemaining - 1
         let (m, s) = secondsToMinutesSeconds(seconds: timeRemaining)
         timeRemainingLabel.text = "\(timeText(m)):\(timeText(s))"
         
-        print("current heading is: \(currentHeading)")
-        print("startHeading is: \(startHeading)")
-        print("startHeadingMin is: \(startHeadingMin)")
-        print("startHeadingMax is: \(startHeadingMax)")
-        print("returnHeading is: \(returnHeading)")
-        print("returnHeadingMin is: \(returnHeadingMin)")
-        print("returnHeadingMax is: \(returnHeadingMax)")
+        //print("current heading is: \(currentHeading)")
+        //print("startHeading is: \(startHeading)")
+        //print("startHeadingMin is: \(startHeadingMin)")
+        //print("startHeadingMax is: \(startHeadingMax)")
+        //print("returnHeading is: \(returnHeading)")
+        //print("returnHeadingMin is: \(returnHeadingMin)")
+        //print("returnHeadingMax is: \(returnHeadingMax)")
         
         if (laps%2 == 0) {
             if (currentHeading > returnHeadingMin && currentHeading < returnHeadingMax) {
                 laps += 1
-                lapsLabel.text = "Number of laps: \(laps)"
+                lapsLabel.text = "Laps: \(laps)"
             }
         } else if (laps%2 == 1) {
             if (currentHeading > startHeadingMin && currentHeading < startHeadingMax) {
                 laps += 1
-                lapsLabel.text = "Number of laps: \(laps)"
+                lapsLabel.text = "Laps: \(laps)"
             }
         }
+        
+        if (timeRemaining == 5) {
+            playAudio(name: "6MWT-countdown-end")
+        }
+        
+        if (timeRemaining == 0) {
+            timer.invalidate()
+            stopButton.isEnabled = false
+            stopButton.alpha = 0.5
+            
+            playAudio(name: "6MWT-congratulations")
+            
+            //finalise results
+            timeRemaining = 10
+            timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(resultsFinalised), userInfo: nil, repeats: true)
+        }
+    }
+    
+    func resultsFinalised() {
+        timeRemaining = timeRemaining - 1
         
         if (timeRemaining == 0) {
             pedometer.stopUpdates()
             timer.invalidate()
+            
+            playAudio(name: "6MWT-results-finalised")
+            while (audioPlayer.isPlaying) {}
+            
+            stopButton.isEnabled = true
+            stopButton.alpha = 1
         }
     }
     
@@ -314,6 +363,24 @@ class SixMinuteWalkTestController: UIViewController, CLLocationManagerDelegate {
         return s < 10 ? "0\(s)" : "\(s)"
     }
     
+    ///////////////////////////////
+    //                           //
+    //  AUDIO RELATED FUNCTIONS  //
+    //                           //
+    ///////////////////////////////
+    
+    func playAudio(name: String) {
+        do {
+            let audioPath = Bundle.main.path(forResource: name, ofType: "mp3")
+            
+            audioPlayer = try AVAudioPlayer(contentsOf: NSURL(fileURLWithPath: audioPath!) as URL)
+            audioPlayer.prepareToPlay()
+        } catch {
+            print("error playing audio")
+        }
+        
+        audioPlayer.play()
+    }
     
     ////////////////////
     //                //
@@ -323,13 +390,11 @@ class SixMinuteWalkTestController: UIViewController, CLLocationManagerDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        //set walk test variables
+        reset()
         
         //setup location manager
         setupLocationManager()
-        locationManager.startUpdatingHeading()
-        
-        //initialise timer (seconds)
-        reset()
         
         //setup table view
         navigationItem.title = "6MWT"

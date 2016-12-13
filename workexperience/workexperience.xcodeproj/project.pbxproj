@@ -11,6 +11,11 @@
 		C30E62F91DFF886100430E1B /* QuestionnaireSelect.swift in Sources */ = {isa = PBXBuildFile; fileRef = C30E62F81DFF886100430E1B /* QuestionnaireSelect.swift */; };
 		C30E62FB1DFF886600430E1B /* WalkTestComplete.swift in Sources */ = {isa = PBXBuildFile; fileRef = C30E62FA1DFF886600430E1B /* WalkTestComplete.swift */; };
 		C311066D1DF4E37C00D48134 /* SixMinuteWalkTestController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C311066C1DF4E37C00D48134 /* SixMinuteWalkTestController.swift */; };
+		C32B36281DFF985B0018726F /* 6MWT-congratulations.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C32B36231DFF985B0018726F /* 6MWT-congratulations.mp3 */; };
+		C32B36291DFF985B0018726F /* 6MWT-countdown-end.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C32B36241DFF985B0018726F /* 6MWT-countdown-end.mp3 */; };
+		C32B362A1DFF985B0018726F /* 6MWT-countdown-start.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C32B36251DFF985B0018726F /* 6MWT-countdown-start.mp3 */; };
+		C32B362B1DFF985B0018726F /* 6MWT-intro.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C32B36261DFF985B0018726F /* 6MWT-intro.mp3 */; };
+		C32B362C1DFF985B0018726F /* 6MWT-results-finalised.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C32B36271DFF985B0018726F /* 6MWT-results-finalised.mp3 */; };
 		C34CEEC31DEEA4C200F839D9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C34CEEC21DEEA4C200F839D9 /* AppDelegate.swift */; };
 		C34CEEC81DEEA4C200F839D9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C34CEEC61DEEA4C200F839D9 /* Main.storyboard */; };
 		C34CEECA1DEEA4C200F839D9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C34CEEC91DEEA4C200F839D9 /* Assets.xcassets */; };
@@ -28,6 +33,11 @@
 		C30E62F81DFF886100430E1B /* QuestionnaireSelect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuestionnaireSelect.swift; sourceTree = "<group>"; };
 		C30E62FA1DFF886600430E1B /* WalkTestComplete.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WalkTestComplete.swift; sourceTree = "<group>"; };
 		C311066C1DF4E37C00D48134 /* SixMinuteWalkTestController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SixMinuteWalkTestController.swift; sourceTree = "<group>"; };
+		C32B36231DFF985B0018726F /* 6MWT-congratulations.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "6MWT-congratulations.mp3"; sourceTree = "<group>"; };
+		C32B36241DFF985B0018726F /* 6MWT-countdown-end.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "6MWT-countdown-end.mp3"; sourceTree = "<group>"; };
+		C32B36251DFF985B0018726F /* 6MWT-countdown-start.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "6MWT-countdown-start.mp3"; sourceTree = "<group>"; };
+		C32B36261DFF985B0018726F /* 6MWT-intro.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "6MWT-intro.mp3"; sourceTree = "<group>"; };
+		C32B36271DFF985B0018726F /* 6MWT-results-finalised.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "6MWT-results-finalised.mp3"; sourceTree = "<group>"; };
 		C34CEEBF1DEEA4C200F839D9 /* workexperience.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = workexperience.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C34CEEC21DEEA4C200F839D9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C34CEEC71DEEA4C200F839D9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -53,6 +63,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C32B36221DFF984B0018726F /* Audio */ = {
+			isa = PBXGroup;
+			children = (
+				C32B36231DFF985B0018726F /* 6MWT-congratulations.mp3 */,
+				C32B36241DFF985B0018726F /* 6MWT-countdown-end.mp3 */,
+				C32B36251DFF985B0018726F /* 6MWT-countdown-start.mp3 */,
+				C32B36261DFF985B0018726F /* 6MWT-intro.mp3 */,
+				C32B36271DFF985B0018726F /* 6MWT-results-finalised.mp3 */,
+			);
+			name = Audio;
+			sourceTree = "<group>";
+		};
 		C34CEEB61DEEA4C200F839D9 = {
 			isa = PBXGroup;
 			children = (
@@ -72,6 +94,7 @@
 		C34CEEC11DEEA4C200F839D9 /* workexperience */ = {
 			isa = PBXGroup;
 			children = (
+				C32B36221DFF984B0018726F /* Audio */,
 				C30E62FA1DFF886600430E1B /* WalkTestComplete.swift */,
 				C30E62F81DFF886100430E1B /* QuestionnaireSelect.swift */,
 				C30E62F61DFF885800430E1B /* QuestionnaireController.swift */,
@@ -152,7 +175,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				C34CEECD1DEEA4C200F839D9 /* LaunchScreen.storyboard in Resources */,
+				C32B362C1DFF985B0018726F /* 6MWT-results-finalised.mp3 in Resources */,
+				C32B362A1DFF985B0018726F /* 6MWT-countdown-start.mp3 in Resources */,
+				C32B362B1DFF985B0018726F /* 6MWT-intro.mp3 in Resources */,
 				C34CEECA1DEEA4C200F839D9 /* Assets.xcassets in Resources */,
+				C32B36291DFF985B0018726F /* 6MWT-countdown-end.mp3 in Resources */,
+				C32B36281DFF985B0018726F /* 6MWT-congratulations.mp3 in Resources */,
 				C34CEEC81DEEA4C200F839D9 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
