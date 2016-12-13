@@ -8,11 +8,26 @@
 
 import UIKit
 import CoreMotion
+import CoreLocation
 
-class SixMinuteWalkTestController: UIViewController {
+class SixMinuteWalkTestController: UIViewController, CLLocationManagerDelegate {
     //To use the iphone's pedometer, you must edit the Info.plist file, and add "Privacy - Motion Usage Description" as a key, String as a type, and the message you want to show your user as a value.
     let activityManager = CMMotionActivityManager()
     let pedometer = CMPedometer()
+    var locationManager: CLLocationManager!
+    
+    var hasStarted = false
+    
+    //start heading variables
+    let headingThreshold = 10
+    var startHeading = 0
+    var startHeadingMin = 0
+    var startHeadingMax = 0
+    var returnHeading = 0
+    var returnHeadingMin = 0
+    var returnHeadingMax = 0
+    var currentHeading = 0
+    //end heading variables.
     
     var timeRemaining = 0
     var timer = Timer()
@@ -114,6 +129,8 @@ class SixMinuteWalkTestController: UIViewController {
     }
     
     func handleStart() {
+        setupHeadings()
+
         timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(countdown), userInfo: nil, repeats: true)
         
         let currentTime = getCurrentLocalDate()
@@ -145,6 +162,7 @@ class SixMinuteWalkTestController: UIViewController {
     func handleStop() {
         pedometer.stopUpdates()
         timer.invalidate()
+        locationManager.stopUpdatingHeading()
         reset()
         
         startButton.isEnabled = true
@@ -157,6 +175,65 @@ class SixMinuteWalkTestController: UIViewController {
         
         stopButton.isEnabled = false
         stopButton.alpha = 0.5
+    }
+    
+    //////////////////////////////////
+    //                              //
+    //  LOCATION RELATED FUNCTIONS  //
+    //                              //
+    //////////////////////////////////
+    
+    func setupLocationManager() {
+        locationManager = CLLocationManager()
+        locationManager.delegate = self
+        //locationManager.startUpdatingHeading()
+        //locationManager.requestWhenInUseAuthorization()
+    }
+    
+    func setupHeadings() {
+        startHeading = currentHeading
+        //startHeadingLabel.text = "Start heading: \(startHeading)"
+        startHeadingMin = startHeading - headingThreshold
+        
+        if (startHeadingMin < 0) {
+            startHeadingMin += 360
+        }
+        
+        startHeadingMax = startHeading + headingThreshold
+        
+        if (startHeadingMax > 360) {
+            startHeadingMax -= 360
+        }
+        
+        returnHeading = startHeading - 180
+        
+        if (returnHeading < 0) {
+            returnHeading += 360
+        } else if (returnHeading > 360) {
+            returnHeading -= 360
+        }
+        
+        //returnHeadingLabel.text = "Return heading: \(returnHeading)"
+        
+        returnHeadingMin = returnHeading - headingThreshold
+        
+        if (returnHeadingMin < 0) {
+            returnHeadingMin += 360
+        }
+        
+        returnHeadingMax = returnHeading + headingThreshold
+        
+        if (returnHeadingMax > 360) {
+            returnHeadingMax -= 360
+        }
+        
+        hasStarted = true
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
+        currentHeading = Int(newHeading.magneticHeading)
+        //currentHeadingLabel.text = "Current heading: \(currentHeading)"
+        print(currentHeading)
     }
     
     ///////////////////////////////////
@@ -203,6 +280,26 @@ class SixMinuteWalkTestController: UIViewController {
         let (m, s) = secondsToMinutesSeconds(seconds: timeRemaining)
         timeRemainingLabel.text = "\(timeText(m)):\(timeText(s))"
         
+        print("current heading is: \(currentHeading)")
+        print("startHeading is: \(startHeading)")
+        print("startHeadingMin is: \(startHeadingMin)")
+        print("startHeadingMax is: \(startHeadingMax)")
+        print("returnHeading is: \(returnHeading)")
+        print("returnHeadingMin is: \(returnHeadingMin)")
+        print("returnHeadingMax is: \(returnHeadingMax)")
+        
+        if (laps%2 == 0) {
+            if (currentHeading > returnHeadingMin && currentHeading < returnHeadingMax) {
+                laps += 1
+                lapsLabel.text = "Number of laps: \(laps)"
+            }
+        } else if (laps%2 == 1) {
+            if (currentHeading > startHeadingMin && currentHeading < startHeadingMax) {
+                laps += 1
+                lapsLabel.text = "Number of laps: \(laps)"
+            }
+        }
+        
         if (timeRemaining == 0) {
             pedometer.stopUpdates()
             timer.invalidate()
@@ -226,6 +323,10 @@ class SixMinuteWalkTestController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //setup location manager
+        setupLocationManager()
+        locationManager.startUpdatingHeading()
         
         //initialise timer (seconds)
         reset()

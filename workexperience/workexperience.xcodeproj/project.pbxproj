@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C30E62F71DFF885800430E1B /* QuestionnaireController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C30E62F61DFF885800430E1B /* QuestionnaireController.swift */; };
+		C30E62F91DFF886100430E1B /* QuestionnaireSelect.swift in Sources */ = {isa = PBXBuildFile; fileRef = C30E62F81DFF886100430E1B /* QuestionnaireSelect.swift */; };
+		C30E62FB1DFF886600430E1B /* WalkTestComplete.swift in Sources */ = {isa = PBXBuildFile; fileRef = C30E62FA1DFF886600430E1B /* WalkTestComplete.swift */; };
 		C311066D1DF4E37C00D48134 /* SixMinuteWalkTestController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C311066C1DF4E37C00D48134 /* SixMinuteWalkTestController.swift */; };
 		C34CEEC31DEEA4C200F839D9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C34CEEC21DEEA4C200F839D9 /* AppDelegate.swift */; };
 		C34CEEC81DEEA4C200F839D9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C34CEEC61DEEA4C200F839D9 /* Main.storyboard */; };
@@ -14,8 +17,6 @@
 		C34CEECD1DEEA4C200F839D9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C34CEECB1DEEA4C200F839D9 /* LaunchScreen.storyboard */; };
 		C34CEED71DEEA54A00F839D9 /* HomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C34CEED61DEEA54A00F839D9 /* HomeController.swift */; };
 		C34CEED91DEEA58B00F839D9 /* CustomBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C34CEED81DEEA58B00F839D9 /* CustomBarController.swift */; };
-		C34CEEDB1DEEA5A200F839D9 /* QuestionnaireController1.swift in Sources */ = {isa = PBXBuildFile; fileRef = C34CEEDA1DEEA5A200F839D9 /* QuestionnaireController1.swift */; };
-		C34CEEDD1DEEA5BD00F839D9 /* QuestionnaireController2.swift in Sources */ = {isa = PBXBuildFile; fileRef = C34CEEDC1DEEA5BD00F839D9 /* QuestionnaireController2.swift */; };
 		C34CEEDF1DEEA5D600F839D9 /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C34CEEDE1DEEA5D600F839D9 /* LoginController.swift */; };
 		C34CEEE11DEF956200F839D9 /* CustomTableViewCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = C34CEEE01DEF956200F839D9 /* CustomTableViewCells.swift */; };
 		C34CEEE31DEF96B900F839D9 /* WalkTestController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C34CEEE21DEF96B900F839D9 /* WalkTestController.swift */; };
@@ -23,6 +24,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C30E62F61DFF885800430E1B /* QuestionnaireController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuestionnaireController.swift; sourceTree = "<group>"; };
+		C30E62F81DFF886100430E1B /* QuestionnaireSelect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuestionnaireSelect.swift; sourceTree = "<group>"; };
+		C30E62FA1DFF886600430E1B /* WalkTestComplete.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WalkTestComplete.swift; sourceTree = "<group>"; };
 		C311066C1DF4E37C00D48134 /* SixMinuteWalkTestController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SixMinuteWalkTestController.swift; sourceTree = "<group>"; };
 		C34CEEBF1DEEA4C200F839D9 /* workexperience.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = workexperience.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C34CEEC21DEEA4C200F839D9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -32,8 +36,6 @@
 		C34CEECE1DEEA4C200F839D9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C34CEED61DEEA54A00F839D9 /* HomeController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeController.swift; sourceTree = "<group>"; };
 		C34CEED81DEEA58B00F839D9 /* CustomBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomBarController.swift; sourceTree = "<group>"; };
-		C34CEEDA1DEEA5A200F839D9 /* QuestionnaireController1.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuestionnaireController1.swift; sourceTree = "<group>"; };
-		C34CEEDC1DEEA5BD00F839D9 /* QuestionnaireController2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuestionnaireController2.swift; sourceTree = "<group>"; };
 		C34CEEDE1DEEA5D600F839D9 /* LoginController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
 		C34CEEE01DEF956200F839D9 /* CustomTableViewCells.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomTableViewCells.swift; sourceTree = "<group>"; };
 		C34CEEE21DEF96B900F839D9 /* WalkTestController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WalkTestController.swift; sourceTree = "<group>"; };
@@ -70,12 +72,13 @@
 		C34CEEC11DEEA4C200F839D9 /* workexperience */ = {
 			isa = PBXGroup;
 			children = (
+				C30E62FA1DFF886600430E1B /* WalkTestComplete.swift */,
+				C30E62F81DFF886100430E1B /* QuestionnaireSelect.swift */,
+				C30E62F61DFF885800430E1B /* QuestionnaireController.swift */,
 				C34CEEC21DEEA4C200F839D9 /* AppDelegate.swift */,
 				C34CEED81DEEA58B00F839D9 /* CustomBarController.swift */,
 				C34CEEDE1DEEA5D600F839D9 /* LoginController.swift */,
 				C34CEED61DEEA54A00F839D9 /* HomeController.swift */,
-				C34CEEDA1DEEA5A200F839D9 /* QuestionnaireController1.swift */,
-				C34CEEDC1DEEA5BD00F839D9 /* QuestionnaireController2.swift */,
 				C34CEEE41DEFD44900F839D9 /* Questionnaire.swift */,
 				C34CEEE21DEF96B900F839D9 /* WalkTestController.swift */,
 				C311066C1DF4E37C00D48134 /* SixMinuteWalkTestController.swift */,
@@ -120,6 +123,7 @@
 				TargetAttributes = {
 					C34CEEBE1DEEA4C200F839D9 = {
 						CreatedOnToolsVersion = 8.1;
+						DevelopmentTeam = 94953ESUTK;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -163,12 +167,13 @@
 				C34CEED91DEEA58B00F839D9 /* CustomBarController.swift in Sources */,
 				C311066D1DF4E37C00D48134 /* SixMinuteWalkTestController.swift in Sources */,
 				C34CEEDF1DEEA5D600F839D9 /* LoginController.swift in Sources */,
+				C30E62FB1DFF886600430E1B /* WalkTestComplete.swift in Sources */,
+				C30E62F71DFF885800430E1B /* QuestionnaireController.swift in Sources */,
 				C34CEEE11DEF956200F839D9 /* CustomTableViewCells.swift in Sources */,
-				C34CEEDB1DEEA5A200F839D9 /* QuestionnaireController1.swift in Sources */,
 				C34CEEC31DEEA4C200F839D9 /* AppDelegate.swift in Sources */,
 				C34CEED71DEEA54A00F839D9 /* HomeController.swift in Sources */,
+				C30E62F91DFF886100430E1B /* QuestionnaireSelect.swift in Sources */,
 				C34CEEE31DEF96B900F839D9 /* WalkTestController.swift in Sources */,
-				C34CEEDD1DEEA5BD00F839D9 /* QuestionnaireController2.swift in Sources */,
 				C34CEEE51DEFD44900F839D9 /* Questionnaire.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -292,8 +297,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 94953ESUTK;
 				INFOPLIST_FILE = workexperience/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.yourcompany.workexperience;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -305,8 +311,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 94953ESUTK;
 				INFOPLIST_FILE = workexperience/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.yourcompany.workexperience;
 				PRODUCT_NAME = "$(TARGET_NAME)";
