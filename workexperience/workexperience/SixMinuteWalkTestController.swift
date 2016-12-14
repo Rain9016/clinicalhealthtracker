@@ -33,12 +33,44 @@ class SixMinuteWalkTestController: UIViewController, CLLocationManagerDelegate {
     var currentHeading = 0
     
     //timer variables
-    var timeRemaining = 0
+    var timeRemainingWalkTest = 30 //time limit for the walk test (6 minutes)
+    var timeRemainingAudio = 13 //time remaining for the first audio clip
     var timer = Timer()
     
     //audio variables
     var audioPlayer = AVAudioPlayer()
     var audioPath = ""
+    
+    ///////////////////////
+    //                   //
+    //  RESET VARIABLES  //
+    //                   //
+    ///////////////////////
+    
+    func reset() {
+        timeRemainingWalkTest = 30
+        timeRemainingAudio = 13
+        hasStarted = false
+        steps = 0
+        laps = 0
+        distance = 0
+        
+        setTimeRemainingLabel(timeRemaining: timeRemainingWalkTest)
+        setStepsLabel(numberOfSteps: steps)
+        setLapsLabel(numberOfLaps: laps)
+        setDistanceLabel(distanceWalked: distance)
+        
+        startButton.isEnabled = true
+        startButton.alpha = 1
+        stopButton.isEnabled = false
+        stopButton.alpha = 0.5
+    }
+    
+    ////////////////////////////
+    //                        //
+    //  TIME REMAINING LABEL  //
+    //                        //
+    ////////////////////////////
     
     var timeRemainingLabel: UILabel = {
         let label = UILabel()
@@ -54,7 +86,7 @@ class SixMinuteWalkTestController: UIViewController, CLLocationManagerDelegate {
     }
     
     func setTimeRemainingLabel(timeRemaining: Int) {
-        self.timeRemaining = timeRemaining
+        self.timeRemainingWalkTest = timeRemaining
         let (m, s) = secondsToMinutesSeconds(seconds: timeRemaining)
         timeRemainingLabel.text = "\(timeText(m)):\(timeText(s))"
     }
@@ -65,6 +97,7 @@ class SixMinuteWalkTestController: UIViewController, CLLocationManagerDelegate {
     //                                //
     ////////////////////////////////////
     
+    /* STEPS */
     var stepsLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 16)
@@ -82,6 +115,7 @@ class SixMinuteWalkTestController: UIViewController, CLLocationManagerDelegate {
         stepsLabel.text = "Steps: \(numberOfSteps)"
     }
     
+    /* LAPS */
     var lapsLabel: UILabel = {
         let label = UILabel()
         label.text = "Laps: 0"
@@ -97,9 +131,10 @@ class SixMinuteWalkTestController: UIViewController, CLLocationManagerDelegate {
     }
     
     func setLapsLabel(numberOfLaps: Int) {
-        lapsLabel.text = "Steps: \(numberOfLaps)"
+        lapsLabel.text = "Laps: \(numberOfLaps)"
     }
     
+    /* DISTANCE */
     var distanceLabel: UILabel = {
         let label = UILabel()
         label.text = "Distance: 0"
@@ -114,12 +149,17 @@ class SixMinuteWalkTestController: UIViewController, CLLocationManagerDelegate {
         distanceLabel.topAnchor.constraint(equalTo: lapsLabel.bottomAnchor).isActive = true
     }
     
+    func setDistanceLabel(distanceWalked: Int) {
+        distanceLabel.text = "Distance: \(distanceWalked)"
+    }
+    
     //////////////////////////////
     //                          //
     //  START AND STOP BUTTONS  //
     //                          //
     //////////////////////////////
     
+    /* START BUTTON */
     var startButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Start", for: .normal)
@@ -140,14 +180,8 @@ class SixMinuteWalkTestController: UIViewController, CLLocationManagerDelegate {
         locationManager.startUpdatingHeading()
         
         playAudio(name: "6MWT-intro")
-        while (audioPlayer.isPlaying) {}
-        playAudio(name: "6MWT-countdown-start")
-        while (audioPlayer.isPlaying) {}
-
-        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(countdown), userInfo: nil, repeats: true)
         
-        let currentTime = getCurrentLocalDate()
-        countSteps(from: currentTime)
+        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(getCurrentHeading), userInfo: nil, repeats: true)
         
         startButton.isEnabled = false
         startButton.alpha = 0.5
@@ -155,6 +189,7 @@ class SixMinuteWalkTestController: UIViewController, CLLocationManagerDelegate {
         stopButton.alpha = 1
     }
     
+    /* STOP BUTTON */
     var stopButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Stop", for: .normal)
@@ -162,8 +197,6 @@ class SixMinuteWalkTestController: UIViewController, CLLocationManagerDelegate {
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
-    
-    
     
     func setupStopButton() {
         stopButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
@@ -173,29 +206,123 @@ class SixMinuteWalkTestController: UIViewController, CLLocationManagerDelegate {
     }
     
     func handleStop() {
-        pedometer.stopUpdates()
+        if (audioPlayer.isPlaying) {
+            audioPlayer.stop()
+        }
+        
         timer.invalidate()
+        pedometer.stopUpdates()
         locationManager.stopUpdatingHeading()
         reset()
-        
-        startButton.isEnabled = true
-        startButton.alpha = 1
     }
     
-    func reset() {
-        hasStarted = false
-        steps = 0
-        laps = 0
-        distance = 0
-        timeRemaining = 30
+    ///////////////////////////////////
+    //                               //
+    //  WALK TEST FUNCTIONS RELATED  //
+    //                               //
+    ///////////////////////////////////
+    
+    /* BEFORE WALK TEST BEGINS */
+    func getCurrentHeading() {
+        timeRemainingAudio = timeRemainingAudio - 1
         
-        setTimeRemainingLabel(timeRemaining: timeRemaining)
-        setStepsLabel(numberOfSteps: steps)
-        setLapsLabel(numberOfLaps: laps)
-        
-        stopButton.isEnabled = false
-        stopButton.alpha = 0.5
+        if (timeRemainingAudio == 0) {
+            timer.invalidate() //invalidate old timer
+            
+            setupHeadings()
+            hasStarted = true
+            
+            playAudio(name: "6MWT-countdown-start")
+            
+            //start new timer
+            timeRemainingAudio = 3
+            timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(beginCountdown), userInfo: nil, repeats: true)
+        }
     }
+    
+    func beginCountdown() {
+        timeRemainingAudio = timeRemainingAudio - 1
+        
+        if (timeRemainingAudio == 0) {
+            timer.invalidate() //invalidate old timer
+            
+            //begin counting steps
+            let currentTime = getCurrentLocalDate()
+            countSteps(from: currentTime)
+            
+            //start new timer
+            timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(countdown), userInfo: nil, repeats: true)
+        }
+    }
+    
+    /* WHILE WALK TEST IS IN PROGRESS */
+    func countdown() {
+        timeRemainingWalkTest = timeRemainingWalkTest - 1 //reduce time
+        
+        //display the amount of time left
+        let (m, s) = secondsToMinutesSeconds(seconds: timeRemainingWalkTest)
+        timeRemainingLabel.text = "\(timeText(m)):\(timeText(s))"
+        
+        //increment the number of laps if needed
+        if (laps%2 == 0) {
+            if (currentHeading > returnHeadingMin && currentHeading < returnHeadingMax) {
+                laps += 1
+                lapsLabel.text = "Laps: \(laps)"
+            }
+        } else if (laps%2 == 1) {
+            if (currentHeading > startHeadingMin && currentHeading < startHeadingMax) {
+                laps += 1
+                lapsLabel.text = "Laps: \(laps)"
+            }
+        }
+        
+        if (timeRemainingWalkTest == 5) {
+            playAudio(name: "6MWT-countdown-end")
+        }
+        
+        if (timeRemainingWalkTest == 0) {
+            timer.invalidate()
+            stopButton.isEnabled = false
+            stopButton.alpha = 0.5
+            
+            playAudio(name: "6MWT-congratulations")
+            
+            //finalise results
+            timeRemainingAudio = 10
+            timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(finaliseResults), userInfo: nil, repeats: true)
+        }
+    }
+    
+    /* ONCE WALK TEST HAS FINISHED */
+    func finaliseResults() {
+        timeRemainingAudio = timeRemainingAudio - 1
+        
+        if (timeRemainingAudio == 0) {
+            timer.invalidate()
+            pedometer.stopUpdates()
+            locationManager.stopUpdatingHeading()
+            
+            playAudio(name: "6MWT-results-finalised")
+            
+            timeRemainingAudio = 5
+            timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(resultsFinalised), userInfo: nil, repeats: true)
+        }
+    }
+    
+    func resultsFinalised() {
+        timeRemainingAudio = timeRemainingAudio - 1
+        
+        if (timeRemainingAudio == 0) {
+            timer.invalidate()
+            //reset()
+            
+            stopButton.isEnabled = true
+            stopButton.alpha = 1
+            
+            //segue to results finalised page
+        }
+    }
+
     
     //////////////////////////////////
     //                              //
@@ -206,13 +333,11 @@ class SixMinuteWalkTestController: UIViewController, CLLocationManagerDelegate {
     func setupLocationManager() {
         locationManager = CLLocationManager()
         locationManager.delegate = self
-        //locationManager.startUpdatingHeading()
         //locationManager.requestWhenInUseAuthorization()
     }
     
     func setupHeadings() {
         startHeading = currentHeading
-        //startHeadingLabel.text = "Start heading: \(startHeading)"
         startHeadingMin = startHeading - headingThreshold
         
         if (startHeadingMin < 0) {
@@ -233,8 +358,6 @@ class SixMinuteWalkTestController: UIViewController, CLLocationManagerDelegate {
             returnHeading -= 360
         }
         
-        //returnHeadingLabel.text = "Return heading: \(returnHeading)"
-        
         returnHeadingMin = returnHeading - headingThreshold
         
         if (returnHeadingMin < 0) {
@@ -248,10 +371,9 @@ class SixMinuteWalkTestController: UIViewController, CLLocationManagerDelegate {
         }
     }
     
+    /* every time the heading is updated */
     func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
         currentHeading = Int(newHeading.magneticHeading)
-        //currentHeadingLabel.text = "Current heading: \(currentHeading)"
-        //print(currentHeading)
     }
     
     ///////////////////////////////////
@@ -265,11 +387,15 @@ class SixMinuteWalkTestController: UIViewController, CLLocationManagerDelegate {
             pedometer.startUpdates(from: from) { (data: CMPedometerData?, error) -> Void in
                 DispatchQueue.main.async(execute: { () -> Void in
                     if(error == nil){
-                        print("\(data!.numberOfSteps)")
+                        /* get steps */
                         self.steps = Int(data!.numberOfSteps)
                         self.setStepsLabel(numberOfSteps: Int(data!.numberOfSteps))
+                        
+                        /* get distance */
+                        self.distance = Int(data!.distance!)
+                        self.setDistanceLabel(distanceWalked: Int(data!.distance!))
                     } else {
-                        //could not start counting steps
+                        //handle error
                     }
                 })
             }
@@ -293,72 +419,12 @@ class SixMinuteWalkTestController: UIViewController, CLLocationManagerDelegate {
         return date
     }
     
-    func countdown() {
-        if (!hasStarted) {
-            setupHeadings()
-            hasStarted = true
-        }
-        
-        timeRemaining = timeRemaining - 1
-        let (m, s) = secondsToMinutesSeconds(seconds: timeRemaining)
-        timeRemainingLabel.text = "\(timeText(m)):\(timeText(s))"
-        
-        //print("current heading is: \(currentHeading)")
-        //print("startHeading is: \(startHeading)")
-        //print("startHeadingMin is: \(startHeadingMin)")
-        //print("startHeadingMax is: \(startHeadingMax)")
-        //print("returnHeading is: \(returnHeading)")
-        //print("returnHeadingMin is: \(returnHeadingMin)")
-        //print("returnHeadingMax is: \(returnHeadingMax)")
-        
-        if (laps%2 == 0) {
-            if (currentHeading > returnHeadingMin && currentHeading < returnHeadingMax) {
-                laps += 1
-                lapsLabel.text = "Laps: \(laps)"
-            }
-        } else if (laps%2 == 1) {
-            if (currentHeading > startHeadingMin && currentHeading < startHeadingMax) {
-                laps += 1
-                lapsLabel.text = "Laps: \(laps)"
-            }
-        }
-        
-        if (timeRemaining == 5) {
-            playAudio(name: "6MWT-countdown-end")
-        }
-        
-        if (timeRemaining == 0) {
-            timer.invalidate()
-            stopButton.isEnabled = false
-            stopButton.alpha = 0.5
-            
-            playAudio(name: "6MWT-congratulations")
-            
-            //finalise results
-            timeRemaining = 10
-            timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(resultsFinalised), userInfo: nil, repeats: true)
-        }
-    }
-    
-    func resultsFinalised() {
-        timeRemaining = timeRemaining - 1
-        
-        if (timeRemaining == 0) {
-            pedometer.stopUpdates()
-            timer.invalidate()
-            
-            playAudio(name: "6MWT-results-finalised")
-            while (audioPlayer.isPlaying) {}
-            
-            stopButton.isEnabled = true
-            stopButton.alpha = 1
-        }
-    }
-    
+    /* This function converts seconds to minutes and seconds and stores the result in a tuple */
     func secondsToMinutesSeconds(seconds: Int) -> (Int, Int) {
         return ((seconds % 3600) / 60, (seconds % 3600) % 60)
     }
     
+    /* This function takes a number of seconds, and returns a string representing that number of seconds in minutes and seconds in the format of mm:ss */
     func timeText(_ s: Int) -> String {
         return s < 10 ? "0\(s)" : "\(s)"
     }
@@ -369,6 +435,7 @@ class SixMinuteWalkTestController: UIViewController, CLLocationManagerDelegate {
     //                           //
     ///////////////////////////////
     
+    /* This function plays an audio clip */
     func playAudio(name: String) {
         do {
             let audioPath = Bundle.main.path(forResource: name, ofType: "mp3")
@@ -390,6 +457,7 @@ class SixMinuteWalkTestController: UIViewController, CLLocationManagerDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         //set walk test variables
         reset()
         

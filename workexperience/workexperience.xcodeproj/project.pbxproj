@@ -95,7 +95,6 @@
 			isa = PBXGroup;
 			children = (
 				C32B36221DFF984B0018726F /* Audio */,
-				C30E62FA1DFF886600430E1B /* WalkTestComplete.swift */,
 				C30E62F81DFF886100430E1B /* QuestionnaireSelect.swift */,
 				C30E62F61DFF885800430E1B /* QuestionnaireController.swift */,
 				C34CEEC21DEEA4C200F839D9 /* AppDelegate.swift */,
@@ -105,6 +104,7 @@
 				C34CEEE41DEFD44900F839D9 /* Questionnaire.swift */,
 				C34CEEE21DEF96B900F839D9 /* WalkTestController.swift */,
 				C311066C1DF4E37C00D48134 /* SixMinuteWalkTestController.swift */,
+				C30E62FA1DFF886600430E1B /* WalkTestComplete.swift */,
 				C34CEEE01DEF956200F839D9 /* CustomTableViewCells.swift */,
 				C34CEEC61DEEA4C200F839D9 /* Main.storyboard */,
 				C34CEEC91DEEA4C200F839D9 /* Assets.xcassets */,
