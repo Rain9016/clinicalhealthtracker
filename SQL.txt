@@ -1,0 +1,70 @@
+//trial_data database
+CREATE TABLE trials (
+    `id` BIGINT UNSIGNED AUTO_INCREMENT,
+    `name` VARCHAR(50) NOT NULL,
+    `extra_info` TINYINT,
+    PRIMARY KEY (`id`)
+)
+
+CREATE TABLE trial_questions (
+    `id` BIGINT UNSIGNED AUTO_INCREMENT,
+    `question` VARCHAR(100) NOT NULL,
+    `type` CHAR(50) NOT NULL,
+    `trial_id` BIGINT UNSIGNED NOT NULL,
+    PRIMARY KEY (`id`),
+    CONSTRAINT `fk_trials_trial_questions` FOREIGN KEY (`trial_id`) REFERENCES `trials` (`id`) ON DELETE CASCADE
+)
+
+CREATE TABLE trial_question_choices (
+    `id` BIGINT UNSIGNED AUTO_INCREMENT,
+    `choice` VARCHAR(100) NOT NULL,
+    `question_id` BIGINT UNSIGNED AUTO_INCREMENT,
+    PRIMARY KEY (`id`),
+    CONSTRAINT `fk_trial_question_choices_trial_questions` FOREIGN KEY (`question_id`) REFERENCES `trial_questions` (`id`) ON DELETE CASCADE
+)
+
+CREATE TABLE trial_question_answers {
+    `id` BIGINT UNSIGNED AUTO_INCREMENT,
+    `answer` VARCHAR(100) NOT NULL,
+    `user_id` BIGINT UNSIGNED NOT NULL,
+    `trial_question_id` BIGINT UNSIGNED NOT NULL,
+    PRIMARY KEY (`id`),
+    CONSTRAINT `fk_trial_question_answers_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+    CONSTRAINT `fk_trial_question_answers_trial_questions` FOREIGN KEY (`trial_question_id`) REFERENCES `trial_questions` (`id`) ON DELETE CASCADE
+}
+
+CREATE TABLE users (
+    `id` BIGINT UNSIGNED AUTO_INCREMENT,
+    `unique_id` VARCHAR(50) NOT NULL,
+    `first_name` CHAR(50) NOT NULL,
+    `last_name` CHAR(50) NOT NULL,
+    `email` VARCHAR(50) NOT NULL,
+    `trial_id` BIGINT NOT NULL,
+    `previous_login` TINYINT,
+    PRIMARY KEY (`id`)
+)
+
+//patient_data database
+
+CREATE TABLE locations (
+    `id` BIGINT UNSIGNED AUTO_INCREMENT,
+    `user_id` VARCHAR(50) NOT NULL,
+    `latitude` DECIMAL(10, 8) NOT NULL,
+    `longitude` DECIMAL(11, 8) NOT NULL,
+    `date_time` DATETIME
+    PRIMARY KEY (`id`)
+)
+
+//secure_login database
+CREATE TABLE `users` (
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `username` VARCHAR(50) NOT NULL,
+    `password` CHAR(200) NOT NULL,
+    `email` VARCHAR(50) NOT NULL,
+    PRIMARY KEY (`id`)
+)
+
+CREATE TABLE `login_attempts` (
+    `user_id` INT NOT NULL,
+    `time` VARCHAR(50) NOT NULL
+)
