@@ -6,32 +6,32 @@ CREATE TABLE trials (
     PRIMARY KEY (`id`)
 )
 
-CREATE TABLE trial_questions (
+CREATE TABLE questions (
     `id` BIGINT UNSIGNED AUTO_INCREMENT,
     `question` VARCHAR(100) NOT NULL,
-    `type` CHAR(50) NOT NULL,
+    `type` VARCHAR(50) NOT NULL,
     `trial_id` BIGINT UNSIGNED NOT NULL,
     PRIMARY KEY (`id`),
-    CONSTRAINT `fk_trials_trial_questions` FOREIGN KEY (`trial_id`) REFERENCES `trials` (`id`) ON DELETE CASCADE
+    CONSTRAINT `fk_questions_trial` FOREIGN KEY (`trial_id`) REFERENCES `trials` (`id`) ON DELETE CASCADE
 )
 
-CREATE TABLE trial_question_choices (
+CREATE TABLE choices (
     `id` BIGINT UNSIGNED AUTO_INCREMENT,
     `choice` VARCHAR(100) NOT NULL,
-    `question_id` BIGINT UNSIGNED AUTO_INCREMENT,
+    `question_id` BIGINT UNSIGNED NOT NULL,
     PRIMARY KEY (`id`),
-    CONSTRAINT `fk_trial_question_choices_trial_questions` FOREIGN KEY (`question_id`) REFERENCES `trial_questions` (`id`) ON DELETE CASCADE
+    CONSTRAINT `fk_question_choices_questions` FOREIGN KEY (`question_id`) REFERENCES `questions` (`id`) ON DELETE CASCADE
 )
 
-CREATE TABLE trial_question_answers {
+CREATE TABLE answers (
     `id` BIGINT UNSIGNED AUTO_INCREMENT,
     `answer` VARCHAR(100) NOT NULL,
     `user_id` BIGINT UNSIGNED NOT NULL,
-    `trial_question_id` BIGINT UNSIGNED NOT NULL,
+    `question_id` BIGINT UNSIGNED NOT NULL,
     PRIMARY KEY (`id`),
-    CONSTRAINT `fk_trial_question_answers_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
-    CONSTRAINT `fk_trial_question_answers_trial_questions` FOREIGN KEY (`trial_question_id`) REFERENCES `trial_questions` (`id`) ON DELETE CASCADE
-}
+    CONSTRAINT `fk_answers_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+    CONSTRAINT `fk_answers_questions` FOREIGN KEY (`question_id`) REFERENCES `questions` (`id`) ON DELETE CASCADE
+)
 
 CREATE TABLE users (
     `id` BIGINT UNSIGNED AUTO_INCREMENT,
@@ -39,7 +39,7 @@ CREATE TABLE users (
     `first_name` CHAR(50) NOT NULL,
     `last_name` CHAR(50) NOT NULL,
     `email` VARCHAR(50) NOT NULL,
-    `trial_id` BIGINT NOT NULL,
+    `trial_id` INT NOT NULL,
     `previous_login` TINYINT,
     PRIMARY KEY (`id`)
 )
@@ -64,6 +64,7 @@ CREATE TABLE `users` (
     PRIMARY KEY (`id`)
 )
 
+//login_attempts database
 CREATE TABLE `login_attempts` (
     `user_id` INT NOT NULL,
     `time` VARCHAR(50) NOT NULL
