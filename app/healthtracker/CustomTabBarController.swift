@@ -43,7 +43,7 @@ class CustomTabBarController: UITabBarController {
         label.text = "\u{f3bb}"
         let walkTestImage = UIImage.imageWithLabel(label: label)
         
-        let walkTestController = QuestionnaireController()
+        let walkTestController = WalkTestController()
         let navWalkTestController = UINavigationController(rootViewController: walkTestController)
         navWalkTestController.title = "6MWT"
         navWalkTestController.tabBarItem.image = walkTestImage
