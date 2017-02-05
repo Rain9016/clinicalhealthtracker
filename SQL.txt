@@ -1,4 +1,9 @@
-//trial_data database
+//////////////////
+//              //
+//  TRIAL_DATA  //
+//              //
+//////////////////
+
 CREATE TABLE trials (
     `id` BIGINT UNSIGNED AUTO_INCREMENT,
     `name` VARCHAR(50) NOT NULL,
@@ -15,12 +20,30 @@ CREATE TABLE questions (
     CONSTRAINT `fk_questions_trial` FOREIGN KEY (`trial_id`) REFERENCES `trials` (`id`) ON DELETE CASCADE
 )
 
+INSERT INTO `questions`(`question`, `type`, `trial_id`) VALUES ("Planned operation","text_field",1)
+INSERT INTO `questions`(`question`, `type`, `trial_id`) VALUES ("Planned date of operation","text_field",1)
+INSERT INTO `questions`(`question`, `type`, `trial_id`) VALUES ("Patient age","text_field",1)
+INSERT INTO `questions`(`question`, `type`, `trial_id`) VALUES ("Patient sex","multiple_choice",1)
+INSERT INTO `questions`(`question`, `type`, `trial_id`) VALUES ("COPD","boolean",1)
+INSERT INTO `questions`(`question`, `type`, `trial_id`) VALUES ("Extracardiac arteriopathy","boolean",1)
+INSERT INTO `questions`(`question`, `type`, `trial_id`) VALUES ("Neurological dysfunction","boolean",1)
+INSERT INTO `questions`(`question`, `type`, `trial_id`) VALUES ("Previous cardiac surgery","boolean",1)
+INSERT INTO `questions`(`question`, `type`, `trial_id`) VALUES ("Creatinine > 200micromol/l","boolean",1)
+INSERT INTO `questions`(`question`, `type`, `trial_id`) VALUES ("Active endocarditis","boolean",1)
+INSERT INTO `questions`(`question`, `type`, `trial_id`) VALUES ("Critical perioperative state","boolean",1)
+INSERT INTO `questions`(`question`, `type`, `trial_id`) VALUES ("LV function","multiple_choice",1)
+INSERT INTO `questions`(`question`, `type`, `trial_id`) VALUES ("Unstable angina or recent MI","boolean",1)
+INSERT INTO `questions`(`question`, `type`, `trial_id`) VALUES ("Pulmonary hypertension","boolean",1)
+INSERT INTO `questions`(`question`, `type`, `trial_id`) VALUES ("Other than isolated CABG","boolean",1)
+INSERT INTO `questions`(`question`, `type`, `trial_id`) VALUES ("Surgery on thoracic","boolean",1)
+INSERT INTO `questions`(`question`, `type`, `trial_id`) VALUES ("Post infarct septal rupture","boolean",1)
+
 CREATE TABLE choices (
     `id` BIGINT UNSIGNED AUTO_INCREMENT,
     `choice` VARCHAR(100) NOT NULL,
     `question_id` BIGINT UNSIGNED NOT NULL,
     PRIMARY KEY (`id`),
-    CONSTRAINT `fk_question_choices_questions` FOREIGN KEY (`question_id`) REFERENCES `questions` (`id`) ON DELETE CASCADE
+    CONSTRAINT `fk_choices_questions` FOREIGN KEY (`question_id`) REFERENCES `questions` (`id`) ON DELETE CASCADE
 )
 
 CREATE TABLE answers (
@@ -44,7 +67,11 @@ CREATE TABLE users (
     PRIMARY KEY (`id`)
 )
 
-//patient_data database
+////////////////////
+//                //
+//  PATIENT_DATA  //
+//                //
+////////////////////
 
 CREATE TABLE locations (
     `id` BIGINT UNSIGNED AUTO_INCREMENT,
@@ -55,7 +82,12 @@ CREATE TABLE locations (
     PRIMARY KEY (`id`)
 )
 
-//secure_login database
+////////////////////
+//                //
+//  SECURE_LOGIN  //
+//                //
+////////////////////
+
 CREATE TABLE `users` (
     `id` INT NOT NULL AUTO_INCREMENT,
     `username` VARCHAR(50) NOT NULL,
