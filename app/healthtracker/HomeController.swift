@@ -15,10 +15,19 @@ class HomeController: UIViewController {
     
     let label = UILabel()
     
+    /* http://stackoverflow.com/questions/7886096/unbalanced-calls-to-begin-end-appearance-transitions-for-uitabbarcontroller-0x */
+    override func viewDidAppear(_ animated: Bool) {
+        if (UserDefaults.standard.object(forKey: "unique_id") == nil) {
+            let loginController = LoginController()
+            present(loginController, animated: true, completion: nil)
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.white
         
+        /*
         getSteps()
         printSteps()
         
@@ -35,6 +44,7 @@ class HomeController: UIViewController {
         view.addSubview(button)
         
         button.addTarget(self, action: #selector(handleButton), for: .touchUpInside)
+ */
     }
     
     func handleButton() {

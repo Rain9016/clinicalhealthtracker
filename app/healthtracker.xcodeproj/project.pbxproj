@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C3067D2A1E41F17B002C22A7 /* Lobster 1.4.otf in Resources */ = {isa = PBXBuildFile; fileRef = C3067D291E41F17B002C22A7 /* Lobster 1.4.otf */; };
 		C31471DE1E3B19E5009E65F3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C31471DD1E3B19E5009E65F3 /* AppDelegate.swift */; };
 		C31471E01E3B19E5009E65F3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C31471DF1E3B19E5009E65F3 /* ViewController.swift */; };
 		C31471E31E3B19E5009E65F3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C31471E11E3B19E5009E65F3 /* Main.storyboard */; };
@@ -32,9 +33,11 @@
 		C3ABFB431E3B1F7E00095384 /* 6MWT-intro.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C3ABFB421E3B1F7E00095384 /* 6MWT-intro.mp3 */; };
 		C3ABFB451E3B1F8300095384 /* 6MWT-results-finalised.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C3ABFB441E3B1F8300095384 /* 6MWT-results-finalised.mp3 */; };
 		C3ABFB471E3B1FC700095384 /* WalkTestController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3ABFB461E3B1FC700095384 /* WalkTestController.swift */; };
+		C3ABFB6D1E41598200095384 /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3ABFB6C1E41598200095384 /* LoginController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C3067D291E41F17B002C22A7 /* Lobster 1.4.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Lobster 1.4.otf"; sourceTree = "<group>"; };
 		C31471DA1E3B19E5009E65F3 /* healthtracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = healthtracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C31471DD1E3B19E5009E65F3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C31471DF1E3B19E5009E65F3 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -63,6 +66,7 @@
 		C3ABFB421E3B1F7E00095384 /* 6MWT-intro.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "6MWT-intro.mp3"; sourceTree = "<group>"; };
 		C3ABFB441E3B1F8300095384 /* 6MWT-results-finalised.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "6MWT-results-finalised.mp3"; sourceTree = "<group>"; };
 		C3ABFB461E3B1FC700095384 /* WalkTestController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WalkTestController.swift; sourceTree = "<group>"; };
+		C3ABFB6C1E41598200095384 /* LoginController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,6 +81,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C3067D261E41EC90002C22A7 /* Images */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Images;
+			sourceTree = "<group>";
+		};
 		C31471D11E3B19E5009E65F3 = {
 			isa = PBXGroup;
 			children = (
@@ -97,6 +108,7 @@
 		C31471DC1E3B19E5009E65F3 /* healthtracker */ = {
 			isa = PBXGroup;
 			children = (
+				C3067D261E41EC90002C22A7 /* Images */,
 				C31471F11E3B1A70009E65F3 /* Fonts */,
 				C3ABFB3B1E3B1F5F00095384 /* Audio */,
 				C3ABFB351E3B1CD200095384 /* healthtracker.entitlements */,
@@ -118,6 +130,7 @@
 				C31472041E3B1BA0009E65F3 /* Structs.swift */,
 				C31472061E3B1BB4009E65F3 /* TextFieldController.swift */,
 				C3ABFB461E3B1FC700095384 /* WalkTestController.swift */,
+				C3ABFB6C1E41598200095384 /* LoginController.swift */,
 			);
 			path = healthtracker;
 			sourceTree = "<group>";
@@ -125,6 +138,7 @@
 		C31471F11E3B1A70009E65F3 /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
+				C3067D291E41F17B002C22A7 /* Lobster 1.4.otf */,
 				C3ABFB391E3B1DEA00095384 /* FontAwesome.otf */,
 				C31471F21E3B1ABB009E65F3 /* ionicons.ttf */,
 			);
@@ -219,6 +233,7 @@
 				C31471E81E3B19E5009E65F3 /* LaunchScreen.storyboard in Resources */,
 				C3ABFB3A1E3B1DEA00095384 /* FontAwesome.otf in Resources */,
 				C3ABFB451E3B1F8300095384 /* 6MWT-results-finalised.mp3 in Resources */,
+				C3067D2A1E41F17B002C22A7 /* Lobster 1.4.otf in Resources */,
 				C3ABFB3F1E3B1F7400095384 /* 6MWT-countdown-end.mp3 in Resources */,
 				C31471E51E3B19E5009E65F3 /* Assets.xcassets in Resources */,
 				C3ABFB411E3B1F7900095384 /* 6MWT-countdown-start.mp3 in Resources */,
@@ -239,6 +254,7 @@
 				C31471FB1E3B1B2B009E65F3 /* InstructionController.swift in Sources */,
 				C31471E01E3B19E5009E65F3 /* ViewController.swift in Sources */,
 				C31471DE1E3B19E5009E65F3 /* AppDelegate.swift in Sources */,
+				C3ABFB6D1E41598200095384 /* LoginController.swift in Sources */,
 				C3ABFB471E3B1FC700095384 /* WalkTestController.swift in Sources */,
 				C31472031E3B1B90009E65F3 /* ScaleController.swift in Sources */,
 				C31471FF1E3B1B5F009E65F3 /* QuestionnaireController.swift in Sources */,
