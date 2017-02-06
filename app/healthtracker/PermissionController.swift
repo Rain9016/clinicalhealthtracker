@@ -10,7 +10,6 @@ import UIKit
 
 class PermissionController: UIViewController {
     var pages = [PermissionPage]()
-    var page = 0
     var heading = ""
     var content = ""
     var unicodeEscaped = ""
@@ -41,29 +40,32 @@ class PermissionController: UIViewController {
     }()
     
     func handleButton() {
-        switch self.page {
-        case 0:
-            print("case 1")
-        case 1:
-            print("case 2")
-        case 2:
-            UserDefaults.standard.set(true, forKey: "permissions_set")
-            dismiss(animated: true, completion: nil)
-            return
+        switch self.heading {
+        case "Location Services":
+            print("location services")
+            _ = LocationManager.sharedInstance
+        case "HealthKit":
+            print("healthkit")
+        case "Motion & Fitness":
+            print("motion & fitness")
         default:
-            break
+            print("default")
         }
         
-        let page = self.page + 1
+        self.pages.remove(at: 0)
         
-        let controller = PermissionController()
-        controller.pages = self.pages
-        controller.page = page
-        controller.heading = pages[page].heading
-        controller.content = pages[page].content
-        controller.unicodeEscaped = pages[page].unicodeEscaped
-        
-        self.navigationController?.pushViewController(controller, animated: true)
+        if (pages.count > 0) {
+            let controller = PermissionController()
+            controller.pages = self.pages
+            controller.heading = (pages.first?.heading)!
+            controller.content = (pages.first?.content)!
+            controller.unicodeEscaped = (pages.first?.unicodeEscaped)!
+            
+            self.navigationController?.pushViewController(controller, animated: true)
+        } else {
+            UserDefaults.standard.set(true, forKey: "permissions_set")
+            dismiss(animated: true, completion: nil)
+        }
     }
     
     override func viewDidLoad() {
@@ -108,12 +110,12 @@ class PermissionController: UIViewController {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         
-        switch self.page {
-        case 0:
+        switch self.heading {
+        case "Location Services":
             imageView.rightAnchor.constraint(equalTo: view.centerXAnchor, constant: 75).isActive = true //location services
-        case 1:
+        case "HealthKit":
             imageView.rightAnchor.constraint(equalTo: view.centerXAnchor, constant: 80).isActive = true //healtkit
-        case 2:
+        case "Motion & Fitness":
             imageView.rightAnchor.constraint(equalTo: view.centerXAnchor, constant: 50).isActive = true //motion & fitness
         default:
             break

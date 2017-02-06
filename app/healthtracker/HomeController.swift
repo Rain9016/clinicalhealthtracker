@@ -14,14 +14,14 @@ class HomeController: UIViewController {
     let pages: [PermissionPage] = {
         let firstPage = PermissionPage(heading: "Location Services", content: "Health App requires use of your location services. This app will monitor your location and record your GPS coordinates every 15 minutes in order to map out an activity space. Please press the \"Allow\" button below, and allow Health App to access your location services when prompted.", unicodeEscaped: "\u{f46d}")
         
-        let secondPage = PermissionPage(heading: "Health Kit", content: "Health App requires access to HealthKit in order to access and record your steps and distance history. This app will also continue to monitor and record your step count and distance walked. Please press the \"Allow\" button below, and allow Health App to access your location services when prompted.", unicodeEscaped: "\u{f442}")
+        let secondPage = PermissionPage(heading: "HealthKit", content: "Health App requires access to HealthKit in order to access and record your steps and distance history. This app will also continue to monitor and record your step count and distance walked. Please press the \"Allow\" button below, and allow Health App to access your location services when prompted.", unicodeEscaped: "\u{f442}")
         
         let thirdPage = PermissionPage(heading: "Motion & Fitness", content: "Health App requires access to Health & Fitness in order to track and record your step count and distance walked during the walk test. Please press the \"Allow\" button below, and allow Health App to access your location services when prompted.", unicodeEscaped: "\u{f3bb}")
         
         return [firstPage, secondPage, thirdPage]
     }()
 
-    let healthKitManager = HealthKitManager.sharedInstance
+    //let healthKitManager = HealthKitManager.sharedInstance
     var steps = [HKQuantitySample]()
     
     /* http://stackoverflow.com/questions/7886096/unbalanced-calls-to-begin-end-appearance-transitions-for-uitabbarcontroller-0x */
@@ -33,13 +33,11 @@ class HomeController: UIViewController {
         }
         
         guard (UserDefaults.standard.object(forKey: "permissions_set") as? Bool) == true else {
-            let page = 0
-            
             let permissionController = PermissionController()
             permissionController.pages = self.pages
-            permissionController.heading = pages[page].heading
-            permissionController.content = pages[page].content
-            permissionController.unicodeEscaped = pages[page].unicodeEscaped
+            permissionController.heading = (pages.first?.heading)!
+            permissionController.content = (pages.first?.content)!
+            permissionController.unicodeEscaped = (pages.first?.unicodeEscaped)!
             
             let navController = UINavigationController(rootViewController: permissionController)
             present(navController, animated: true, completion: nil)
@@ -89,17 +87,10 @@ class HomeController: UIViewController {
 
 extension HomeController {
     func getSteps() {
-        let dataToRead = NSSet(object: healthKitManager.stepsCount!)
-        
-        healthKitManager.healthStore?.requestAuthorization(toShare: nil, read: dataToRead as? Set<HKObjectType>, completion: { (success, error) in
-            if success {
-                //self.printSteps()
-            } else {
-                print(error.debugDescription)
-            }
-        })
+
     }
     
+    /*
     func printSteps() {
         let query = HKSampleQuery(sampleType: healthKitManager.stepsCount!, predicate: nil, limit: Int(HKObjectQueryNoLimit), sortDescriptors: nil)
         { (query, results, error) in
@@ -118,6 +109,7 @@ extension HomeController {
         
         healthKitManager.healthStore?.execute(query)
     }
+ */
     
     func dateTimeToString(date: NSDate, component: String) -> String {
         let calendar = NSCalendar.current

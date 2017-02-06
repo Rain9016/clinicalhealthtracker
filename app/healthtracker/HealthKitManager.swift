@@ -6,22 +6,46 @@
 //  Copyright © 2017 untitled. All rights reserved.
 //
 
+import Foundation
 import HealthKit
 
-class HealthKitManager {
+class HealthKitManager: NSObject {
     
-    static let sharedInstance = HealthKitManager()
-    
-    private init() {}
-    
-    let healthStore: HKHealthStore? = {
-        if HKHealthStore.isHealthDataAvailable() {
-            return HKHealthStore()
-        } else {
-            return nil
-        }
+    static let sharedInstance: HealthKitManager = {
+        let instance = HealthKitManager()
+        return instance
     }()
     
-    let stepsCount = HKObjectType.quantityType(forIdentifier: HKQuantityTypeIdentifier.stepCount)
+    var healthStore: HKHealthStore?
+    let stepCount = HKObjectType.quantityType(forIdentifier: HKQuantityTypeIdentifier.stepCount)
     let stepsUnit = HKUnit.count()
+    let distanceWalkingRunning = HKObjectType.quantityType(forIdentifier: HKQuantityTypeIdentifier.distanceWalkingRunning)
+    var typesToRead = Set<HKObjectType>()
+    
+    override init() {
+        super.init()
+        
+        if HKHealthStore.isHealthDataAvailable() {
+            self.healthStore = HKHealthStore()
+            
+            guard let healthStore = self.healthStore else {
+                return
+            }
+            
+            typesToRead = [stepCount!, distanceWalkingRunning!]
+            
+            //if healthStore.authorizationStatus() == .notDetermined
+            
+            healthStore.requestAuthorization(toShare: nil, read: typesToRead, completion: { (success, error) in
+                if success {
+                    //self.printSteps()
+                } else {
+                    print(error.debugDescription)
+                }
+            })
+            
+        } else {
+            
+        }
+    }
 }
