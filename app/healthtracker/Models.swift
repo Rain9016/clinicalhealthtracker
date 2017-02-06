@@ -6,6 +6,8 @@
 //  Copyright © 2017 untitled. All rights reserved.
 //
 
+import Foundation
+
 struct Questionnaire {
     var title: String
     var steps: [Step]
@@ -40,4 +42,10 @@ struct Step {
             self.multiple_choice_answers = [String]()
         }
     }
+}
+
+struct PermissionPage {
+    let heading: String
+    let content: String
+    let unicodeEscaped: String
 }

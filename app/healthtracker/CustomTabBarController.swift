@@ -29,13 +29,13 @@ class CustomTabBarController: UITabBarController {
         navHomeController.tabBarItem.image = homeImage
         
         label.frame = CGRect(x: 0, y: 0, width: 20, height: 30)
-        label.font = UIFont.init(name: "FontAwesome", size: 33)
+        label.font = UIFont.init(name: "FontAwesome", size: 35)
         label.text = "\u{f128}"
         let questionnaireImage = UIImage.imageWithLabel(label: label)
         
         let questionnaireController = QuestionnaireController()
         let navQuestionnaireController = UINavigationController(rootViewController: questionnaireController)
-        navQuestionnaireController.title = "Qnaires"
+        navQuestionnaireController.title = "HRQOL"
         navQuestionnaireController.tabBarItem.image = questionnaireImage
         
         label.frame = CGRect(x: 0, y: 0, width: 17, height: 30)

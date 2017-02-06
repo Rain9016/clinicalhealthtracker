@@ -15,6 +15,10 @@ extension UIColor {
 }
 
 extension UIImage {
+    /*******************************/
+    /* TURN A STRING INTO AN IMAGE */
+    /*******************************/
+    
     class func imageWithLabel(label: UILabel) -> UIImage {
         UIGraphicsBeginImageContextWithOptions(label.bounds.size, false, 0.0)
         label.layer.render(in: UIGraphicsGetCurrentContext()!)
@@ -24,8 +28,12 @@ extension UIImage {
     }
 }
 
-/* http://stackoverflow.com/questions/24126678/close-ios-keyboard-by-touching-anywhere-using-swift */
 extension UIViewController {
+    /************************************************************/
+    /* DISMISS KEYBOARD WHEN SCREEN TAPPED OUTSIDE OF KEYBOARD  */
+    /************************************************************/
+    //http://stackoverflow.com/questions/24126678/close-ios-keyboard-by-touching-anywhere-using-swift
+    
     func hideKeyboardWhenTappedAround() {
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard))
         view.addGestureRecognizer(tap)
@@ -34,4 +42,19 @@ extension UIViewController {
     func dismissKeyboard() {
         view.endEditing(true)
     }
+    
+    /*****************************/
+    /* SEND AN ALERT TO THE USER */
+    /*****************************/
+    //http://stackoverflow.com/questions/28152526/how-do-i-open-phone-settings-when-a-button-is-clicked-ios
+    
+    func sendAlert(title: String, message: String) {
+        let alertController = UIAlertController (title: title, message: message, preferredStyle: .alert)
+        
+        let cancelAction = UIAlertAction(title: "Dismiss", style: .default, handler: nil)
+        alertController.addAction(cancelAction)
+        
+        present(alertController, animated: true, completion: nil)
+    }
 }
+
