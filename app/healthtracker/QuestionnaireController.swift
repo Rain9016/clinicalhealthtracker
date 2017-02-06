@@ -555,7 +555,6 @@ class QuestionnaireController: UIViewController, UITableViewDelegate, UITableVie
         }
     }
     
-    
     ////////////////////
     //                //
     //  MAIN PROGRAM  //
@@ -564,8 +563,6 @@ class QuestionnaireController: UIViewController, UITableViewDelegate, UITableVie
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
         
         view.backgroundColor = UIColor.white
         

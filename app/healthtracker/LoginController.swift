@@ -24,7 +24,7 @@ class LoginController: UIViewController {
     
     let button: UIButton = {
         let button = UIButton(type: .system)
-        button.backgroundColor = UIColor.init(r: 204, g: 0, b: 0) // #DA1D31
+        button.backgroundColor = UIColor.init(r: 204, g: 0, b: 0)
         button.setTitle("Login", for: .normal)
         button.setTitleColor(.white, for: .normal)
         return button
@@ -153,9 +153,14 @@ class LoginController: UIViewController {
         
         task.resume()
     }
-
+    
     func handleButton() {
-        authenticate()
-        print("pressed")
+        if textField.text == "" {
+            UserDefaults.standard.set(nil, forKey: "unique_id")
+        } else {
+            UserDefaults.standard.set(textField.text, forKey: "unique_id")
+        }
+        
+        dismiss(animated: false, completion: nil)
     }
 }

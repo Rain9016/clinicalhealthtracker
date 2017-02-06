@@ -10,22 +10,49 @@ import UIKit
 import HealthKit
 
 class HomeController: UIViewController {
+    
+    let pages: [PermissionPage] = {
+        let firstPage = PermissionPage(heading: "Location Services", content: "Health App requires use of your location services. This app will monitor your location and record your GPS coordinates every 15 minutes in order to map out an activity space. Please press the \"Allow\" button below, and allow Health App to access your location services when prompted.", unicodeEscaped: "\u{f46d}")
+        
+        let secondPage = PermissionPage(heading: "Health Kit", content: "Health App requires access to HealthKit in order to access and record your steps and distance history. This app will also continue to monitor and record your step count and distance walked. Please press the \"Allow\" button below, and allow Health App to access your location services when prompted.", unicodeEscaped: "\u{f442}")
+        
+        let thirdPage = PermissionPage(heading: "Motion & Fitness", content: "Health App requires access to Health & Fitness in order to track and record your step count and distance walked during the walk test. Please press the \"Allow\" button below, and allow Health App to access your location services when prompted.", unicodeEscaped: "\u{f3bb}")
+        
+        return [firstPage, secondPage, thirdPage]
+    }()
+
     let healthKitManager = HealthKitManager.sharedInstance
     var steps = [HKQuantitySample]()
     
-    let label = UILabel()
-    
     /* http://stackoverflow.com/questions/7886096/unbalanced-calls-to-begin-end-appearance-transitions-for-uitabbarcontroller-0x */
     override func viewDidAppear(_ animated: Bool) {
-        if (UserDefaults.standard.object(forKey: "unique_id") == nil) {
+        guard (UserDefaults.standard.object(forKey: "unique_id") as? String) != nil else {
             let loginController = LoginController()
             present(loginController, animated: true, completion: nil)
+            return
+        }
+        
+        guard (UserDefaults.standard.object(forKey: "permissions_set") as? Bool) == true else {
+            let page = 0
+            
+            let permissionController = PermissionController()
+            permissionController.pages = self.pages
+            permissionController.heading = pages[page].heading
+            permissionController.content = pages[page].content
+            permissionController.unicodeEscaped = pages[page].unicodeEscaped
+            
+            let navController = UINavigationController(rootViewController: permissionController)
+            present(navController, animated: true, completion: nil)
+            return
         }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.white
+        
+        UserDefaults.standard.set(nil, forKey: "unique_id")
+        UserDefaults.standard.set(nil, forKey: "permissions_set")
         
         /*
         getSteps()
@@ -46,6 +73,8 @@ class HomeController: UIViewController {
         button.addTarget(self, action: #selector(handleButton), for: .touchUpInside)
  */
     }
+    
+    let label = UILabel()
     
     func handleButton() {
         if (currentReachabilityStatus == .notReachable) {

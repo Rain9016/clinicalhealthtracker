@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		C3067D2A1E41F17B002C22A7 /* Lobster 1.4.otf in Resources */ = {isa = PBXBuildFile; fileRef = C3067D291E41F17B002C22A7 /* Lobster 1.4.otf */; };
+		C3067D361E46BB21002C22A7 /* PermissionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3067D351E46BB21002C22A7 /* PermissionController.swift */; };
 		C31471DE1E3B19E5009E65F3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C31471DD1E3B19E5009E65F3 /* AppDelegate.swift */; };
 		C31471E01E3B19E5009E65F3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C31471DF1E3B19E5009E65F3 /* ViewController.swift */; };
 		C31471E31E3B19E5009E65F3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C31471E11E3B19E5009E65F3 /* Main.storyboard */; };
@@ -23,7 +24,7 @@
 		C31471FF1E3B1B5F009E65F3 /* QuestionnaireController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C31471FE1E3B1B5F009E65F3 /* QuestionnaireController.swift */; };
 		C31472011E3B1B7B009E65F3 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = C31472001E3B1B7B009E65F3 /* Reachability.swift */; };
 		C31472031E3B1B90009E65F3 /* ScaleController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C31472021E3B1B90009E65F3 /* ScaleController.swift */; };
-		C31472051E3B1BA0009E65F3 /* Structs.swift in Sources */ = {isa = PBXBuildFile; fileRef = C31472041E3B1BA0009E65F3 /* Structs.swift */; };
+		C31472051E3B1BA0009E65F3 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = C31472041E3B1BA0009E65F3 /* Models.swift */; };
 		C31472071E3B1BB4009E65F3 /* TextFieldController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C31472061E3B1BB4009E65F3 /* TextFieldController.swift */; };
 		C3ABFB381E3B1CD200095384 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C3ABFB371E3B1CD200095384 /* HealthKit.framework */; };
 		C3ABFB3A1E3B1DEA00095384 /* FontAwesome.otf in Resources */ = {isa = PBXBuildFile; fileRef = C3ABFB391E3B1DEA00095384 /* FontAwesome.otf */; };
@@ -38,6 +39,7 @@
 
 /* Begin PBXFileReference section */
 		C3067D291E41F17B002C22A7 /* Lobster 1.4.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Lobster 1.4.otf"; sourceTree = "<group>"; };
+		C3067D351E46BB21002C22A7 /* PermissionController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PermissionController.swift; sourceTree = "<group>"; };
 		C31471DA1E3B19E5009E65F3 /* healthtracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = healthtracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C31471DD1E3B19E5009E65F3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C31471DF1E3B19E5009E65F3 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -55,7 +57,7 @@
 		C31471FE1E3B1B5F009E65F3 /* QuestionnaireController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuestionnaireController.swift; sourceTree = "<group>"; };
 		C31472001E3B1B7B009E65F3 /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		C31472021E3B1B90009E65F3 /* ScaleController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScaleController.swift; sourceTree = "<group>"; };
-		C31472041E3B1BA0009E65F3 /* Structs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Structs.swift; sourceTree = "<group>"; };
+		C31472041E3B1BA0009E65F3 /* Models.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		C31472061E3B1BB4009E65F3 /* TextFieldController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextFieldController.swift; sourceTree = "<group>"; };
 		C3ABFB351E3B1CD200095384 /* healthtracker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = healthtracker.entitlements; sourceTree = "<group>"; };
 		C3ABFB371E3B1CD200095384 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
@@ -127,10 +129,11 @@
 				C31471FE1E3B1B5F009E65F3 /* QuestionnaireController.swift */,
 				C31472001E3B1B7B009E65F3 /* Reachability.swift */,
 				C31472021E3B1B90009E65F3 /* ScaleController.swift */,
-				C31472041E3B1BA0009E65F3 /* Structs.swift */,
+				C31472041E3B1BA0009E65F3 /* Models.swift */,
 				C31472061E3B1BB4009E65F3 /* TextFieldController.swift */,
 				C3ABFB461E3B1FC700095384 /* WalkTestController.swift */,
 				C3ABFB6C1E41598200095384 /* LoginController.swift */,
+				C3067D351E46BB21002C22A7 /* PermissionController.swift */,
 			);
 			path = healthtracker;
 			sourceTree = "<group>";
@@ -250,12 +253,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C31472051E3B1BA0009E65F3 /* Structs.swift in Sources */,
+				C31472051E3B1BA0009E65F3 /* Models.swift in Sources */,
 				C31471FB1E3B1B2B009E65F3 /* InstructionController.swift in Sources */,
 				C31471E01E3B19E5009E65F3 /* ViewController.swift in Sources */,
 				C31471DE1E3B19E5009E65F3 /* AppDelegate.swift in Sources */,
 				C3ABFB6D1E41598200095384 /* LoginController.swift in Sources */,
 				C3ABFB471E3B1FC700095384 /* WalkTestController.swift in Sources */,
+				C3067D361E46BB21002C22A7 /* PermissionController.swift in Sources */,
 				C31472031E3B1B90009E65F3 /* ScaleController.swift in Sources */,
 				C31471FF1E3B1B5F009E65F3 /* QuestionnaireController.swift in Sources */,
 				C31471F91E3B1B14009E65F3 /* HomeController.swift in Sources */,
