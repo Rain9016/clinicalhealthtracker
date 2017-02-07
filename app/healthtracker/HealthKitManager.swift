@@ -43,9 +43,8 @@ class HealthKitManager: NSObject {
                     print(error.debugDescription)
                 }
             })
-            
         } else {
-            
+            print("HealthKit unavailable")
         }
     }
 }

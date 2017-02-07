@@ -7,6 +7,9 @@
 //
 
 import UIKit
+import CoreLocation
+import HealthKit
+import CoreMotion
 
 class PermissionController: UIViewController {
     var pages = [PermissionPage]()
@@ -43,11 +46,19 @@ class PermissionController: UIViewController {
         switch self.heading {
         case "Location Services":
             print("location services")
+            
+            guard CLLocationManager.locationServicesEnabled() else {
+                sendAlert(title: "Error", message: "In order to use this app, Location Services must be enabled. Please to go Settings > Privacy > Location Services and enable Location Services")
+                return
+            }
+            
             _ = LocationManager.sharedInstance
         case "HealthKit":
             print("healthkit")
+            _ = HealthKitManager.sharedInstance
         case "Motion & Fitness":
             print("motion & fitness")
+            _ = PedometerManager.sharedInstance
         default:
             print("default")
         }
@@ -63,7 +74,7 @@ class PermissionController: UIViewController {
             
             self.navigationController?.pushViewController(controller, animated: true)
         } else {
-            UserDefaults.standard.set(true, forKey: "permissions_set")
+            UserDefaults.standard.set(true, forKey: "permissions_requested")
             dismiss(animated: true, completion: nil)
         }
     }

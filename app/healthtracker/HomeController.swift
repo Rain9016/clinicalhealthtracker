@@ -32,7 +32,7 @@ class HomeController: UIViewController {
             return
         }
         
-        guard (UserDefaults.standard.object(forKey: "permissions_set") as? Bool) == true else {
+        guard (UserDefaults.standard.object(forKey: "permissions_requested") as? Bool) == true else {
             let permissionController = PermissionController()
             permissionController.pages = self.pages
             permissionController.heading = (pages.first?.heading)!
@@ -50,7 +50,7 @@ class HomeController: UIViewController {
         view.backgroundColor = UIColor.white
         
         UserDefaults.standard.set(nil, forKey: "unique_id")
-        UserDefaults.standard.set(nil, forKey: "permissions_set")
+        UserDefaults.standard.set(nil, forKey: "permissions_requested")
         
         /*
         getSteps()
