@@ -5,8 +5,7 @@
 //  Created by untitled on 24/1/17.
 //  Copyright © 2017 untitled. All rights reserved.
 //
-
-/* solution here http://stackoverflow.com/questions/39558868/check-internet-connection-ios-10 */
+//  Useful links: http://stackoverflow.com/questions/39558868/check-internet-connection-ios-10
 
 import SystemConfiguration
 

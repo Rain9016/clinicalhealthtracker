@@ -5,6 +5,7 @@
 //  Created by untitled on 12/1/17.
 //  Copyright © 2017 untitled. All rights reserved.
 //
+//  Useful links: http://stackoverflow.com/questions/7886096/unbalanced-calls-to-begin-end-appearance-transitions-for-uitabbarcontroller-0x
 
 import UIKit
 import HealthKit
@@ -21,10 +22,14 @@ class HomeController: UIViewController {
         return [firstPage, secondPage, thirdPage]
     }()
 
-    //let healthKitManager = HealthKitManager.sharedInstance
-    var steps = [HKQuantitySample]()
+    var healthKitManager: HealthKitManager?
+    var locationManager: LocationManager?
     
-    /* http://stackoverflow.com/questions/7886096/unbalanced-calls-to-begin-end-appearance-transitions-for-uitabbarcontroller-0x */
+    var hk_data = [String:String]()
+    var hk_data_to_send = [String:[[String:String]]]()
+    var locations = [String:String]()
+    var locations_to_send = [String:[[String:String]]]()
+    
     override func viewDidAppear(_ animated: Bool) {
         guard (UserDefaults.standard.object(forKey: "unique_id") as? String) != nil else {
             let loginController = LoginController()
@@ -43,7 +48,12 @@ class HomeController: UIViewController {
             present(navController, animated: true, completion: nil)
             return
         }
+        
+        healthKitManager = HealthKitManager.sharedInstance
+        printSteps()
     }
+    
+    let label = UILabel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,37 +61,6 @@ class HomeController: UIViewController {
         
         UserDefaults.standard.set(nil, forKey: "unique_id")
         UserDefaults.standard.set(nil, forKey: "permissions_requested")
-        
-        /*
-        getSteps()
-        printSteps()
-        
-        label.frame = CGRect(x: 0, y: 100, width: view.frame.size.width, height: 200)
-        label.text = "hello"
-        
-        view.addSubview(label)
-        
-        let button = UIButton()
-        button.frame = CGRect(x: 0, y: 300, width: 100, height: 50)
-        button.backgroundColor = UIColor.blue
-        button.setTitle("Begin", for: .normal)
-        
-        view.addSubview(button)
-        
-        button.addTarget(self, action: #selector(handleButton), for: .touchUpInside)
- */
-    }
-    
-    let label = UILabel()
-    
-    func handleButton() {
-        if (currentReachabilityStatus == .notReachable) {
-            label.text = "not reachable"
-        } else if (currentReachabilityStatus == .reachableViaWWAN) {
-            label.text = "reachable via WWAN"
-        } else if (currentReachabilityStatus == .reachableViaWiFi) {
-            label.text = "reachable via wifi"
-        }
     }
 }
 
@@ -90,45 +69,19 @@ extension HomeController {
 
     }
     
-    /*
     func printSteps() {
-        let query = HKSampleQuery(sampleType: healthKitManager.stepsCount!, predicate: nil, limit: Int(HKObjectQueryNoLimit), sortDescriptors: nil)
+        let query = HKSampleQuery(sampleType: healthKitManager!.stepCount!, predicate: nil, limit: Int(HKObjectQueryNoLimit), sortDescriptors: nil)
         { (query, results, error) in
             if error != nil {
                 print("error")
             } else {
                 for steps in results as! [HKQuantitySample] {
                     let stepsCount = HKUnit.count()
-                    let date = self.dateTimeToString(date: steps.startDate as NSDate, component: "date")
-                    let startTime = self.dateTimeToString(date: steps.startDate as NSDate, component: "time")
-                    let endTime = self.dateTimeToString(date: steps.endDate as NSDate, component: "time")
-                    print("steps: \(steps.quantity.doubleValue(for: stepsCount)), date: \(date), start: \(startTime), end: \(endTime)")
+                    print("steps:", steps.quantity.doubleValue(for: stepsCount))
                 }
             }
         }
         
-        healthKitManager.healthStore?.execute(query)
-    }
- */
-    
-    func dateTimeToString(date: NSDate, component: String) -> String {
-        let calendar = NSCalendar.current
-        var result = ""
-        
-        if (component == "date") {
-            let day = calendar.component(.day, from: date as Date)
-            let month = calendar.component(.month, from: date as Date)
-            let year = calendar.component(.year, from: date as Date)
-            
-            result = "\(day):\(month):\(year)"
-        } else if (component == "time") {
-            let hour = calendar.component(.hour, from: date as Date)
-            let minutes = calendar.component(.minute, from: date as Date)
-            let seconds = calendar.component(.second, from: date as Date)
-            
-            result = "\(hour):\(minutes):\(seconds)"
-        }
-        
-        return result
+        healthKitManager!.healthStore?.execute(query)
     }
 }

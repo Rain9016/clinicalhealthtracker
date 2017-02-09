@@ -1,37 +1,54 @@
+<?php
+    require_once $_SERVER['DOCUMENT_ROOT'] . "/db/connect.php";
+    require_once 'functions.php';
+
+    /* START SECURE SESSION */
+    sec_session_start();
+
+    /* CONNECT TO DB */
+    $db_name = "secure_login";
+    $db = connect($db_name);
+
+    /* IF ALL FIELDS NOT FILLED OUT */
+    if (!empty($_POST)) {
+        if(empty($_POST['username']))
+        {
+            echo("Please enter username.<br />");
+        }
+
+        if(empty($_POST['password']))
+        {
+            echo("Please enter password.<br />");
+        }
+    }
+
+    /* IF ALL FIELDS FILLED OUT */
+    if(!empty($_POST['username']) && !empty($_POST['password'])) {
+        $username = $_POST['username'];
+        $password = $_POST['password'];
+
+        if (using_brute_force($username, $db)) {
+            echo "account locked";
+        } else if (login_success($username, $password, $db)) {
+            header('Location: main.php');
+            die();
+        } else {
+            echo("Username or password incorrect.<br />");
+        }
+    }
+?>
+
 <!doctype html>
 <html>
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clinical Health Tracker</title>
-<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700">
-<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Lobster">
-<style type="text/css">
-    *, :before, :after {
-        margin: 0;
-        padding: 0;
-    }
-
-    html {
-    }
-
-    body {
-        font-family: 'Open Sans', sans-serif;
-    }
-
-    @media (min-width : 320px) {
-    }
-
-    @media (min-width : 768px) and (max-width : 1024px) {
-
-    }
-</style>
 </head>
 <body>
-<form method="post" action="login.php">
+<form method="post" action="index.php">
 welcome to health tracker<br>
 <input type="text" placeholder="username" name="username" required><br>
-<input type"password" placeholder="password" name="password" required><br>
-<button type="submit">log in</button> or <a href="signup.php">sign up a patient</a>
+<input type="password" placeholder="password" name="password" required><br>
+<button type="submit">log in</button> or <a href="sign-up.php">sign up a patient</a>
 </form>
 </body>
 </html>

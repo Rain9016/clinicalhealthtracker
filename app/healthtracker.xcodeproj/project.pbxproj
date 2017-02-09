@@ -11,6 +11,7 @@
 		C3067D361E46BB21002C22A7 /* PermissionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3067D351E46BB21002C22A7 /* PermissionController.swift */; };
 		C3067D3D1E481769002C22A7 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3067D3C1E481769002C22A7 /* LocationManager.swift */; };
 		C3067D671E48BD39002C22A7 /* PedometerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3067D661E48BD39002C22A7 /* PedometerManager.swift */; };
+		C30EAC061E4B568100353701 /* HomeControllerOld.swift in Sources */ = {isa = PBXBuildFile; fileRef = C30EAC051E4B568100353701 /* HomeControllerOld.swift */; };
 		C31471DE1E3B19E5009E65F3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C31471DD1E3B19E5009E65F3 /* AppDelegate.swift */; };
 		C31471E51E3B19E5009E65F3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C31471E41E3B19E5009E65F3 /* Assets.xcassets */; };
 		C31471E81E3B19E5009E65F3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C31471E61E3B19E5009E65F3 /* LaunchScreen.storyboard */; };
@@ -42,6 +43,7 @@
 		C3067D351E46BB21002C22A7 /* PermissionController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PermissionController.swift; sourceTree = "<group>"; };
 		C3067D3C1E481769002C22A7 /* LocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		C3067D661E48BD39002C22A7 /* PedometerManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PedometerManager.swift; sourceTree = "<group>"; };
+		C30EAC051E4B568100353701 /* HomeControllerOld.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeControllerOld.swift; sourceTree = "<group>"; };
 		C31471DA1E3B19E5009E65F3 /* healthtracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = healthtracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C31471DD1E3B19E5009E65F3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C31471E41E3B19E5009E65F3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -126,6 +128,7 @@
 				C31471F61E3B1AFF009E65F3 /* HealthKitManager.swift */,
 				C3067D3C1E481769002C22A7 /* LocationManager.swift */,
 				C3067D661E48BD39002C22A7 /* PedometerManager.swift */,
+				C30EAC051E4B568100353701 /* HomeControllerOld.swift */,
 			);
 			path = healthtracker;
 			sourceTree = "<group>";
@@ -263,6 +266,7 @@
 				C31472071E3B1BB4009E65F3 /* TextFieldController.swift in Sources */,
 				C31472011E3B1B7B009E65F3 /* Reachability.swift in Sources */,
 				C3067D671E48BD39002C22A7 /* PedometerManager.swift in Sources */,
+				C30EAC061E4B568100353701 /* HomeControllerOld.swift in Sources */,
 				C31471F51E3B1ADE009E65F3 /* Extensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

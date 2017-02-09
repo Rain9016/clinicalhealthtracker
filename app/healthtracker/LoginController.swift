@@ -105,7 +105,7 @@ class LoginController: UIViewController {
     
     func authenticate() {
         let request: URLRequest = {
-            let urlString = "http://cht.dev/iphone/authenticate.php"
+            let urlString = "http://cht.dev/web-service/authenticate.php"
             let url = URL(string: urlString)
             var request = URLRequest(url: url!)
             request.httpMethod = "POST"
@@ -119,34 +119,29 @@ class LoginController: UIViewController {
         let session = URLSession(configuration: URLSessionConfiguration.default)
         
         let task = session.dataTask(with: request, completionHandler: { (data, response, error) in
-            guard let _ = data, let _ = response, error == nil else {
-                print("error")
+            if error != nil {
+                print("error", error.debugDescription)
                 return
             }
             
             /* https://developer.apple.com/swift/blog/?id=37 */
             do {
-                let parsedData = try JSONSerialization.jsonObject(with: data!, options: []) as! [String: Any]
-                let message = parsedData["message"] as! String
+                let data = try JSONSerialization.jsonObject(with: data!, options: []) as! [String: Any]
+                let err = data["error"] as! Bool
                 
-                if let err = parsedData["error"] {
-                    print(err)
-                    print(message)
+                if err {
+                    DispatchQueue.main.async {
+                        self.sendAlert(title: "Error", message: data["message"] as! String)
+                    }
                     return
+                } else {
+                    DispatchQueue.main.async {
+                        UserDefaults.standard.set(self.textField.text, forKey: "unique_id")
+                        self.dismiss(animated: false, completion: nil)
+                    }
                 }
-                
-                let name = parsedData["name"] as! String
-                
-                print(name)
-                print(message)
-                
-                /*
-                DispatchQueue.main.async {
-                    self.performSegue(withIdentifier: "goBack", sender: nil)
-                }
-                 */
             } catch {
-                print("error")
+                print("error", error.localizedDescription)
                 return
             }
         })
@@ -156,11 +151,11 @@ class LoginController: UIViewController {
     
     func handleButton() {
         if textField.text == "" {
-            UserDefaults.standard.set(nil, forKey: "unique_id")
+            sendAlert(title: "Error", message: "Please enter your unique ID")
         } else {
-            UserDefaults.standard.set(textField.text, forKey: "unique_id")
+            UserDefaults.standard.set(self.textField.text, forKey: "unique_id") //DELETE!
+            self.dismiss(animated: false, completion: nil) //DELETE!
+            //authenticate()
         }
-        
-        dismiss(animated: false, completion: nil)
     }
 }
