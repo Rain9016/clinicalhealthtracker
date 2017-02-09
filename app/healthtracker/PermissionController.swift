@@ -16,6 +16,7 @@ class PermissionController: UIViewController {
     var heading = ""
     var content = ""
     var unicodeEscaped = ""
+    var permission_requested = false
     
     let headingLabel: UILabel = {
         let label = UILabel()
@@ -34,48 +35,70 @@ class PermissionController: UIViewController {
     }()
     
     let button: UIButton = {
-        let button = UIButton(type: .system)
-        button.backgroundColor = UIColor(r: 204, g: 0, b: 0)
-        button.setTitleColor(.white, for: .normal)
+        let button = UIButton()
+        button.backgroundColor = UIColor.white
+        button.setTitleColor(UIColor.init(r: 204, g: 0, b: 0), for: .normal)
         button.setTitle("Allow", for: .normal)
+        button.layer.borderWidth = 1
+        button.layer.borderColor = UIColor.init(r: 204, g: 0, b: 0).cgColor
+        button.layer.cornerRadius = 4
+        
         button.addTarget(self, action: #selector(handleButton), for: .touchUpInside)
         return button
     }()
     
     func handleButton() {
-        switch self.heading {
-        case "Location Services":
-            print("location services")
+        if (!permission_requested) {
+            switch self.heading {
+            case "Location Services":
+                print("location services")
             
-            guard CLLocationManager.locationServicesEnabled() else {
-                sendAlert(title: "Error", message: "In order to use this app, Location Services must be enabled. Please to go Settings > Privacy > Location Services and enable Location Services")
+                guard CLLocationManager.locationServicesEnabled() else {
+                    sendAlert(title: "Error", message: "In order to use this app, Location Services must be enabled. Please to go Settings > Privacy > Location Services and enable Location Services")
+                    return
+                }
+            
+                _ = LocationManager.sharedInstance
+            case "HealthKit":
+                print("healthkit")
+                _ = HealthKitManager.sharedInstance
+            case "Motion & Fitness":
+                print("motion & fitness")
+                _ = PedometerManager.sharedInstance
+                
+                button.backgroundColor = UIColor.init(r: 204, g: 0, b: 0)
+                button.setTitleColor(UIColor.white, for: .normal)
+                button.setTitle("Finish", for: .normal)
+                button.layer.borderWidth = 0
+                
+                permission_requested = true
+                return
+            default:
+                print("default")
                 return
             }
             
-            _ = LocationManager.sharedInstance
-        case "HealthKit":
-            print("healthkit")
-            _ = HealthKitManager.sharedInstance
-        case "Motion & Fitness":
-            print("motion & fitness")
-            _ = PedometerManager.sharedInstance
-        default:
-            print("default")
-        }
-        
-        self.pages.remove(at: 0)
-        
-        if (pages.count > 0) {
-            let controller = PermissionController()
-            controller.pages = self.pages
-            controller.heading = (pages.first?.heading)!
-            controller.content = (pages.first?.content)!
-            controller.unicodeEscaped = (pages.first?.unicodeEscaped)!
+            button.backgroundColor = UIColor.init(r: 204, g: 0, b: 0)
+            button.setTitleColor(UIColor.white, for: .normal)
+            button.setTitle("Next", for: .normal)
+            button.layer.borderWidth = 0
             
-            self.navigationController?.pushViewController(controller, animated: true)
+            permission_requested = true
         } else {
-            UserDefaults.standard.set(true, forKey: "permissions_requested")
-            dismiss(animated: true, completion: nil)
+            self.pages.remove(at: 0)
+                
+            if (pages.count > 0) {
+                let controller = PermissionController()
+                controller.pages = self.pages
+                controller.heading = (pages.first?.heading)!
+                controller.content = (pages.first?.content)!
+                controller.unicodeEscaped = (pages.first?.unicodeEscaped)!
+                    
+                self.navigationController?.pushViewController(controller, animated: true)
+            } else {
+                UserDefaults.standard.set(true, forKey: "permissions_requested")
+                dismiss(animated: true, completion: nil)
+            }
         }
     }
     
@@ -102,7 +125,7 @@ class PermissionController: UIViewController {
         
         button.translatesAutoresizingMaskIntoConstraints = false
         button.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        button.topAnchor.constraint(equalTo: contentLabel.bottomAnchor, constant: 20).isActive = true
+        button.topAnchor.constraint(equalTo: contentLabel.bottomAnchor, constant: 22).isActive = true
         button.heightAnchor.constraint(equalToConstant: 40).isActive = true
         button.widthAnchor.constraint(equalToConstant: 100).isActive = true
         
