@@ -50,7 +50,6 @@ class HomeController: UIViewController {
         }
         
         healthKitManager = HealthKitManager.sharedInstance
-        printSteps()
     }
     
     let label = UILabel()
@@ -65,12 +64,8 @@ class HomeController: UIViewController {
 }
 
 extension HomeController {
-    func getSteps() {
-
-    }
-    
-    func printSteps() {
-        let query = HKSampleQuery(sampleType: healthKitManager!.stepCount!, predicate: nil, limit: Int(HKObjectQueryNoLimit), sortDescriptors: nil)
+    func record_hk_data() {
+        var query = HKSampleQuery(sampleType: healthKitManager!.stepCount!, predicate: nil, limit: Int(HKObjectQueryNoLimit), sortDescriptors: nil)
         { (query, results, error) in
             if error != nil {
                 print("error")
@@ -82,6 +77,20 @@ extension HomeController {
             }
         }
         
+        healthKitManager!.healthStore?.execute(query)
+        
+        query = HKSampleQuery(sampleType: healthKitManager!.stepCount!, predicate: nil, limit: Int(HKObjectQueryNoLimit), sortDescriptors: nil)
+        { (query, results, error) in
+            if error != nil {
+                print("error")
+            } else {
+                for steps in results as! [HKQuantitySample] {
+                    let stepsCount = HKUnit.count()
+                    print("steps:", steps.quantity.doubleValue(for: stepsCount))
+                }
+            }
+        }
+
         healthKitManager!.healthStore?.execute(query)
     }
 }
