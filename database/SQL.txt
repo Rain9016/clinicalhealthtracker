@@ -84,7 +84,7 @@ CREATE TABLE locations (
 
 CREATE TABLE `hk_data` (
   `id` BIGINT UNSIGNED AUTO_INCREMENT,
-  `user_id` VARCHAR(50) NOT NULL,
+  `unique_id` VARCHAR(50) NOT NULL,
   `start_time` TIMESTAMP NOT NULL,
   `end_time` TIMESTAMP NOT NULL,
   `steps` INT NOT NULL,
@@ -94,7 +94,7 @@ CREATE TABLE `hk_data` (
 
 //http://stackoverflow.com/questions/9748954/is-it-possible-to-define-a-timestamp-column-that-is-not-null-and-has-no-default
 //http://stackoverflow.com/questions/3651798/remove-on-update-condition-without-drop-mysql-table
-ALTER TABLE `hk_data` CHANGE `start_date` `start_date` TIMESTAMP NOT NULL DEFAULT 0;
+ALTER TABLE `hk_data` CHANGE `start_time` `start_time` TIMESTAMP NOT NULL DEFAULT 0;
 ALTER TABLE `hk_data` ALTER COLUMN `start_time` DROP DEFAULT;
 
 ////////////////////
