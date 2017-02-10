@@ -19,7 +19,7 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
     var locationManager: CLLocationManager?
     var currentLocation: CLLocation?
     
-    private override init() {
+    override init() {
         super.init()
         
         self.locationManager = CLLocationManager()
@@ -28,25 +28,21 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
             return
         }
         
-        guard CLLocationManager.authorizationStatus() == .authorizedAlways else {
-            locationManager.requestAlwaysAuthorization()
-            
-            locationManager.desiredAccuracy = kCLLocationAccuracyBest
-            locationManager.allowsBackgroundLocationUpdates = true
-            locationManager.pausesLocationUpdatesAutomatically = false
-            locationManager.delegate = self
-            
-            return
+        if CLLocationManager.authorizationStatus() != .authorizedAlways {
+            self.locationManager?.requestAlwaysAuthorization()
         }
+        
+        locationManager.delegate = self
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.allowsBackgroundLocationUpdates = true
+        locationManager.pausesLocationUpdatesAutomatically = false
     }
     
     func startUpdatingLocation() {
-        print("Starting Location Updates")
         self.locationManager?.startUpdatingLocation()
     }
     
     func stopUpdatingLocation() {
-        print("Stop Location Updates")
         self.locationManager?.stopUpdatingLocation()
     }
     
@@ -54,10 +50,8 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
         guard let location = locations.last else {
             return
         }
-
-        self.currentLocation = location
         
-        print("latitude \(location.coordinate.latitude), longitude: \(location.coordinate.longitude)")
+        self.currentLocation = location
     }
     
     func isAuthorized() -> Bool {

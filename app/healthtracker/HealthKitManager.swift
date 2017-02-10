@@ -18,7 +18,6 @@ class HealthKitManager: NSObject {
     
     var healthStore: HKHealthStore?
     let stepCount = HKObjectType.quantityType(forIdentifier: HKQuantityTypeIdentifier.stepCount)
-    let stepsUnit = HKUnit.count()
     let distanceWalkingRunning = HKObjectType.quantityType(forIdentifier: HKQuantityTypeIdentifier.distanceWalkingRunning)
     var typesToRead = Set<HKObjectType>()
     
