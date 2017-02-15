@@ -73,22 +73,31 @@ CREATE TABLE users (
 //                //
 ////////////////////
 
-CREATE TABLE locations (
+CREATE TABLE location_data (
     `id` BIGINT UNSIGNED AUTO_INCREMENT,
-    `user_id` VARCHAR(50) NOT NULL,
-    `latitude` DECIMAL(10, 8) NOT NULL,
-    `longitude` DECIMAL(11, 8) NOT NULL,
-    `date_time` DATETIME
+    `unique_id` VARCHAR(50) NOT NULL,
+    `time` TIMESTAMP NOT NULL DEFAULT 0,
+    `latitude` DECIMAL(8,6) NOT NULL,
+    `longitude` DECIMAL(9,6) NOT NULL,
     PRIMARY KEY (`id`)
 )
 
 CREATE TABLE `hk_data` (
   `id` BIGINT UNSIGNED AUTO_INCREMENT,
   `unique_id` VARCHAR(50) NOT NULL,
-  `start_time` TIMESTAMP NOT NULL,
-  `end_time` TIMESTAMP NOT NULL,
+  `start_time` TIMESTAMP NOT NULL DEFAULT 0,
+  `end_time` TIMESTAMP NOT NULL DEFAULT 0,
   `steps` INT NOT NULL,
   `distance` FLOAT NOT NULL,
+  PRIMARY KEY (`id`)
+)
+
+CREATE TABLE `questionnaire_data` (
+  `id` BIGINT UNSIGNED AUTO_INCREMENT,
+  `name` VARCHAR(50) NOT NULL,
+  `time` TIMESTAMP NOT NULL DEFAULT 0,
+  `question` VARCHAR(100) NOT NULL,
+  `answer` VARCHAR(100) NOT NULL,
   PRIMARY KEY (`id`)
 )
 
@@ -96,6 +105,10 @@ CREATE TABLE `hk_data` (
 //http://stackoverflow.com/questions/3651798/remove-on-update-condition-without-drop-mysql-table
 ALTER TABLE `hk_data` CHANGE `start_time` `start_time` TIMESTAMP NOT NULL DEFAULT 0;
 ALTER TABLE `hk_data` ALTER COLUMN `start_time` DROP DEFAULT;
+ALTER TABLE `hk_data` ALTER COLUMN `end_time` DROP DEFAULT;
+
+ALTER TABLE `location_data` CHANGE `time` `time` TIMESTAMP NOT NULL DEFAULT 0;
+ALTER TABLE `location_data` ALTER COLUMN `time` DROP DEFAULT;
 
 ////////////////////
 //                //

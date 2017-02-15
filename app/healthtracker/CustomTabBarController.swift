@@ -25,7 +25,7 @@ class CustomTabBarController: UITabBarController {
         
         let homeController = HomeController()
         let navHomeController = UINavigationController(rootViewController: homeController)
-        navHomeController.title = "Home"
+        navHomeController.title = "Information"
         navHomeController.tabBarItem.image = homeImage
         
         label.frame = CGRect(x: 0, y: 0, width: 20, height: 30)
@@ -35,7 +35,7 @@ class CustomTabBarController: UITabBarController {
         
         let questionnaireController = QuestionnaireController()
         let navQuestionnaireController = UINavigationController(rootViewController: questionnaireController)
-        navQuestionnaireController.title = "HRQOL"
+        navQuestionnaireController.title = "Surveys"
         navQuestionnaireController.tabBarItem.image = questionnaireImage
         
         label.frame = CGRect(x: 0, y: 0, width: 17, height: 30)
@@ -45,7 +45,7 @@ class CustomTabBarController: UITabBarController {
         
         let walkTestController = WalkTestController()
         let navWalkTestController = UINavigationController(rootViewController: walkTestController)
-        navWalkTestController.title = "6MWT"
+        navWalkTestController.title = "Walk Test"
         navWalkTestController.tabBarItem.image = walkTestImage
         
         viewControllers = [navHomeController, navQuestionnaireController, navWalkTestController]

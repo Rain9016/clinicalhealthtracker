@@ -8,90 +8,31 @@
 
 import UIKit
 
-class InstructionController: UIViewController {
-    var questionnaire: Questionnaire!
-    var currentStep: Int!
-    var patientAnswers: [String:String]!
-    
-    ////////////////////////////
-    //                        //
-    //  NAVIGATION BAR STUFF  //
-    //                        //
-    ////////////////////////////
-    
-    func setupNavigationBar() {
-        if (currentStep == 0) {
-            self.navigationItem.hidesBackButton = true
-        }
-        
-        self.navigationItem.title = "Step " + String(currentStep + 1) + " of " + String(questionnaire.steps.count)
-        
-        let cancelButton = UIBarButtonItem()
-        cancelButton.title = "Cancel"
-        cancelButton.style = .done
-        cancelButton.target = self
-        cancelButton.action = #selector(handleCancelButton)
-        
-        self.navigationItem.rightBarButtonItem = cancelButton
-    }
-    
-    func handleCancelButton() {
-        _ = navigationController?.popToRootViewController(animated: true)
-    }
-    
-    
-    /////////////////////////
-    //                     //
-    //  SCROLL VIEW STUFF  //
-    //                     //
-    /////////////////////////
-    
-    let scrollView = UIScrollView()
-    
-    func setupScrollView() {
-        scrollView.frame = view.bounds
-    }
-    
-    func constrainScrollView() {
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        scrollView.topAnchor.constraint(equalTo: topLayoutGuide.topAnchor).isActive = true /* attach the top of the scrollview to below the navigation bar */
-        scrollView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
-        scrollView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
-        scrollView.bottomAnchor.constraint(equalTo: bottomLayoutGuide.bottomAnchor).isActive = true /* attach the bottom of the scrollview to above the tab bar */
-    }
-    
+class InstructionController: StepController {
     ///////////////////
     //               //
     //  LABEL STUFF  //
     //               //
     ///////////////////
     
-    let label = UILabel()
+    let content_label: UILabel = {
+        let label = UILabel()
+        return label
+    }()
     
-    func setupLabel() {
-        label.numberOfLines = 0
-        label.lineBreakMode = NSLineBreakMode.byWordWrapping
-        label.text = questionnaire.steps[currentStep].title
-        label.font = label.font.withSize(20)
+    func setup_content_label() {
+        content_label.numberOfLines = 0
+        content_label.lineBreakMode = NSLineBreakMode.byWordWrapping
+        content_label.text = questionnaire.steps[currentStep].instruction?.content
         
         let labelWidth: CGFloat = view.frame.size.width - 30
-        let labelSize: CGSize = label.sizeThatFits(CGSize(width: labelWidth, height: CGFloat.greatestFiniteMagnitude))
+        let labelSize: CGSize = content_label.sizeThatFits(CGSize(width: labelWidth, height: CGFloat.greatestFiniteMagnitude))
         
-        label.frame = CGRect(x: Double(15), y: Double(15), width: Double(labelSize.width), height: Double(labelSize.height))
-    }
-    
-    var subtitleLabel = UILabel()
-    
-    func setupSubtitleLabel() {
-        subtitleLabel.numberOfLines = 0
-        subtitleLabel.lineBreakMode = NSLineBreakMode.byWordWrapping
-        subtitleLabel.text = questionnaire.steps[currentStep].subtitle
-        subtitleLabel.textColor = UIColor.gray
-        
-        let labelWidth: CGFloat = view.frame.size.width - 30
-        let labelSize: CGSize = subtitleLabel.sizeThatFits(CGSize(width: labelWidth, height: CGFloat.greatestFiniteMagnitude))
-        
-        subtitleLabel.frame = CGRect(x: Double(15), y: Double(15) + Double(label.frame.size.height), width: Double(labelSize.width), height: Double(labelSize.height))
+        if (questionnaire.steps[currentStep].subtitle != nil) {
+            content_label.frame = CGRect(x: 15, y: 15 + label.frame.size.height + subtitleLabel.frame.size.height + 20, width: labelSize.width, height: labelSize.height)
+        } else {
+            content_label.frame = CGRect(x: 15, y: 15 + label.frame.size.height + 20, width: labelSize.width, height: labelSize.height)
+        }
     }
     
     ////////////////////
@@ -104,9 +45,9 @@ class InstructionController: UIViewController {
     
     func setupNextButton() {
         if (questionnaire.steps[currentStep].subtitle != nil) {
-            nextButton.frame = CGRect(x: view.frame.size.width/3, y: 15 + label.frame.size.height + subtitleLabel.frame.size.height + 20, width: view.frame.size.width/3, height: 40)
+            nextButton.frame = CGRect(x: view.frame.size.width/3, y: 15 + label.frame.size.height + subtitleLabel.frame.size.height + 20 + content_label.frame.size.height + 20, width: view.frame.size.width/3, height: 40)
         } else {
-            nextButton.frame = CGRect(x: view.frame.size.width/3, y: 15 + label.frame.size.height + 20, width: view.frame.size.width/3, height: 40)
+            nextButton.frame = CGRect(x: view.frame.size.width/3, y: 15 + label.frame.size.height + 20 + content_label.frame.size.height + 20, width: view.frame.size.width/3, height: 40)
         }
         
         nextButton.backgroundColor = UIColor.white
@@ -129,9 +70,9 @@ class InstructionController: UIViewController {
         let skipLabelSize: CGSize = skipLabel.sizeThatFits(CGSize(width: skipLabelWidth, height: CGFloat.greatestFiniteMagnitude))
         
         if (questionnaire.steps[currentStep].subtitle != nil) {
-            skipButton.frame = CGRect(x: 0, y: 15 + label.frame.size.height + subtitleLabel.frame.size.height + 20 + nextButton.frame.size.height + 5, width: view.frame.size.width, height: skipLabelSize.height)
+            skipButton.frame = CGRect(x: 0, y: 15 + label.frame.size.height + subtitleLabel.frame.size.height + 20 + content_label.frame.size.height + 20 + nextButton.frame.size.height + 5, width: view.frame.size.width, height: skipLabelSize.height)
         } else {
-            skipButton.frame = CGRect(x: 0, y: 15 + label.frame.size.height + 20 + nextButton.frame.size.height + 5, width: view.frame.size.width, height: skipLabelSize.height)
+            skipButton.frame = CGRect(x: 0, y: 15 + label.frame.size.height + 20 + content_label.frame.size.height + 20 + nextButton.frame.size.height + 5, width: view.frame.size.width, height: skipLabelSize.height)
         }
         
         skipButton.setTitleColor(UIColor.init(r: 14, g: 122, b: 254), for: .normal)
@@ -139,60 +80,12 @@ class InstructionController: UIViewController {
         
         skipButton.addTarget(self, action: #selector(handleButtons), for: .touchUpInside)
         
-        if (questionnaire.steps[currentStep].isSkippable!) {
+        if (questionnaire.steps[currentStep].isSkippable) {
             skipButton.isEnabled = true
             skipButton.alpha = 1
         } else {
             skipButton.isEnabled = false
             skipButton.alpha = 0.2
-        }
-    }
-    
-    func handleButtons() {
-        let nextStep = currentStep + 1
-        
-        /* set the back bar button item */
-        let backBarButtonItem = UIBarButtonItem()
-        backBarButtonItem.title = "Back"
-        navigationItem.backBarButtonItem = backBarButtonItem
-        
-        if (questionnaire.steps[nextStep].type == "instruction") {
-            let instructionController = InstructionController()
-            instructionController.questionnaire = questionnaire
-            instructionController.currentStep = nextStep
-            instructionController.patientAnswers = patientAnswers
-            
-            nextButton.isEnabled = false
-            nextButton.alpha = 0.5;
-            
-            self.navigationController?.pushViewController(instructionController, animated: true)
-        } else if (questionnaire.steps[nextStep].type == "multiple_choice") {
-            let multipleChoiceController = MultipleChoiceController()
-            multipleChoiceController.questionnaire = questionnaire
-            multipleChoiceController.currentStep = nextStep
-            multipleChoiceController.patientAnswers = patientAnswers
-            
-            nextButton.isEnabled = false
-            nextButton.alpha = 0.5;
-            
-            self.navigationController?.pushViewController(multipleChoiceController, animated: true)
-        } else if (questionnaire.steps[nextStep].type == "text_field") {
-            let textFieldController = TextFieldController()
-            textFieldController.questionnaire = questionnaire
-            textFieldController.currentStep = nextStep
-            textFieldController.patientAnswers = patientAnswers
-            
-            nextButton.isEnabled = false
-            nextButton.alpha = 0.5
-            
-            self.navigationController?.pushViewController(textFieldController, animated: true)
-        } else if (questionnaire.steps[nextStep].type == "scale") {
-            let scaleController = ScaleController()
-            scaleController.questionnaire = questionnaire
-            scaleController.currentStep = nextStep
-            scaleController.patientAnswers = patientAnswers
-            
-            self.navigationController?.pushViewController(scaleController, animated: true)
         }
     }
     
@@ -221,6 +114,9 @@ class InstructionController: UIViewController {
             scrollView.addSubview(subtitleLabel)
         }
         
+        setup_content_label()
+        scrollView.addSubview(content_label)
+        
         setupNextButton()
         scrollView.addSubview(nextButton)
         
@@ -236,9 +132,9 @@ class InstructionController: UIViewController {
         var scrollViewHeight = 0
         
         if (questionnaire.steps[currentStep].subtitle != nil) {
-            scrollViewHeight = 15 + Int(label.frame.size.height) + Int(subtitleLabel.frame.size.height) + 20 + 40 + 5 + Int(skipButton.frame.size.height) + 20
+            scrollViewHeight = 15 + Int(label.frame.size.height) + Int(subtitleLabel.frame.size.height) + 20 + Int(content_label.frame.size.height) + 20 + 40 + 5 + Int(skipButton.frame.size.height) + 20
         } else {
-            scrollViewHeight = 15 + Int(label.frame.size.height) + 20 + 40 + 5 + Int(skipButton.frame.size.height) + 20
+            scrollViewHeight = 15 + Int(label.frame.size.height) + 20 + Int(content_label.frame.size.height) + 20 + 40 + 5 + Int(skipButton.frame.size.height) + 20
         }
         
         scrollView.contentSize = CGSize(width: view.frame.width, height: CGFloat(scrollViewHeight))

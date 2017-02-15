@@ -8,6 +8,12 @@
 
 import Foundation
 
+/////////////////////
+//                 //
+//  QUESTIONNAIRE  //
+//                 //
+/////////////////////
+
 struct Questionnaire {
     var title: String
     var steps: [Step]
@@ -22,27 +28,46 @@ struct Step {
     var title: String
     var type: String //instruction, text, multiple_choice, slider
     var subtitle: String?
-    var isSkippable: Bool?
+    var isSkippable = false
     
-    var instruction_text: String?
-    
-    var multiple_choice_answers: [String]?
-    
-    var scale_min_value: Int?
-    var scale_max_value: Int?
-    var scale_default_value: Int?
-    var scale_step: Int?
+    var instruction: Instruction?
+    var multiple_choice: MultipleChoice?
+    var scale: Scale?
     
     init(title: String, type: String) {
         self.title = title
         self.type = type
-        self.isSkippable = false
         
-        if (type == "multiple_choice") {
-            self.multiple_choice_answers = [String]()
+        if (type == "instruction") {
+            instruction = Instruction()
+        } else if (type == "multiple_choice") {
+            multiple_choice = MultipleChoice()
+        } else if (type == "scale") {
+            scale = Scale()
         }
     }
 }
+
+struct Instruction {
+    var content: String?
+}
+
+struct MultipleChoice {
+    var answers: [String] = [String]()
+}
+
+struct Scale {
+    var min_value = 0
+    var max_value = 0
+    var default_value = 0
+    var step = 0
+}
+
+///////////////////
+//               //
+//  PERMISSIONS  //
+//               //
+///////////////////
 
 struct PermissionPage {
     let heading: String

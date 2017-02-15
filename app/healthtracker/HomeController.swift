@@ -25,15 +25,19 @@ class HomeController: UIViewController, CLLocationManagerDelegate {
 
     var healthKitManager: HealthKitManager?
     var locationManager: LocationManager?
-    var semaphore: DispatchSemaphore?
+    
+    var unique_id: String?
+    
+    let semaphore = DispatchSemaphore(value: 0) //create semaphore
     
     var dataToSend = DataToSend.sharedInstance
     var hk_data = [[String:String]]()
     var distance = [String]()
-    var locations = [String:String]()
+    var last_hk_update = Date()
     
+    var is_recording = false
     var timer: Timer?
-    var start_location_recorded = false
+    var update_interval: TimeInterval = 10
 
     let button: UIButton = {
         let button = UIButton(type: .system)
@@ -44,7 +48,7 @@ class HomeController: UIViewController, CLLocationManagerDelegate {
     }()
     
     func handleButton(sender: UIButton!) {
-        print("latitude \(locationManager?.currentLocation?.coordinate.latitude), longitude: \(locationManager?.currentLocation?.coordinate.longitude)")
+        print("\(dataToSend.hk_data["hk_data"]?.count)")
     }
     
     override func viewDidLoad() {
@@ -65,7 +69,7 @@ class HomeController: UIViewController, CLLocationManagerDelegate {
         //                                                  //
         //////////////////////////////////////////////////////
         
-        guard (UserDefaults.standard.object(forKey: "unique_id") as? String) != nil else {
+        guard (UserDefaults.standard.object(forKey: "unique_id")) != nil else {
             let loginController = LoginController()
             present(loginController, animated: true, completion: nil)
             return
@@ -89,17 +93,6 @@ class HomeController: UIViewController, CLLocationManagerDelegate {
             return
         }
         
-        ////////////////////////////////////////////////////////////
-        //                                                        //
-        //  INITIALISE LOCATION MANAGER, START UPDATING LOCATION  //
-        //                                                        //
-        ////////////////////////////////////////////////////////////
-        
-        locationManager = LocationManager.sharedInstance
-        locationManager?.startUpdatingLocation()
-        
-        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(countdown), userInfo: nil, repeats: true)
-        
         ///////////////////////////////////////////////////////////////////
         //                                                               //
         //  IF HEALTHKIT HISTORY HAS NOT BEEN SENT, SEND HEALTHKIT DATA  //
@@ -108,21 +101,9 @@ class HomeController: UIViewController, CLLocationManagerDelegate {
         
         if (UserDefaults.standard.object(forKey: "hk_history_sent") as? Bool) != true {
             healthKitManager = HealthKitManager.sharedInstance
+            //get_hk_data() //get healthkit data in background
             
-            semaphore = DispatchSemaphore(value: 0) //create semaphore
-            get_hk_data() //get healthkit data in background
-            semaphore?.wait() //wait for healthkit data
-            get_distance_data() //get distance data in background
-            semaphore?.wait() //wait for distance data
-        
-            let entry_count = hk_data.count
-        
-            //combine healthkit data (containing steps) with distance data
-            for i in 0..<entry_count {
-                hk_data[i]["distance"] = distance[i]
-            }
-            
-            dataToSend.hk_data["hk_data"]?.append(contentsOf: self.hk_data)
+            //print(dataToSend.hk_data["hk_data"]!)
             
             //////////////////////////////////////////////////////////////////
             //                                                              //
@@ -130,34 +111,113 @@ class HomeController: UIViewController, CLLocationManagerDelegate {
             //                                                              //
             //////////////////////////////////////////////////////////////////
             
-            if (currentReachabilityStatus == .reachableViaWiFi) {
-                //send_data(data: dataToSend.hk_data)
-            } else {
+            guard currentReachabilityStatus == .reachableViaWiFi else {
                 print("Not connected to wi-fi")
+                return
             }
+            
+            //send_data(data: dataToSend.hk_data)
+            
+            UserDefaults.standard.set(true, forKey: "hk_history_sent")
+        }
+        
+        if !(is_recording) {
+            /////////////////////////////////////
+            //                                 //
+            //  SET UNIQUE_ID GLOBAL VARIABLE  //
+            //                                 //
+            /////////////////////////////////////
+        
+            unique_id = UserDefaults.standard.object(forKey: "unique_id") as? String
+        
+            ////////////////////////////////////////////////////////////
+            //                                                        //
+            //  INITIALISE LOCATION MANAGER, START UPDATING LOCATION  //
+            //                                                        //
+            ////////////////////////////////////////////////////////////
+        
+            locationManager = LocationManager.sharedInstance
+            locationManager?.startUpdatingLocation()
+        
+            timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(record_initial_location), userInfo: nil, repeats: true)
+            
+            is_recording = true
         }
     }
     
-    func countdown() {
-        guard start_location_recorded else {
-            print("\(locationManager?.currentLocation?.coordinate.latitude), \(locationManager?.currentLocation?.coordinate.longitude)")
-            timer?.invalidate()
-            start_location_recorded = true
-            
-            timer = Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(countdown), userInfo: nil, repeats: true)
+    func record_initial_location() {
+        get_location_data()
+        
+        guard currentReachabilityStatus == .reachableViaWiFi else {
+            print("Not connected to wi-fi")
             return
         }
         
-        print("\(locationManager?.currentLocation?.coordinate.latitude), \(locationManager?.currentLocation?.coordinate.longitude)")
+        send_data(data_type: "location_data")
+        
+        timer?.invalidate()
+        timer = Timer.scheduledTimer(timeInterval: update_interval, target: self, selector: #selector(countdown), userInfo: nil, repeats: true)
+    }
+
+    func countdown() {
+        //get_hk_data(start_date: last_hk_update)
+        get_location_data()
+        
+        guard currentReachabilityStatus == .reachableViaWiFi else {
+            print("Not connected to wi-fi")
+            return
+        }
+        
+        //send_data(data: dataToSend.hk_data)
+        send_data(data_type: "location_data")
+        
+        if (dataToSend.questionnaire_data["questionnaire_data"]?.count)! > 0 {
+            
+        }
+        
+        if (dataToSend.walk_test_data["walk_test_data"]?.count)! > 0 {
+            
+        }
     }
 }
 
 extension HomeController {
+    //////////////////////////
+    //                      //
+    //  GET HEALTHKIT DATA  //
+    //                      //
+    //////////////////////////
     
-    func get_hk_data() {
-        let unique_id: String = UserDefaults.standard.object(forKey: "unique_id") as! String
+    func get_hk_data(start_date: Date? = nil) {
+        get_step_data() //get healthkit data in background
+        self.semaphore.wait() //wait for healthkit data
+        get_distance_data() //get distance data in background
+        self.semaphore.wait() //wait for distance data
         
-        let query = HKSampleQuery(sampleType: healthKitManager!.stepCount!, predicate: nil, limit: Int(HKObjectQueryNoLimit), sortDescriptors: nil)
+        let entry_count = hk_data.count
+        
+        if (hk_data.count > 0) {
+            //combine healthkit data (containing steps) with distance data
+            for i in 0..<entry_count {
+                hk_data[i]["distance"] = distance[i]
+            }
+            
+            //add it to dataToSend object
+            dataToSend.hk_data["hk_data"]?.append(contentsOf: self.hk_data)
+        
+            hk_data.removeAll()
+            last_hk_update = Date()
+        }
+    }
+    
+    func get_step_data(start_date: Date? = nil) {
+        var predicate: NSPredicate?
+        
+        if (start_date != nil) {
+            predicate = HKQuery.predicateForSamples(withStart: start_date, end: Date(), options: [])
+        }
+        
+        let query = HKSampleQuery(sampleType: healthKitManager!.stepCount!, predicate: predicate, limit: Int(HKObjectQueryNoLimit), sortDescriptors: nil)
         { (query, results, error) in
             if error != nil {
                 print("error =>", error.debugDescription)
@@ -170,17 +230,23 @@ extension HomeController {
                     let end_time = dateFormatter.string(from: entry.endDate)
                     let steps = String(Int(entry.quantity.doubleValue(for: HKUnit.count())))
                     
-                    self.hk_data.append(["unique_id":unique_id, "start_time":start_time, "end_time":end_time, "steps":steps])
+                    self.hk_data.append(["unique_id":self.unique_id!, "start_time":start_time, "end_time":end_time, "steps":steps])
                 }
-                self.semaphore?.signal()
+                self.semaphore.signal()
             }
         }
         
         healthKitManager!.healthStore?.execute(query)
     }
     
-    func get_distance_data() {
-        let query = HKSampleQuery(sampleType: healthKitManager!.distanceWalkingRunning!, predicate: nil, limit: Int(HKObjectQueryNoLimit), sortDescriptors: nil)
+    func get_distance_data(start_date: Date? = nil) {
+        var predicate: NSPredicate?
+        
+        if (start_date != nil) {
+            predicate = HKQuery.predicateForSamples(withStart: start_date, end: Date(), options: [])
+        }
+        
+        let query = HKSampleQuery(sampleType: healthKitManager!.distanceWalkingRunning!, predicate: predicate, limit: Int(HKObjectQueryNoLimit), sortDescriptors: nil)
         { (query, results, error) in
             if error != nil {
                 print("error =>", error.debugDescription)
@@ -190,34 +256,75 @@ extension HomeController {
                     
                     self.distance.append(distance)
                 }
-                self.semaphore?.signal()
+                self.semaphore.signal()
             }
         }
         
         healthKitManager!.healthStore?.execute(query)
     }
     
-    func send_data(data: [String:[[String:String]]]) {
-        let data_type = Array(data.keys).first
-        var url_string: String?
+    /////////////////////////
+    //                     //
+    //  GET LOCATION DATA  //
+    //                     //
+    /////////////////////////
+    
+    func get_location_data() {
+        guard let location = locationManager?.currentLocation else {
+            return
+        }
         
-        if (data_type == "hk_data") {
-            if (data["hk_data"]?.count)! > 0 {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        let current_time = dateFormatter.string(from: Date())
+        
+        let latitude: String = String(location.coordinate.latitude)
+        let longitude: String = String(location.coordinate.longitude)
+        dataToSend.location_data["location_data"]?.append(["unique_id":self.unique_id!, "time":current_time, "latitude":latitude, "longitude":longitude])
+    }
+}
+
+extension UIViewController {
+    /////////////////
+    //             //
+    //  SEND DATA  //
+    //             //
+    /////////////////
+    
+    func send_data(data_type: String) {
+        let the_data = DataToSend.sharedInstance
+        var url_string: String?
+        var data_to_send = [String:[[String:String]]]()
+        
+        switch data_type {
+        case "hk_data":
+            if (the_data.hk_data["hk_data"]?.count)! > 0 {
+                data_to_send = the_data.hk_data
                 url_string = "https://www.clinicalhealthtracker.com/web-service/insert-hk-data.php"
             } else {
-                print("no data to send")
+                print("no hk data to send")
                 return
             }
-        } else if (data_type == "location_data") {
-            print("location_data")
-        } else if (data_type == "questionnaire_data") {
-            print("questionnaire_data")
-        } else if (data_type == "walk_test_data") {
-            print("walk_test_data")
+        case "location_data":
+            if (the_data.location_data["location_data"]?.count)! > 0 {
+                data_to_send = the_data.location_data
+                //url_string = "https://www.clinicalhealthtracker.com/web-service/insert-location-data.php"
+                url_string = "http://cht.dev/web-service/insert-location-data.php"
+            } else {
+                print("no location data to send")
+                return
+            }
+
+        case "questionnaire_data & Fitness":
+            return
+        case "walk_test_data & Fitness":
+            return
+        default:
+            return
         }
         
         do {
-            let json_data = try JSONSerialization.data(withJSONObject: data, options: .prettyPrinted)
+            let json_data = try JSONSerialization.data(withJSONObject: data_to_send, options: .prettyPrinted)
             
             let request: URLRequest = {
                 let url = URL(string: url_string!)
@@ -244,8 +351,26 @@ extension HomeController {
                     if err {
                         print(data["message"]!)
                         return
+                    //////////////////////////////////////////////////////
+                    //                                                  //
+                    //  IF SUCCESSFUL, DELETE PREVIOUS DATA FROM PHONE  //
+                    //                                                  //
+                    //////////////////////////////////////////////////////
                     } else {
                         print(data["message"]!)
+                        
+                        switch data_type {
+                        case "hk_data":
+                            the_data.hk_data["hk_data"]?.removeAll()
+                        case "location_data":
+                            the_data.location_data["location_data"]?.removeAll()
+                        case "questionnaire_data":
+                            the_data.questionnaire_data["questionnaire_data"]?.removeAll()
+                        case "walk_test_data":
+                            the_data.walk_test_data["walk_test_data"]?.removeAll()
+                        default:
+                            return
+                        }
                     }
                 } catch {
                     print("error =>", error.localizedDescription) //e.g. The data couldn’t be read because it isn’t in the correct format
