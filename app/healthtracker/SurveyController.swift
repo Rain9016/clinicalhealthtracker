@@ -8,14 +8,14 @@
 
 import UIKit
 
-class QuestionnaireController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-    //////////////////////
-    //                  //
-    //  QUESTIONNAIRES  //
-    //                  //
-    //////////////////////
+class SurveyController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+    ///////////////
+    //           //
+    //  SURVEYS  //
+    //           //
+    ///////////////
     
-    var questionnaires = [Questionnaire]()
+    var surveys = [Survey]()
     
     func setupQuestionnaires() {
         var step = Step(title: "", type: "")
@@ -23,7 +23,7 @@ class QuestionnaireController: UIViewController, UITableViewDelegate, UITableVie
         
         /* EQ-5D */
         
-        var EQ5D = Questionnaire(title: "EQ-5D")
+        var EQ5D = Survey(title: "EQ-5D")
         
         step = Step(title: "Mobility", type: "multiple_choice")
         answers = [String]()
@@ -84,11 +84,11 @@ class QuestionnaireController: UIViewController, UITableViewDelegate, UITableVie
         step.scale?.step = 5
         EQ5D.steps.append(step)
         
-        questionnaires.append(EQ5D)
+        surveys.append(EQ5D)
         
         /* LSA */
         
-        var LSA = Questionnaire(title: "LSA")
+        var LSA = Survey(title: "LSA")
         
         step = Step(title: "During the past 4 weeks, have you been to other rooms of your home besides the room where you sleep?", type: "multiple_choice")
         answers = [String]()
@@ -219,11 +219,11 @@ class QuestionnaireController: UIViewController, UITableViewDelegate, UITableVie
         step.multiple_choice?.answers.append(contentsOf: answers)
         LSA.steps.append(step)
         
-        questionnaires.append(LSA)
+        surveys.append(LSA)
         
         /* WHODAS 2.0 */
         
-        var WHODAS = Questionnaire(title: "WHODAS 2.0")
+        var WHODAS = Survey(title: "WHODAS 2.0")
         
         step = Step(title: "Demographic and background information", type: "instruction")
         step.instruction?.content = "This interview has been developed by the World Health Organization (WHO) to better understand the difficulties people may have due to their health conditions. The information that you provide in this interview is confidential and will be used only for research. The interview will take 5-10 minutes to complete."
@@ -413,7 +413,7 @@ class QuestionnaireController: UIViewController, UITableViewDelegate, UITableVie
         step = Step(title: "In the past 30 days, not counting the days that you were totally unable, for how many days did you cut back or reduce your usual activities or work because of any health condition?", type: "text_field")
         WHODAS.steps.append(step)
         
-        questionnaires.append(WHODAS)
+        surveys.append(WHODAS)
     }
     
     
@@ -443,7 +443,7 @@ class QuestionnaireController: UIViewController, UITableViewDelegate, UITableVie
     //                    //
     ////////////////////////
     
-    var selectedQuestionnaire = 0
+    var selectedSurvey = 0
     let tableView = UITableView()
     
     func setupTableView() {
@@ -459,12 +459,12 @@ class QuestionnaireController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return questionnaires.count
+        return surveys.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.textLabel?.text = questionnaires[indexPath.row].title
+        cell.textLabel?.text = surveys[indexPath.row].title
         cell.textLabel?.numberOfLines = 0;
         cell.textLabel?.lineBreakMode = .byWordWrapping
         return cell
@@ -479,7 +479,7 @@ class QuestionnaireController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selectedQuestionnaire = indexPath.row
+        selectedSurvey = indexPath.row
         beginButton.isEnabled = true
         beginButton.alpha = 1
     }
@@ -496,10 +496,10 @@ class QuestionnaireController: UIViewController, UITableViewDelegate, UITableVie
         beginButton.frame = CGRect(x: view.frame.size.width/3, y: tableView.contentSize.height + 20, width: view.frame.size.width/3, height: 40)
         
         beginButton.backgroundColor = UIColor.white
-        beginButton.setTitleColor(UIColor.init(r: 14, g: 122, b: 254), for: .normal)
+        beginButton.setTitleColor(UIColor.init(r: 204, g: 0, b: 0), for: .normal)
         beginButton.setTitle("Begin", for: .normal)
         beginButton.layer.borderWidth = 1
-        beginButton.layer.borderColor = UIColor.init(r: 14, g: 122, b: 254).cgColor
+        beginButton.layer.borderColor = UIColor.init(r: 204, g: 0, b: 0).cgColor
         beginButton.layer.cornerRadius = 4
         
         beginButton.addTarget(self, action: #selector(handleBeginButton), for: .touchUpInside)
@@ -509,55 +509,59 @@ class QuestionnaireController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func handleBeginButton() {
-        let questionnaire = questionnaires[selectedQuestionnaire]
+        let survey = surveys[selectedSurvey]
         
-        guard questionnaire.steps.count > 0 else {
+        guard survey.steps.count > 0 else {
             print("Questionnaire contains no steps")
             return
         }
         
         let currentStep = 0
         
-        if (questionnaire.steps[currentStep].type == "instruction") {
+        if (survey.steps[currentStep].type == "instruction") {
             let instructionController = InstructionController()
-            instructionController.questionnaire = questionnaire
+            instructionController.survey = survey
             instructionController.currentStep = currentStep
             instructionController.answers = [[String:String]]()
             
             beginButton.isEnabled = false
             beginButton.alpha = 0.5;
             
-            self.navigationController?.pushViewController(instructionController, animated: true)
-        } else if (questionnaire.steps[currentStep].type == "multiple_choice") {
+            let newNavigationController = UINavigationController(rootViewController: instructionController)
+            present(newNavigationController, animated: true, completion: nil)
+        } else if (survey.steps[currentStep].type == "multiple_choice") {
             let multipleChoiceController = MultipleChoiceController()
-            multipleChoiceController.questionnaire = questionnaire
+            multipleChoiceController.survey = survey
             multipleChoiceController.currentStep = currentStep
             multipleChoiceController.answers = [[String:String]]()
             
             beginButton.isEnabled = false
             beginButton.alpha = 0.5
             
-            self.navigationController?.pushViewController(multipleChoiceController, animated: true)
-        } else if (questionnaire.steps[currentStep].type == "text_field") {
+            let newNavigationController = UINavigationController(rootViewController: multipleChoiceController)
+            present(newNavigationController, animated: true, completion: nil)
+        } else if (survey.steps[currentStep].type == "text_field") {
             let textFieldController = TextFieldController()
-            textFieldController.questionnaire = questionnaire
+            textFieldController.survey = survey
             textFieldController.currentStep = currentStep
             textFieldController.answers = [[String:String]]()
             
             beginButton.isEnabled = false
             beginButton.alpha = 0.5
             
-            self.navigationController?.pushViewController(textFieldController, animated: true)
-        } else if (questionnaire.steps[currentStep].type == "scale") {
+            let newNavigationController = UINavigationController(rootViewController: textFieldController)
+            present(newNavigationController, animated: true, completion: nil)
+        } else if (survey.steps[currentStep].type == "scale") {
             let scaleController = ScaleController()
-            scaleController.questionnaire = questionnaire
+            scaleController.survey = survey
             scaleController.currentStep = currentStep
             scaleController.answers = [[String:String]]()
             
             beginButton.isEnabled = false
             beginButton.alpha = 0.5;
             
-            self.navigationController?.pushViewController(scaleController, animated: true)
+            let newNavigationController = UINavigationController(rootViewController: scaleController)
+            present(newNavigationController, animated: true, completion: nil)
         }
     }
     
@@ -571,6 +575,7 @@ class QuestionnaireController: UIViewController, UITableViewDelegate, UITableVie
         super.viewDidLoad()
         
         view.backgroundColor = UIColor.white
+        self.navigationItem.title = "Surveys"
         
         setupQuestionnaires()
         

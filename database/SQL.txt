@@ -92,9 +92,10 @@ CREATE TABLE `hk_data` (
   PRIMARY KEY (`id`)
 )
 
-CREATE TABLE `questionnaire_data` (
+CREATE TABLE `survey_data` (
   `id` BIGINT UNSIGNED AUTO_INCREMENT,
-  `name` VARCHAR(50) NOT NULL,
+  `unique_id` VARCHAR(50) NOT NULL,
+  `title` VARCHAR(50) NOT NULL,
   `time` TIMESTAMP NOT NULL DEFAULT 0,
   `question` VARCHAR(100) NOT NULL,
   `answer` VARCHAR(100) NOT NULL,

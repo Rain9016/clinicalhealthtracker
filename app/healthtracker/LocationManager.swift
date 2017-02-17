@@ -18,6 +18,7 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
     
     var locationManager: CLLocationManager?
     var currentLocation: CLLocation?
+    var currentHeading: CLLocationDirection?
     
     override init() {
         super.init()
@@ -52,6 +53,18 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
         }
         
         self.currentLocation = location
+    }
+    
+    func startUpdatingHeading() {
+        self.locationManager?.startUpdatingHeading()
+    }
+    
+    func stopUpdatingHeading() {
+        self.locationManager?.stopUpdatingHeading()
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
+        self.currentHeading = newHeading.magneticHeading
     }
     
     func isAuthorized() -> Bool {

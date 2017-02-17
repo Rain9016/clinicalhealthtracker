@@ -38,27 +38,11 @@ class HomeController: UIViewController, CLLocationManagerDelegate {
     var is_recording = false
     var timer: Timer?
     var update_interval: TimeInterval = 10
-
-    let button: UIButton = {
-        let button = UIButton(type: .system)
-        button.frame = CGRect(x: 200, y: 200, width: 100, height: 40)
-        button.setTitle("press", for: .normal)
-        button.addTarget(self, action: #selector(handleButton), for: .touchUpInside)
-        return button
-    }()
-    
-    func handleButton(sender: UIButton!) {
-        print("\(dataToSend.hk_data["hk_data"]?.count)")
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.white
-        
-        view.addSubview(button)
-        
-        //UserDefaults.standard.set(nil, forKey: "unique_id")
-        //UserDefaults.standard.set(nil, forKey: "permissions_requested")
+        self.navigationItem.title = "Home"
     }
 
     
@@ -101,21 +85,8 @@ class HomeController: UIViewController, CLLocationManagerDelegate {
         
         if (UserDefaults.standard.object(forKey: "hk_history_sent") as? Bool) != true {
             healthKitManager = HealthKitManager.sharedInstance
+            
             //get_hk_data() //get healthkit data in background
-            
-            //print(dataToSend.hk_data["hk_data"]!)
-            
-            //////////////////////////////////////////////////////////////////
-            //                                                              //
-            //  IF PATIENT IS CONNECTED TO WIFI, SEND HEALTHKIT DATA TO DB  //
-            //                                                              //
-            //////////////////////////////////////////////////////////////////
-            
-            guard currentReachabilityStatus == .reachableViaWiFi else {
-                print("Not connected to wi-fi")
-                return
-            }
-            
             //send_data(data: dataToSend.hk_data)
             
             UserDefaults.standard.set(true, forKey: "hk_history_sent")
@@ -147,13 +118,7 @@ class HomeController: UIViewController, CLLocationManagerDelegate {
     
     func record_initial_location() {
         get_location_data()
-        
-        guard currentReachabilityStatus == .reachableViaWiFi else {
-            print("Not connected to wi-fi")
-            return
-        }
-        
-        send_data(data_type: "location_data")
+        send_data(type: "location")
         
         timer?.invalidate()
         timer = Timer.scheduledTimer(timeInterval: update_interval, target: self, selector: #selector(countdown), userInfo: nil, repeats: true)
@@ -163,21 +128,17 @@ class HomeController: UIViewController, CLLocationManagerDelegate {
         //get_hk_data(start_date: last_hk_update)
         get_location_data()
         
-        guard currentReachabilityStatus == .reachableViaWiFi else {
-            print("Not connected to wi-fi")
-            return
-        }
-        
         //send_data(data: dataToSend.hk_data)
-        send_data(data_type: "location_data")
+        send_data(type: "location")
+        send_data(type: "survey")
         
-        if (dataToSend.questionnaire_data["questionnaire_data"]?.count)! > 0 {
-            
-        }
+        /////////////////
+        //             //
+        //  REMEMBER!  //
+        //             //
+        /////////////////
         
-        if (dataToSend.walk_test_data["walk_test_data"]?.count)! > 0 {
-            
-        }
+        //LOWER LOCATION ACCURACY
     }
 }
 
@@ -291,38 +252,64 @@ extension UIViewController {
     //             //
     /////////////////
     
-    func send_data(data_type: String) {
-        let the_data = DataToSend.sharedInstance
+    func send_data(type: String) {
+        ////////////////////////////////////////
+        //                                    //
+        //  IF NOT CONNECTED TO WIFI, RETURN  //
+        //                                    //
+        ////////////////////////////////////////
+        guard currentReachabilityStatus == .reachableViaWiFi else {
+            print("Not connected to wi-fi")
+            return
+        }
+        
+        ///////////////////////////////////////
+        //                                   //
+        //  IF CONNECTED TO WIFI, SEND DATA  //
+        //                                   //
+        ///////////////////////////////////////
+        let stored_data = DataToSend.sharedInstance
         var url_string: String?
         var data_to_send = [String:[[String:String]]]()
         
-        switch data_type {
-        case "hk_data":
-            if (the_data.hk_data["hk_data"]?.count)! > 0 {
-                data_to_send = the_data.hk_data
+        switch type {
+        case "healthkit":
+            if (stored_data.hk_data["hk_data"]?.count)! > 0 {
+                data_to_send = stored_data.hk_data
                 url_string = "https://www.clinicalhealthtracker.com/web-service/insert-hk-data.php"
             } else {
                 print("no hk data to send")
                 return
             }
-        case "location_data":
-            if (the_data.location_data["location_data"]?.count)! > 0 {
-                data_to_send = the_data.location_data
+        case "location":
+            if (stored_data.location_data["location_data"]?.count)! > 0 {
+                data_to_send = stored_data.location_data
                 //url_string = "https://www.clinicalhealthtracker.com/web-service/insert-location-data.php"
                 url_string = "http://cht.dev/web-service/insert-location-data.php"
             } else {
                 print("no location data to send")
                 return
             }
-
-        case "questionnaire_data & Fitness":
-            return
-        case "walk_test_data & Fitness":
+        case "survey":
+            if (stored_data.survey_data["survey_data"]?.count)! > 0 {
+                data_to_send = stored_data.survey_data
+                //url_string = "https://www.clinicalhealthtracker.com/web-service/insert-survey-data.php"
+                url_string = "http://cht.dev/web-service/insert-survey-data.php"
+            } else {
+                print("no survey data to send")
+                return
+            }
+        case "walk_test":
             return
         default:
             return
         }
         
+        //////////////////////////////////////////////////////////////
+        //                                                          //
+        //  CONVERT DICTIONARY TO JSON, SEND JSON VIA POST REQUEST  //
+        //                                                          //
+        //////////////////////////////////////////////////////////////
         do {
             let json_data = try JSONSerialization.data(withJSONObject: data_to_send, options: .prettyPrinted)
             
@@ -359,15 +346,15 @@ extension UIViewController {
                     } else {
                         print(data["message"]!)
                         
-                        switch data_type {
-                        case "hk_data":
-                            the_data.hk_data["hk_data"]?.removeAll()
-                        case "location_data":
-                            the_data.location_data["location_data"]?.removeAll()
-                        case "questionnaire_data":
-                            the_data.questionnaire_data["questionnaire_data"]?.removeAll()
-                        case "walk_test_data":
-                            the_data.walk_test_data["walk_test_data"]?.removeAll()
+                        switch type {
+                        case "healthkit":
+                            stored_data.hk_data["hk_data"]?.removeAll()
+                        case "location":
+                            stored_data.location_data["location_data"]?.removeAll()
+                        case "survey":
+                            stored_data.survey_data["survey_data"]?.removeAll()
+                        case "walk_test":
+                            stored_data.walk_test_data["walk_test_data"]?.removeAll()
                         default:
                             return
                         }

@@ -11,7 +11,6 @@
 		C3067D361E46BB21002C22A7 /* PermissionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3067D351E46BB21002C22A7 /* PermissionController.swift */; };
 		C3067D3D1E481769002C22A7 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3067D3C1E481769002C22A7 /* LocationManager.swift */; };
 		C3067D671E48BD39002C22A7 /* PedometerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3067D661E48BD39002C22A7 /* PedometerManager.swift */; };
-		C30EAC061E4B568100353701 /* HomeControllerOld.swift in Sources */ = {isa = PBXBuildFile; fileRef = C30EAC051E4B568100353701 /* HomeControllerOld.swift */; };
 		C30EAC2E1E4C92EE00353701 /* DataToSend.swift in Sources */ = {isa = PBXBuildFile; fileRef = C30EAC2D1E4C92EE00353701 /* DataToSend.swift */; };
 		C30EAC301E51AFEA00353701 /* ActivityCompleteController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C30EAC2F1E51AFEA00353701 /* ActivityCompleteController.swift */; };
 		C31471DE1E3B19E5009E65F3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C31471DD1E3B19E5009E65F3 /* AppDelegate.swift */; };
@@ -24,20 +23,42 @@
 		C31471F91E3B1B14009E65F3 /* HomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C31471F81E3B1B14009E65F3 /* HomeController.swift */; };
 		C31471FB1E3B1B2B009E65F3 /* InstructionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C31471FA1E3B1B2B009E65F3 /* InstructionController.swift */; };
 		C31471FD1E3B1B43009E65F3 /* MultipleChoiceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C31471FC1E3B1B43009E65F3 /* MultipleChoiceController.swift */; };
-		C31471FF1E3B1B5F009E65F3 /* QuestionnaireController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C31471FE1E3B1B5F009E65F3 /* QuestionnaireController.swift */; };
+		C31471FF1E3B1B5F009E65F3 /* SurveyController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C31471FE1E3B1B5F009E65F3 /* SurveyController.swift */; };
 		C31472011E3B1B7B009E65F3 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = C31472001E3B1B7B009E65F3 /* Reachability.swift */; };
 		C31472031E3B1B90009E65F3 /* ScaleController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C31472021E3B1B90009E65F3 /* ScaleController.swift */; };
 		C31472051E3B1BA0009E65F3 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = C31472041E3B1BA0009E65F3 /* Models.swift */; };
 		C31472071E3B1BB4009E65F3 /* TextFieldController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C31472061E3B1BB4009E65F3 /* TextFieldController.swift */; };
 		C36EB6891E53D57D009FFD06 /* StepController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36EB6881E53D57D009FFD06 /* StepController.swift */; };
+		C36EB68B1E543A4E009FFD06 /* WalkTestInstructionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36EB68A1E543A4E009FFD06 /* WalkTestInstructionController.swift */; };
+		C36EB68D1E544CD9009FFD06 /* WalkTestMainController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36EB68C1E544CD9009FFD06 /* WalkTestMainController.swift */; };
+		C36EB6931E548891009FFD06 /* AudioManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36EB6921E548891009FFD06 /* AudioManager.swift */; };
+		C36EB6981E553CB1009FFD06 /* instruction-p1-pt1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C36EB6941E553CB1009FFD06 /* instruction-p1-pt1.mp3 */; };
+		C36EB6991E553CB1009FFD06 /* instruction-p1-pt2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C36EB6951E553CB1009FFD06 /* instruction-p1-pt2.mp3 */; };
+		C36EB69A1E553CB1009FFD06 /* instruction-p2-pt1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C36EB6961E553CB1009FFD06 /* instruction-p2-pt1.mp3 */; };
+		C36EB6A11E554C73009FFD06 /* WalkTestController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36EB6A01E554C73009FFD06 /* WalkTestController.swift */; };
+		C36EB6A41E55C96D009FFD06 /* conclusion-pt1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C36EB6A21E55C96D009FFD06 /* conclusion-pt1.mp3 */; };
+		C36EB6A51E55C96D009FFD06 /* conclusion-pt2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C36EB6A31E55C96D009FFD06 /* conclusion-pt2.mp3 */; };
+		C36EB6BE1E55D40B009FFD06 /* encouragement-pt1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C36EB6B61E55D40B009FFD06 /* encouragement-pt1.mp3 */; };
+		C36EB6BF1E55D40B009FFD06 /* encouragement-pt2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C36EB6B71E55D40B009FFD06 /* encouragement-pt2.mp3 */; };
+		C36EB6C01E55D40B009FFD06 /* encouragement-pt3.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C36EB6B81E55D40B009FFD06 /* encouragement-pt3.mp3 */; };
+		C36EB6C11E55D40B009FFD06 /* encouragement-pt4.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C36EB6B91E55D40B009FFD06 /* encouragement-pt4.mp3 */; };
+		C36EB6C21E55D40B009FFD06 /* encouragement-pt5.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C36EB6BA1E55D40B009FFD06 /* encouragement-pt5.mp3 */; };
+		C36EB6C41E55D40B009FFD06 /* encouragement-pt7.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C36EB6BC1E55D40B009FFD06 /* encouragement-pt7.mp3 */; };
+		C36EB6C51E55D40B009FFD06 /* encouragement-pt8.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C36EB6BD1E55D40B009FFD06 /* encouragement-pt8.mp3 */; };
+		C36EB6CD1E55D422009FFD06 /* countdown-pt1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C36EB6C81E55D422009FFD06 /* countdown-pt1.mp3 */; };
+		C36EB6CE1E55D422009FFD06 /* countdown-pt2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C36EB6C91E55D422009FFD06 /* countdown-pt2.mp3 */; };
+		C36EB6CF1E55D422009FFD06 /* countdown-pt3.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C36EB6CA1E55D422009FFD06 /* countdown-pt3.mp3 */; };
+		C36EB6D01E55D422009FFD06 /* countdown-pt4.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C36EB6CB1E55D422009FFD06 /* countdown-pt4.mp3 */; };
+		C36EB6D11E55D422009FFD06 /* countdown-pt5.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C36EB6CC1E55D422009FFD06 /* countdown-pt5.mp3 */; };
+		C36EB6D31E55D456009FFD06 /* stopped-encouragement.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C36EB6D21E55D456009FFD06 /* stopped-encouragement.mp3 */; };
+		C36EB6D71E55DA3F009FFD06 /* encouragement-pt6.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C36EB6D61E55DA3F009FFD06 /* encouragement-pt6.mp3 */; };
+		C36EB6D91E55DCB5009FFD06 /* fifteen-sec-countdown.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C36EB6D81E55DCB5009FFD06 /* fifteen-sec-countdown.mp3 */; };
+		C36EB6DB1E568603009FFD06 /* instruction-p2-pt2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C36EB6DA1E568603009FFD06 /* instruction-p2-pt2.mp3 */; };
 		C3ABFB381E3B1CD200095384 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C3ABFB371E3B1CD200095384 /* HealthKit.framework */; };
 		C3ABFB3A1E3B1DEA00095384 /* FontAwesome.otf in Resources */ = {isa = PBXBuildFile; fileRef = C3ABFB391E3B1DEA00095384 /* FontAwesome.otf */; };
-		C3ABFB3D1E3B1F6E00095384 /* 6MWT-congratulations.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C3ABFB3C1E3B1F6E00095384 /* 6MWT-congratulations.mp3 */; };
-		C3ABFB3F1E3B1F7400095384 /* 6MWT-countdown-end.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C3ABFB3E1E3B1F7400095384 /* 6MWT-countdown-end.mp3 */; };
-		C3ABFB411E3B1F7900095384 /* 6MWT-countdown-start.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C3ABFB401E3B1F7900095384 /* 6MWT-countdown-start.mp3 */; };
-		C3ABFB431E3B1F7E00095384 /* 6MWT-intro.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C3ABFB421E3B1F7E00095384 /* 6MWT-intro.mp3 */; };
-		C3ABFB451E3B1F8300095384 /* 6MWT-results-finalised.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C3ABFB441E3B1F8300095384 /* 6MWT-results-finalised.mp3 */; };
-		C3ABFB471E3B1FC700095384 /* WalkTestController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3ABFB461E3B1FC700095384 /* WalkTestController.swift */; };
+		C3ABFB411E3B1F7900095384 /* intro-pt2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C3ABFB401E3B1F7900095384 /* intro-pt2.mp3 */; };
+		C3ABFB431E3B1F7E00095384 /* intro-pt1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C3ABFB421E3B1F7E00095384 /* intro-pt1.mp3 */; };
+		C3ABFB471E3B1FC700095384 /* WalkTestControllerOld.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3ABFB461E3B1FC700095384 /* WalkTestControllerOld.swift */; };
 		C3ABFB6D1E41598200095384 /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3ABFB6C1E41598200095384 /* LoginController.swift */; };
 /* End PBXBuildFile section */
 
@@ -46,7 +67,6 @@
 		C3067D351E46BB21002C22A7 /* PermissionController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PermissionController.swift; sourceTree = "<group>"; };
 		C3067D3C1E481769002C22A7 /* LocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		C3067D661E48BD39002C22A7 /* PedometerManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PedometerManager.swift; sourceTree = "<group>"; };
-		C30EAC051E4B568100353701 /* HomeControllerOld.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeControllerOld.swift; sourceTree = "<group>"; };
 		C30EAC2D1E4C92EE00353701 /* DataToSend.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataToSend.swift; sourceTree = "<group>"; };
 		C30EAC2F1E51AFEA00353701 /* ActivityCompleteController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityCompleteController.swift; sourceTree = "<group>"; };
 		C31471DA1E3B19E5009E65F3 /* healthtracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = healthtracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -61,21 +81,43 @@
 		C31471F81E3B1B14009E65F3 /* HomeController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeController.swift; sourceTree = "<group>"; };
 		C31471FA1E3B1B2B009E65F3 /* InstructionController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InstructionController.swift; sourceTree = "<group>"; };
 		C31471FC1E3B1B43009E65F3 /* MultipleChoiceController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MultipleChoiceController.swift; sourceTree = "<group>"; };
-		C31471FE1E3B1B5F009E65F3 /* QuestionnaireController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuestionnaireController.swift; sourceTree = "<group>"; };
+		C31471FE1E3B1B5F009E65F3 /* SurveyController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SurveyController.swift; sourceTree = "<group>"; };
 		C31472001E3B1B7B009E65F3 /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		C31472021E3B1B90009E65F3 /* ScaleController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScaleController.swift; sourceTree = "<group>"; };
 		C31472041E3B1BA0009E65F3 /* Models.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		C31472061E3B1BB4009E65F3 /* TextFieldController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextFieldController.swift; sourceTree = "<group>"; };
 		C36EB6881E53D57D009FFD06 /* StepController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StepController.swift; sourceTree = "<group>"; };
+		C36EB68A1E543A4E009FFD06 /* WalkTestInstructionController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WalkTestInstructionController.swift; sourceTree = "<group>"; };
+		C36EB68C1E544CD9009FFD06 /* WalkTestMainController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WalkTestMainController.swift; sourceTree = "<group>"; };
+		C36EB6921E548891009FFD06 /* AudioManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioManager.swift; sourceTree = "<group>"; };
+		C36EB6941E553CB1009FFD06 /* instruction-p1-pt1.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "instruction-p1-pt1.mp3"; sourceTree = "<group>"; };
+		C36EB6951E553CB1009FFD06 /* instruction-p1-pt2.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "instruction-p1-pt2.mp3"; sourceTree = "<group>"; };
+		C36EB6961E553CB1009FFD06 /* instruction-p2-pt1.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "instruction-p2-pt1.mp3"; sourceTree = "<group>"; };
+		C36EB6A01E554C73009FFD06 /* WalkTestController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WalkTestController.swift; sourceTree = "<group>"; };
+		C36EB6A21E55C96D009FFD06 /* conclusion-pt1.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "conclusion-pt1.mp3"; sourceTree = "<group>"; };
+		C36EB6A31E55C96D009FFD06 /* conclusion-pt2.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "conclusion-pt2.mp3"; sourceTree = "<group>"; };
+		C36EB6B61E55D40B009FFD06 /* encouragement-pt1.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "encouragement-pt1.mp3"; sourceTree = "<group>"; };
+		C36EB6B71E55D40B009FFD06 /* encouragement-pt2.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "encouragement-pt2.mp3"; sourceTree = "<group>"; };
+		C36EB6B81E55D40B009FFD06 /* encouragement-pt3.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "encouragement-pt3.mp3"; sourceTree = "<group>"; };
+		C36EB6B91E55D40B009FFD06 /* encouragement-pt4.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "encouragement-pt4.mp3"; sourceTree = "<group>"; };
+		C36EB6BA1E55D40B009FFD06 /* encouragement-pt5.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "encouragement-pt5.mp3"; sourceTree = "<group>"; };
+		C36EB6BC1E55D40B009FFD06 /* encouragement-pt7.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "encouragement-pt7.mp3"; sourceTree = "<group>"; };
+		C36EB6BD1E55D40B009FFD06 /* encouragement-pt8.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "encouragement-pt8.mp3"; sourceTree = "<group>"; };
+		C36EB6C81E55D422009FFD06 /* countdown-pt1.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "countdown-pt1.mp3"; sourceTree = "<group>"; };
+		C36EB6C91E55D422009FFD06 /* countdown-pt2.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "countdown-pt2.mp3"; sourceTree = "<group>"; };
+		C36EB6CA1E55D422009FFD06 /* countdown-pt3.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "countdown-pt3.mp3"; sourceTree = "<group>"; };
+		C36EB6CB1E55D422009FFD06 /* countdown-pt4.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "countdown-pt4.mp3"; sourceTree = "<group>"; };
+		C36EB6CC1E55D422009FFD06 /* countdown-pt5.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "countdown-pt5.mp3"; sourceTree = "<group>"; };
+		C36EB6D21E55D456009FFD06 /* stopped-encouragement.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "stopped-encouragement.mp3"; sourceTree = "<group>"; };
+		C36EB6D61E55DA3F009FFD06 /* encouragement-pt6.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "encouragement-pt6.mp3"; sourceTree = "<group>"; };
+		C36EB6D81E55DCB5009FFD06 /* fifteen-sec-countdown.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "fifteen-sec-countdown.mp3"; sourceTree = "<group>"; };
+		C36EB6DA1E568603009FFD06 /* instruction-p2-pt2.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "instruction-p2-pt2.mp3"; sourceTree = "<group>"; };
 		C3ABFB351E3B1CD200095384 /* healthtracker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = healthtracker.entitlements; sourceTree = "<group>"; };
 		C3ABFB371E3B1CD200095384 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
 		C3ABFB391E3B1DEA00095384 /* FontAwesome.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome.otf; sourceTree = "<group>"; };
-		C3ABFB3C1E3B1F6E00095384 /* 6MWT-congratulations.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "6MWT-congratulations.mp3"; sourceTree = "<group>"; };
-		C3ABFB3E1E3B1F7400095384 /* 6MWT-countdown-end.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "6MWT-countdown-end.mp3"; sourceTree = "<group>"; };
-		C3ABFB401E3B1F7900095384 /* 6MWT-countdown-start.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "6MWT-countdown-start.mp3"; sourceTree = "<group>"; };
-		C3ABFB421E3B1F7E00095384 /* 6MWT-intro.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "6MWT-intro.mp3"; sourceTree = "<group>"; };
-		C3ABFB441E3B1F8300095384 /* 6MWT-results-finalised.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "6MWT-results-finalised.mp3"; sourceTree = "<group>"; };
-		C3ABFB461E3B1FC700095384 /* WalkTestController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WalkTestController.swift; sourceTree = "<group>"; };
+		C3ABFB401E3B1F7900095384 /* intro-pt2.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "intro-pt2.mp3"; sourceTree = "<group>"; };
+		C3ABFB421E3B1F7E00095384 /* intro-pt1.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "intro-pt1.mp3"; sourceTree = "<group>"; };
+		C3ABFB461E3B1FC700095384 /* WalkTestControllerOld.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WalkTestControllerOld.swift; sourceTree = "<group>"; };
 		C3ABFB6C1E41598200095384 /* LoginController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -123,21 +165,24 @@
 				C31471F81E3B1B14009E65F3 /* HomeController.swift */,
 				C31472001E3B1B7B009E65F3 /* Reachability.swift */,
 				C31472041E3B1BA0009E65F3 /* Models.swift */,
-				C3ABFB461E3B1FC700095384 /* WalkTestController.swift */,
 				C3ABFB6C1E41598200095384 /* LoginController.swift */,
 				C3067D351E46BB21002C22A7 /* PermissionController.swift */,
 				C31471F61E3B1AFF009E65F3 /* HealthKitManager.swift */,
 				C3067D3C1E481769002C22A7 /* LocationManager.swift */,
 				C3067D661E48BD39002C22A7 /* PedometerManager.swift */,
-				C30EAC051E4B568100353701 /* HomeControllerOld.swift */,
 				C30EAC2D1E4C92EE00353701 /* DataToSend.swift */,
-				C31471FE1E3B1B5F009E65F3 /* QuestionnaireController.swift */,
+				C31471FE1E3B1B5F009E65F3 /* SurveyController.swift */,
 				C36EB6881E53D57D009FFD06 /* StepController.swift */,
 				C31471FA1E3B1B2B009E65F3 /* InstructionController.swift */,
 				C31471FC1E3B1B43009E65F3 /* MultipleChoiceController.swift */,
 				C31472021E3B1B90009E65F3 /* ScaleController.swift */,
 				C31472061E3B1BB4009E65F3 /* TextFieldController.swift */,
 				C30EAC2F1E51AFEA00353701 /* ActivityCompleteController.swift */,
+				C36EB68C1E544CD9009FFD06 /* WalkTestMainController.swift */,
+				C36EB68A1E543A4E009FFD06 /* WalkTestInstructionController.swift */,
+				C36EB6A01E554C73009FFD06 /* WalkTestController.swift */,
+				C3ABFB461E3B1FC700095384 /* WalkTestControllerOld.swift */,
+				C36EB6921E548891009FFD06 /* AudioManager.swift */,
 			);
 			path = healthtracker;
 			sourceTree = "<group>";
@@ -163,11 +208,29 @@
 		C3ABFB3B1E3B1F5F00095384 /* Audio */ = {
 			isa = PBXGroup;
 			children = (
-				C3ABFB421E3B1F7E00095384 /* 6MWT-intro.mp3 */,
-				C3ABFB401E3B1F7900095384 /* 6MWT-countdown-start.mp3 */,
-				C3ABFB3E1E3B1F7400095384 /* 6MWT-countdown-end.mp3 */,
-				C3ABFB3C1E3B1F6E00095384 /* 6MWT-congratulations.mp3 */,
-				C3ABFB441E3B1F8300095384 /* 6MWT-results-finalised.mp3 */,
+				C36EB6941E553CB1009FFD06 /* instruction-p1-pt1.mp3 */,
+				C36EB6951E553CB1009FFD06 /* instruction-p1-pt2.mp3 */,
+				C36EB6961E553CB1009FFD06 /* instruction-p2-pt1.mp3 */,
+				C36EB6DA1E568603009FFD06 /* instruction-p2-pt2.mp3 */,
+				C3ABFB421E3B1F7E00095384 /* intro-pt1.mp3 */,
+				C3ABFB401E3B1F7900095384 /* intro-pt2.mp3 */,
+				C36EB6B61E55D40B009FFD06 /* encouragement-pt1.mp3 */,
+				C36EB6B71E55D40B009FFD06 /* encouragement-pt2.mp3 */,
+				C36EB6B81E55D40B009FFD06 /* encouragement-pt3.mp3 */,
+				C36EB6B91E55D40B009FFD06 /* encouragement-pt4.mp3 */,
+				C36EB6BA1E55D40B009FFD06 /* encouragement-pt5.mp3 */,
+				C36EB6D61E55DA3F009FFD06 /* encouragement-pt6.mp3 */,
+				C36EB6BC1E55D40B009FFD06 /* encouragement-pt7.mp3 */,
+				C36EB6BD1E55D40B009FFD06 /* encouragement-pt8.mp3 */,
+				C36EB6D21E55D456009FFD06 /* stopped-encouragement.mp3 */,
+				C36EB6C81E55D422009FFD06 /* countdown-pt1.mp3 */,
+				C36EB6C91E55D422009FFD06 /* countdown-pt2.mp3 */,
+				C36EB6CA1E55D422009FFD06 /* countdown-pt3.mp3 */,
+				C36EB6CB1E55D422009FFD06 /* countdown-pt4.mp3 */,
+				C36EB6CC1E55D422009FFD06 /* countdown-pt5.mp3 */,
+				C36EB6D81E55DCB5009FFD06 /* fifteen-sec-countdown.mp3 */,
+				C36EB6A21E55C96D009FFD06 /* conclusion-pt1.mp3 */,
+				C36EB6A31E55C96D009FFD06 /* conclusion-pt2.mp3 */,
 			);
 			name = Audio;
 			sourceTree = "<group>";
@@ -239,16 +302,34 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C3ABFB3D1E3B1F6E00095384 /* 6MWT-congratulations.mp3 in Resources */,
+				C36EB6C41E55D40B009FFD06 /* encouragement-pt7.mp3 in Resources */,
+				C36EB6CF1E55D422009FFD06 /* countdown-pt3.mp3 in Resources */,
+				C36EB6C21E55D40B009FFD06 /* encouragement-pt5.mp3 in Resources */,
+				C36EB6D11E55D422009FFD06 /* countdown-pt5.mp3 in Resources */,
+				C36EB6BF1E55D40B009FFD06 /* encouragement-pt2.mp3 in Resources */,
+				C36EB6CE1E55D422009FFD06 /* countdown-pt2.mp3 in Resources */,
 				C31471E81E3B19E5009E65F3 /* LaunchScreen.storyboard in Resources */,
+				C36EB6D71E55DA3F009FFD06 /* encouragement-pt6.mp3 in Resources */,
 				C3ABFB3A1E3B1DEA00095384 /* FontAwesome.otf in Resources */,
-				C3ABFB451E3B1F8300095384 /* 6MWT-results-finalised.mp3 in Resources */,
+				C36EB6981E553CB1009FFD06 /* instruction-p1-pt1.mp3 in Resources */,
+				C36EB6C11E55D40B009FFD06 /* encouragement-pt4.mp3 in Resources */,
+				C36EB6C01E55D40B009FFD06 /* encouragement-pt3.mp3 in Resources */,
+				C36EB6A41E55C96D009FFD06 /* conclusion-pt1.mp3 in Resources */,
+				C36EB6A51E55C96D009FFD06 /* conclusion-pt2.mp3 in Resources */,
 				C3067D2A1E41F17B002C22A7 /* Lobster 1.4.otf in Resources */,
-				C3ABFB3F1E3B1F7400095384 /* 6MWT-countdown-end.mp3 in Resources */,
+				C36EB6991E553CB1009FFD06 /* instruction-p1-pt2.mp3 in Resources */,
 				C31471E51E3B19E5009E65F3 /* Assets.xcassets in Resources */,
-				C3ABFB411E3B1F7900095384 /* 6MWT-countdown-start.mp3 in Resources */,
-				C3ABFB431E3B1F7E00095384 /* 6MWT-intro.mp3 in Resources */,
+				C36EB6BE1E55D40B009FFD06 /* encouragement-pt1.mp3 in Resources */,
+				C36EB6D91E55DCB5009FFD06 /* fifteen-sec-countdown.mp3 in Resources */,
+				C36EB6C51E55D40B009FFD06 /* encouragement-pt8.mp3 in Resources */,
+				C3ABFB411E3B1F7900095384 /* intro-pt2.mp3 in Resources */,
+				C3ABFB431E3B1F7E00095384 /* intro-pt1.mp3 in Resources */,
 				C31471F31E3B1ABB009E65F3 /* ionicons.ttf in Resources */,
+				C36EB6CD1E55D422009FFD06 /* countdown-pt1.mp3 in Resources */,
+				C36EB6DB1E568603009FFD06 /* instruction-p2-pt2.mp3 in Resources */,
+				C36EB6D31E55D456009FFD06 /* stopped-encouragement.mp3 in Resources */,
+				C36EB6D01E55D422009FFD06 /* countdown-pt4.mp3 in Resources */,
+				C36EB69A1E553CB1009FFD06 /* instruction-p2-pt1.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -262,13 +343,17 @@
 				C31472051E3B1BA0009E65F3 /* Models.swift in Sources */,
 				C3067D3D1E481769002C22A7 /* LocationManager.swift in Sources */,
 				C31471FB1E3B1B2B009E65F3 /* InstructionController.swift in Sources */,
+				C36EB6931E548891009FFD06 /* AudioManager.swift in Sources */,
+				C36EB68B1E543A4E009FFD06 /* WalkTestInstructionController.swift in Sources */,
+				C36EB68D1E544CD9009FFD06 /* WalkTestMainController.swift in Sources */,
+				C36EB6A11E554C73009FFD06 /* WalkTestController.swift in Sources */,
 				C31471DE1E3B19E5009E65F3 /* AppDelegate.swift in Sources */,
 				C30EAC301E51AFEA00353701 /* ActivityCompleteController.swift in Sources */,
 				C3ABFB6D1E41598200095384 /* LoginController.swift in Sources */,
-				C3ABFB471E3B1FC700095384 /* WalkTestController.swift in Sources */,
+				C3ABFB471E3B1FC700095384 /* WalkTestControllerOld.swift in Sources */,
 				C3067D361E46BB21002C22A7 /* PermissionController.swift in Sources */,
 				C31472031E3B1B90009E65F3 /* ScaleController.swift in Sources */,
-				C31471FF1E3B1B5F009E65F3 /* QuestionnaireController.swift in Sources */,
+				C31471FF1E3B1B5F009E65F3 /* SurveyController.swift in Sources */,
 				C31471F91E3B1B14009E65F3 /* HomeController.swift in Sources */,
 				C31471FD1E3B1B43009E65F3 /* MultipleChoiceController.swift in Sources */,
 				C31471F01E3B1A1A009E65F3 /* CustomTabBarController.swift in Sources */,
@@ -276,7 +361,6 @@
 				C31472071E3B1BB4009E65F3 /* TextFieldController.swift in Sources */,
 				C31472011E3B1B7B009E65F3 /* Reachability.swift in Sources */,
 				C3067D671E48BD39002C22A7 /* PedometerManager.swift in Sources */,
-				C30EAC061E4B568100353701 /* HomeControllerOld.swift in Sources */,
 				C31471F51E3B1ADE009E65F3 /* Extensions.swift in Sources */,
 				C30EAC2E1E4C92EE00353701 /* DataToSend.swift in Sources */,
 				C36EB6891E53D57D009FFD06 /* StepController.swift in Sources */,

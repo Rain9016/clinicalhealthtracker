@@ -26,21 +26,24 @@ class ActivityCompleteController: UIViewController {
         return label
     }()
     
+    func doneButtonAction() {
+        /* if conclusion audio from walk test is playing */
+        let audioManager = AudioManager.sharedInstance
+        if (audioManager.isPlaying()) {
+            audioManager.stopAudio()
+        }
+        
+        dismiss(animated: true, completion: nil)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         
-        switch activity {
-        case "questionnaire":
-            title_label.text = "Questionnaire Complete"
-            content_label.text = "Your answers will be recorded and analysed by your clinician."
-        case "walk_test":
-            title_label.text = "Walk Test Complete"
-            content_label.text = "Your results will be recorded and analysed by your clinician."
-        default:
-            return
-        }
-
+        self.navigationItem.hidesBackButton = true
+        let done_button = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(doneButtonAction))
+        self.navigationItem.rightBarButtonItem = done_button
+        
         view.addSubview(title_label)
         view.addSubview(content_label)
         
@@ -67,5 +70,18 @@ class ActivityCompleteController: UIViewController {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         imageView.topAnchor.constraint(equalTo: content_label.bottomAnchor, constant: 20).isActive = true
+        
+        switch activity {
+        case "survey":
+            title_label.text = "Questionnaire Complete"
+            content_label.text = "Your answers will be recorded and analysed by your clinician."
+            
+            send_data(type: "survey")
+        case "walk_test":
+            title_label.text = "Walk Test Complete"
+            content_label.text = "Your results will be recorded and analysed by your clinician."
+        default:
+            return
+        }
     }
 }

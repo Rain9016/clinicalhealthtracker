@@ -9,7 +9,7 @@
 import UIKit
 
 class StepController: UIViewController {
-    var questionnaire: Questionnaire!
+    var survey: Survey!
     var currentStep: Int!
     var answers: [[String:String]]!
     
@@ -24,19 +24,21 @@ class StepController: UIViewController {
             self.navigationItem.hidesBackButton = true
         }
         
-        self.navigationItem.title = "Step " + String(currentStep + 1) + " of " + String(questionnaire.steps.count)
+        self.navigationController?.navigationBar.tintColor = UIColor.init(r: 204, g: 0, b: 0)
+        
+        self.navigationItem.title = "Step " + String(currentStep + 1) + " of " + String(survey.steps.count)
         
         let cancelButton = UIBarButtonItem()
         cancelButton.title = "Cancel"
         cancelButton.style = .done
         cancelButton.target = self
-        cancelButton.action = #selector(handleCancelButton)
+        cancelButton.action = #selector(cancelButtonAction)
         
         self.navigationItem.rightBarButtonItem = cancelButton
     }
     
-    func handleCancelButton() {
-        _ = navigationController?.popToRootViewController(animated: true)
+    func cancelButtonAction() {
+        dismiss(animated: true, completion: nil)
     }
     
     
@@ -71,7 +73,7 @@ class StepController: UIViewController {
     func setupLabel() {
         label.numberOfLines = 0
         label.lineBreakMode = NSLineBreakMode.byWordWrapping
-        label.text = questionnaire.steps[currentStep].title
+        label.text = survey.steps[currentStep].title
         label.font = label.font.withSize(20)
         
         let labelWidth: CGFloat = view.frame.size.width - 30
@@ -85,7 +87,7 @@ class StepController: UIViewController {
     func setupSubtitleLabel() {
         subtitleLabel.numberOfLines = 0
         subtitleLabel.lineBreakMode = NSLineBreakMode.byWordWrapping
-        subtitleLabel.text = questionnaire.steps[currentStep].subtitle
+        subtitleLabel.text = survey.steps[currentStep].subtitle
         subtitleLabel.textColor = UIColor.gray
         
         let labelWidth: CGFloat = view.frame.size.width - 30
@@ -102,20 +104,12 @@ class StepController: UIViewController {
     
     func handleButtons() {
         let nextStep = currentStep + 1
-        guard nextStep < questionnaire.steps.count else {
+        guard nextStep < survey.steps.count else {
             let data_to_send = DataToSend.sharedInstance
-            data_to_send.questionnaire_data["questionnaire_data"]?.append(contentsOf: answers)
+            data_to_send.survey_data["survey_data"]?.append(contentsOf: answers)
             
             let activityCompleteController = ActivityCompleteController()
-            activityCompleteController.activity = "questionnaire"
-            
-            activityCompleteController.navigationItem.hidesBackButton = true
-            let done_button = UIBarButtonItem()
-            done_button.title = "Done"
-            done_button.style = .done
-            done_button.target = self
-            done_button.action = #selector(handle_done_button)
-            activityCompleteController.navigationItem.rightBarButtonItem = done_button
+            activityCompleteController.activity = "survey"
             
             self.navigationController?.pushViewController(activityCompleteController, animated: true)
             return
@@ -126,39 +120,35 @@ class StepController: UIViewController {
         backBarButtonItem.title = "Back"
         navigationItem.backBarButtonItem = backBarButtonItem
         
-        if (questionnaire.steps[nextStep].type == "instruction") {
+        if (survey.steps[nextStep].type == "instruction") {
             let instructionController = InstructionController()
-            instructionController.questionnaire = questionnaire
+            instructionController.survey = survey
             instructionController.currentStep = nextStep
             instructionController.answers = answers
             
             self.navigationController?.pushViewController(instructionController, animated: true)
-        } else if (questionnaire.steps[nextStep].type == "multiple_choice") {
+        } else if (survey.steps[nextStep].type == "multiple_choice") {
             let multipleChoiceController = MultipleChoiceController()
-            multipleChoiceController.questionnaire = questionnaire
+            multipleChoiceController.survey = survey
             multipleChoiceController.currentStep = nextStep
             multipleChoiceController.answers = answers
             
             self.navigationController?.pushViewController(multipleChoiceController, animated: true)
-        } else if (questionnaire.steps[nextStep].type == "text_field") {
+        } else if (survey.steps[nextStep].type == "text_field") {
             let textFieldController = TextFieldController()
-            textFieldController.questionnaire = questionnaire
+            textFieldController.survey = survey
             textFieldController.currentStep = nextStep
             textFieldController.answers = answers
             
             self.navigationController?.pushViewController(textFieldController, animated: true)
-        } else if (questionnaire.steps[nextStep].type == "scale") {
+        } else if (survey.steps[nextStep].type == "scale") {
             let scaleController = ScaleController()
-            scaleController.questionnaire = questionnaire
+            scaleController.survey = survey
             scaleController.currentStep = nextStep
             scaleController.answers = answers
             
             self.navigationController?.pushViewController(scaleController, animated: true)
         }
-    }
-    
-    func handle_done_button() {
-        _ = navigationController?.popToRootViewController(animated: true)
     }
 
     override func viewDidLoad() {

@@ -8,13 +8,13 @@
 
 import Foundation
 
-/////////////////////
-//                 //
-//  QUESTIONNAIRE  //
-//                 //
-/////////////////////
+//////////////
+//          //
+//  SURVEY  //
+//          //
+//////////////
 
-struct Questionnaire {
+struct Survey {
     var title: String
     var steps: [Step]
     
