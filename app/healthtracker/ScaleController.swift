@@ -8,91 +8,7 @@
 
 import UIKit
 
-class ScaleController: UIViewController {
-    var questionnaire: Questionnaire!
-    var currentStep: Int!
-    var patientAnswers: [String:String]!
-    
-    ////////////////////////////
-    //                        //
-    //  NAVIGATION BAR STUFF  //
-    //                        //
-    ////////////////////////////
-    
-    func setupNavigationBar() {
-        if (currentStep == 0) {
-            self.navigationItem.hidesBackButton = true
-        }
-        
-        self.navigationItem.title = "Step " + String(currentStep + 1) + " of " + String(questionnaire.steps.count)
-        
-        let cancelButton = UIBarButtonItem()
-        cancelButton.title = "Cancel"
-        cancelButton.style = .done
-        cancelButton.target = self
-        cancelButton.action = #selector(handleCancelButton)
-        
-        self.navigationItem.rightBarButtonItem = cancelButton
-    }
-    
-    func handleCancelButton() {
-        _ = navigationController?.popToRootViewController(animated: true)
-    }
-    
-    
-    /////////////////////////
-    //                     //
-    //  SCROLL VIEW STUFF  //
-    //                     //
-    /////////////////////////
-    
-    let scrollView = UIScrollView()
-    
-    func setupScrollView() {
-        scrollView.frame = view.bounds
-    }
-    
-    func constrainScrollView() {
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        scrollView.topAnchor.constraint(equalTo: topLayoutGuide.topAnchor).isActive = true /* attach the top of the scrollview to below the navigation bar */
-        scrollView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
-        scrollView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
-        scrollView.bottomAnchor.constraint(equalTo: bottomLayoutGuide.bottomAnchor).isActive = true /* attach the bottom of the scrollview to above the tab bar */
-    }
-    
-    ///////////////////
-    //               //
-    //  LABEL STUFF  //
-    //               //
-    ///////////////////
-    
-    let label = UILabel()
-    
-    func setupLabel() {
-        label.numberOfLines = 0
-        label.lineBreakMode = NSLineBreakMode.byWordWrapping
-        label.text = questionnaire.steps[currentStep].title
-        label.font = label.font.withSize(20)
-        
-        let labelWidth: CGFloat = view.frame.size.width - 30
-        let labelSize: CGSize = label.sizeThatFits(CGSize(width: labelWidth, height: CGFloat.greatestFiniteMagnitude))
-        
-        label.frame = CGRect(x: Double(15), y: Double(15), width: Double(labelSize.width), height: Double(labelSize.height))
-    }
-    
-    var subtitleLabel = UILabel()
-    
-    func setupSubtitleLabel() {
-        subtitleLabel.numberOfLines = 0
-        subtitleLabel.lineBreakMode = NSLineBreakMode.byWordWrapping
-        subtitleLabel.text = questionnaire.steps[currentStep].subtitle
-        subtitleLabel.textColor = UIColor.gray
-        
-        let labelWidth: CGFloat = view.frame.size.width - 30
-        let labelSize: CGSize = subtitleLabel.sizeThatFits(CGSize(width: labelWidth, height: CGFloat.greatestFiniteMagnitude))
-        
-        subtitleLabel.frame = CGRect(x: Double(15), y: Double(15) + Double(label.frame.size.height), width: Double(labelSize.width), height: Double(labelSize.height))
-    }
+class ScaleController: StepController {
     
     ////////////////////
     //                //
@@ -103,13 +19,13 @@ class ScaleController: UIViewController {
     let answerLabel = UILabel()
     
     func setupAnswerLabel() {
-        answerLabel.text = "\(questionnaire.steps[currentStep].scale_default_value!)"
+        answerLabel.text = String((survey.steps[currentStep].scale?.default_value)!)
         answerLabel.font = label.font.withSize(30)
         answerLabel.textAlignment = .center
         
         let labelSize: CGSize = answerLabel.sizeThatFits(CGSize(width: view.frame.size.width, height: CGFloat.greatestFiniteMagnitude))
         
-        if (questionnaire.steps[currentStep].subtitle != nil) {
+        if (survey.steps[currentStep].subtitle != nil) {
             answerLabel.frame = CGRect(x: 0, y: 15 + label.frame.size.height + subtitleLabel.frame.size.height + 30, width: view.frame.size.width, height: labelSize.height)
         } else {
             answerLabel.frame = CGRect(x: 0, y: 15 + label.frame.size.height + 30, width: view.frame.size.width, height: labelSize.height)
@@ -119,12 +35,12 @@ class ScaleController: UIViewController {
     let minValueLabel = UILabel()
     
     func setupMinValueLabel() {
-        minValueLabel.text = "\(questionnaire.steps[currentStep].scale_min_value!)"
+        minValueLabel.text = String((survey.steps[currentStep].scale?.min_value)!)
         minValueLabel.textAlignment = .center
         
         let labelSize: CGSize = minValueLabel.sizeThatFits(CGSize(width: view.frame.size.width, height: CGFloat.greatestFiniteMagnitude))
         
-        if (questionnaire.steps[currentStep].subtitle != nil) {
+        if (survey.steps[currentStep].subtitle != nil) {
             minValueLabel.frame = CGRect(x: 15, y: 15 + label.frame.size.height + subtitleLabel.frame.size.height + 30 + answerLabel.frame.size.height + 10, width: labelSize.width, height: labelSize.height)
         } else {
             minValueLabel.frame = CGRect(x: 15, y: 15 + label.frame.size.height + 30 + answerLabel.frame.size.height + 10, width: labelSize.width, height: labelSize.height)
@@ -134,12 +50,12 @@ class ScaleController: UIViewController {
     let maxValueLabel = UILabel()
     
     func setupMaxValueLabel() {
-        maxValueLabel.text = "\(questionnaire.steps[currentStep].scale_max_value!)"
+        maxValueLabel.text = String((survey.steps[currentStep].scale?.max_value)!)
         maxValueLabel.textAlignment = .center
         
         let labelSize: CGSize = maxValueLabel.sizeThatFits(CGSize(width: view.frame.size.width, height: CGFloat.greatestFiniteMagnitude))
         
-        if (questionnaire.steps[currentStep].subtitle != nil) {
+        if (survey.steps[currentStep].subtitle != nil) {
             maxValueLabel.frame = CGRect(x: view.frame.size.width - 15 - labelSize.width, y: 15 + label.frame.size.height + subtitleLabel.frame.size.height + 30 + answerLabel.frame.size.height + 10, width: labelSize.width, height: labelSize.height)
         } else {
             maxValueLabel.frame = CGRect(x: view.frame.size.width - 15 - labelSize.width, y: 15 + label.frame.size.height + 30 + answerLabel.frame.size.height + 10, width: labelSize.width, height: labelSize.height)
@@ -151,15 +67,15 @@ class ScaleController: UIViewController {
     func setupScale() {
         let scaleHeight: CGFloat = minValueLabel.frame.size.height
         
-        if (questionnaire.steps[currentStep].subtitle != nil) {
+        if (survey.steps[currentStep].subtitle != nil) {
             scale.frame = CGRect(x: 15 + minValueLabel.frame.size.width, y: 15 + label.frame.size.height + subtitleLabel.frame.size.height + 30 + answerLabel.frame.size.height + 10, width: view.frame.width - 15 - minValueLabel.frame.size.width - 15 - maxValueLabel.frame.size.width, height: scaleHeight)
         } else {
             scale.frame = CGRect(x: 15 + minValueLabel.frame.size.width, y: 15 + label.frame.size.height + 30 + answerLabel.frame.size.height + 10, width: view.frame.width - 15 - minValueLabel.frame.size.width - 15 - maxValueLabel.frame.size.width, height: scaleHeight)
         }
         
-        scale.minimumValue = Float(questionnaire.steps[currentStep].scale_min_value!)
-        scale.maximumValue = Float(questionnaire.steps[currentStep].scale_max_value!)
-        scale.value = Float(questionnaire.steps[currentStep].scale_default_value!)
+        scale.minimumValue = Float((survey.steps[currentStep].scale?.min_value)!)
+        scale.maximumValue = Float((survey.steps[currentStep].scale?.max_value)!)
+        scale.value = Float((survey.steps[currentStep].scale?.default_value)!)
         scale.isContinuous = true
         
         /////////////////////////
@@ -179,8 +95,8 @@ class ScaleController: UIViewController {
         leftTick.backgroundColor = UIColor.black.cgColor
         scale.layer.addSublayer(leftTick)
         
-        let scaleMaxValue = questionnaire.steps[currentStep].scale_max_value!
-        let numberOfTicks = Float(scaleMaxValue)/Float(questionnaire.steps[currentStep].scale_step!)
+        let scaleMaxValue = survey.steps[currentStep].scale?.max_value
+        let numberOfTicks = Float(scaleMaxValue!)/Float((survey.steps[currentStep].scale?.step)!)
         let sizeBetweenTicks = Float(scale.frame.size.width - 30)/numberOfTicks
         var currentPosition = 15 + sizeBetweenTicks
         
@@ -207,8 +123,8 @@ class ScaleController: UIViewController {
     }
     
     func scaleValueDidChange() {
-        let scaleStep = questionnaire.steps[currentStep].scale_step!
-        let roundedValue = round(scale.value / Float(scaleStep)) * Float(scaleStep)
+        let scaleStep = survey.steps[currentStep].scale?.step
+        let roundedValue = round(scale.value / Float(scaleStep!)) * Float(scaleStep!)
         scale.value = roundedValue
         
         answerLabel.text = "\(Int(scale.value))"
@@ -229,19 +145,17 @@ class ScaleController: UIViewController {
     func setupNextButton() {
         //extraSpaceAboveButton = (minValueLabel.frame.size.height/2) + CGFloat(15)
         
-        print(scale.frame.height)
-        
-        if (questionnaire.steps[currentStep].subtitle != nil) {
+        if (survey.steps[currentStep].subtitle != nil) {
             nextButton.frame = CGRect(x: view.frame.size.width/3, y: 15 + label.frame.size.height + subtitleLabel.frame.size.height + 30 + answerLabel.frame.size.height + 10 + minValueLabel.frame.height + 45, width: view.frame.size.width/3, height: 40)
         } else {
             nextButton.frame = CGRect(x: view.frame.size.width/3, y: 15 + label.frame.size.height + 30 + answerLabel.frame.size.height + 10 + minValueLabel.frame.height + 45, width: view.frame.size.width/3, height: 40)
         }
         
         nextButton.backgroundColor = UIColor.white
-        nextButton.setTitleColor(UIColor.init(r: 14, g: 122, b: 254), for: .normal)
+        nextButton.setTitleColor(UIColor.init(r: 204, g: 0, b: 0), for: .normal)
         nextButton.setTitle("Next", for: .normal)
         nextButton.layer.borderWidth = 1
-        nextButton.layer.borderColor = UIColor.init(r: 14, g: 122, b: 254).cgColor
+        nextButton.layer.borderColor = UIColor.init(r: 204, g: 0, b: 0).cgColor
         nextButton.layer.cornerRadius = 4
         
         nextButton.addTarget(self, action: #selector(handleButtons), for: .touchUpInside)
@@ -259,18 +173,18 @@ class ScaleController: UIViewController {
         let skipLabelWidth: CGFloat = view.frame.size.width
         let skipLabelSize: CGSize = skipLabel.sizeThatFits(CGSize(width: skipLabelWidth, height: CGFloat.greatestFiniteMagnitude))
         
-        if (questionnaire.steps[currentStep].subtitle != nil) {
+        if (survey.steps[currentStep].subtitle != nil) {
             skipButton.frame = CGRect(x: 0, y: 15 + label.frame.size.height + subtitleLabel.frame.size.height + 30 + answerLabel.frame.size.height + 10 + minValueLabel.frame.size.height + 45 + nextButton.frame.size.height + 5, width: view.frame.size.width, height: skipLabelSize.height)
         } else {
             skipButton.frame = CGRect(x: 0, y: 15 + label.frame.size.height + 30 + answerLabel.frame.size.height + 10 + minValueLabel.frame.size.height + 45 + nextButton.frame.size.height + 5, width: view.frame.size.width, height: skipLabelSize.height)
         }
         
-        skipButton.setTitleColor(UIColor.init(r: 14, g: 122, b: 254), for: .normal)
+        skipButton.setTitleColor(UIColor.init(r: 204, g: 0, b: 0), for: .normal)
         skipButton.setTitle("Skip this question", for: .normal)
         
         skipButton.addTarget(self, action: #selector(handleButtons), for: .touchUpInside)
         
-        if (questionnaire.steps[currentStep].isSkippable!) {
+        if (survey.steps[currentStep].isSkippable) {
             skipButton.isEnabled = true
             skipButton.alpha = 1
         } else {
@@ -279,55 +193,22 @@ class ScaleController: UIViewController {
         }
     }
     
-    func handleButtons() {
-        let patientAnswer = scale.value
-        patientAnswers[questionnaire.steps[currentStep].title] = String(patientAnswer)
-        
-        let nextStep = currentStep + 1
-        
-        /* set the back bar button item */
-        let backBarButtonItem = UIBarButtonItem()
-        backBarButtonItem.title = "Back"
-        navigationItem.backBarButtonItem = backBarButtonItem
-        
-        if (questionnaire.steps[nextStep].type == "instruction") {
-            let instructionController = InstructionController()
-            instructionController.questionnaire = questionnaire
-            instructionController.currentStep = nextStep
-            instructionController.patientAnswers = patientAnswers
+    override func handleButtons() {
+        if (!(survey.steps[currentStep].isSkippable)) {
+            let unique_id = UserDefaults.standard.object(forKey: "unique_id") as? String
+            let title = survey.title
             
-            nextButton.isEnabled = false
-            nextButton.alpha = 0.5;
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+            let time = dateFormatter.string(from: Date())
             
-            self.navigationController?.pushViewController(instructionController, animated: true)
-        } else if (questionnaire.steps[nextStep].type == "multiple_choice") {
-            let multipleChoiceController = MultipleChoiceController()
-            multipleChoiceController.questionnaire = questionnaire
-            multipleChoiceController.currentStep = nextStep
-            multipleChoiceController.patientAnswers = patientAnswers
+            let question = survey.steps[currentStep].title
+            let answer: String = String(scale.value)
             
-            nextButton.isEnabled = false
-            nextButton.alpha = 0.5;
-            
-            self.navigationController?.pushViewController(multipleChoiceController, animated: true)
-        } else if (questionnaire.steps[nextStep].type == "text_field") {
-            let textFieldController = TextFieldController()
-            textFieldController.questionnaire = questionnaire
-            textFieldController.currentStep = nextStep
-            textFieldController.patientAnswers = patientAnswers
-            
-            nextButton.isEnabled = false
-            nextButton.alpha = 0.5
-            
-            self.navigationController?.pushViewController(textFieldController, animated: true)
-        } else if (questionnaire.steps[nextStep].type == "scale") {
-            let scaleController = ScaleController()
-            scaleController.questionnaire = questionnaire
-            scaleController.currentStep = nextStep
-            scaleController.patientAnswers = patientAnswers
-            
-            self.navigationController?.pushViewController(scaleController, animated: true)
+            answers.append(["unique_id":unique_id!, "title":title, "time":time, "question":question, "answer":answer])
         }
+        
+        super.handleButtons()
     }
     
     ////////////////////
@@ -350,7 +231,7 @@ class ScaleController: UIViewController {
         setupLabel()
         scrollView.addSubview(label)
         
-        if (questionnaire.steps[currentStep].subtitle != nil) {
+        if (survey.steps[currentStep].subtitle != nil) {
             setupSubtitleLabel()
             scrollView.addSubview(subtitleLabel)
         }
@@ -381,7 +262,7 @@ class ScaleController: UIViewController {
         
         var scrollViewHeight = 0
         
-        if (questionnaire.steps[currentStep].subtitle != nil) {
+        if (survey.steps[currentStep].subtitle != nil) {
             scrollViewHeight = 15 + Int(label.frame.size.height) + Int(subtitleLabel.frame.size.height) + 30 + Int(answerLabel.frame.size.height) + 10 + Int(scale.frame.height) + 45 + 40 + 5 + Int(skipButton.frame.size.height) + 20
         } else {
             scrollViewHeight = 15 + Int(label.frame.size.height) + 30 + Int(answerLabel.frame.size.height) + 10 + Int(scale.frame.height) + 40 + 40 + 5 + Int(skipButton.frame.size.height) + 20

@@ -14,6 +14,7 @@ class CustomTabBarController: UITabBarController {
         super.viewDidLoad()
         
         self.tabBar.isTranslucent = false
+        self.tabBar.tintColor = UIColor.init(r: 204, g: 0, b: 0)
         
         //setup
         let label = UILabel()
@@ -33,21 +34,21 @@ class CustomTabBarController: UITabBarController {
         label.text = "\u{f128}"
         let questionnaireImage = UIImage.imageWithLabel(label: label)
         
-        let questionnaireController = QuestionnaireController()
-        let navQuestionnaireController = UINavigationController(rootViewController: questionnaireController)
-        navQuestionnaireController.title = "HRQOL"
-        navQuestionnaireController.tabBarItem.image = questionnaireImage
+        let surveyController = SurveyController()
+        let navSurveyController = UINavigationController(rootViewController: surveyController)
+        navSurveyController.title = "Surveys"
+        navSurveyController.tabBarItem.image = questionnaireImage
         
         label.frame = CGRect(x: 0, y: 0, width: 17, height: 30)
         label.font = UIFont.init(name: "Ionicons", size: 33)
         label.text = "\u{f3bb}"
         let walkTestImage = UIImage.imageWithLabel(label: label)
         
-        let walkTestController = WalkTestController()
+        let walkTestController = WalkTestPreludeController()
         let navWalkTestController = UINavigationController(rootViewController: walkTestController)
-        navWalkTestController.title = "6MWT"
+        navWalkTestController.title = "Walk Test"
         navWalkTestController.tabBarItem.image = walkTestImage
         
-        viewControllers = [navHomeController, navQuestionnaireController, navWalkTestController]
+        viewControllers = [navHomeController, navSurveyController, navWalkTestController]
     }
 }

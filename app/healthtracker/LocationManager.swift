@@ -18,6 +18,7 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
     
     var locationManager: CLLocationManager?
     var currentLocation: CLLocation?
+    var currentHeading: CLLocationDirection?
     
     override init() {
         super.init()
@@ -33,7 +34,8 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
         }
         
         locationManager.delegate = self
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
+        locationManager.distanceFilter = kCLDistanceFilterNone
         locationManager.allowsBackgroundLocationUpdates = true
         locationManager.pausesLocationUpdatesAutomatically = false
     }
@@ -51,7 +53,26 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
             return
         }
         
-        self.currentLocation = location
+        guard let previous_location = currentLocation else {
+            currentLocation = location
+            return
+        }
+        
+        if (location.horizontalAccuracy <= previous_location.horizontalAccuracy) {
+            currentLocation = location
+        }
+    }
+    
+    func startUpdatingHeading() {
+        self.locationManager?.startUpdatingHeading()
+    }
+    
+    func stopUpdatingHeading() {
+        self.locationManager?.stopUpdatingHeading()
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
+        self.currentHeading = newHeading.magneticHeading
     }
     
     func isAuthorized() -> Bool {
@@ -68,6 +89,7 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
         }
         
         locationManager.desiredAccuracy = kCLLocationAccuracyThreeKilometers
+        locationManager.distanceFilter = 9999
     }
     
     func increaseAccuracy() {
@@ -75,6 +97,15 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
             return
         }
         
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
+        locationManager.distanceFilter = kCLDistanceFilterNone
+    }
+    
+    func getAccuracy() -> Double {
+        guard let locationManager = self.locationManager else {
+            return 0
+        }
+        
+        return Double(locationManager.desiredAccuracy)
     }
 }

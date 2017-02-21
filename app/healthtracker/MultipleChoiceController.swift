@@ -1,5 +1,5 @@
 //
-//  QuestionnaireController.swift
+//  surveyController.swift
 //  sendLocation
 //
 //  Created by untitled on 12/1/17.
@@ -8,91 +8,7 @@
 
 import UIKit
 
-class MultipleChoiceController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-    var questionnaire: Questionnaire!
-    var currentStep: Int!
-    var patientAnswers: [String:String]!
-    
-    ////////////////////////////
-    //                        //
-    //  NAVIGATION BAR STUFF  //
-    //                        //
-    ////////////////////////////
-    
-    func setupNavigationBar() {
-        if (currentStep == 0) {
-            self.navigationItem.hidesBackButton = true
-        }
-        
-        self.navigationItem.title = "Step " + String(currentStep + 1) + " of " + String(questionnaire.steps.count)
-        
-        let cancelButton = UIBarButtonItem()
-        cancelButton.title = "Cancel"
-        cancelButton.style = .done
-        cancelButton.target = self
-        cancelButton.action = #selector(handleCancelButton)
-        
-        self.navigationItem.rightBarButtonItem = cancelButton
-    }
-    
-    func handleCancelButton() {
-        _ = navigationController?.popToRootViewController(animated: true)
-    }
-    
-    
-    /////////////////////////
-    //                     //
-    //  SCROLL VIEW STUFF  //
-    //                     //
-    /////////////////////////
-    
-    let scrollView = UIScrollView()
-    
-    func setupScrollView() {
-        scrollView.frame = view.bounds
-    }
-    
-    func constrainScrollView() {
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        scrollView.topAnchor.constraint(equalTo: topLayoutGuide.topAnchor).isActive = true /* attach the top of the scrollview to below the navigation bar */
-        scrollView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
-        scrollView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
-        scrollView.bottomAnchor.constraint(equalTo: bottomLayoutGuide.bottomAnchor).isActive = true /* attach the bottom of the scrollview to above the tab bar */
-    }
-    
-    ///////////////////
-    //               //
-    //  LABEL STUFF  //
-    //               //
-    ///////////////////
-    
-    let label = UILabel()
-    
-    func setupLabel() {
-        label.numberOfLines = 0
-        label.lineBreakMode = NSLineBreakMode.byWordWrapping
-        label.text = questionnaire.steps[currentStep].title
-        label.font = label.font.withSize(20)
-        
-        let labelWidth: CGFloat = view.frame.size.width - 30
-        let labelSize: CGSize = label.sizeThatFits(CGSize(width: labelWidth, height: CGFloat.greatestFiniteMagnitude))
-        
-        label.frame = CGRect(x: Double(15), y: Double(15), width: Double(labelSize.width), height: Double(labelSize.height))
-    }
-    
-    var subtitleLabel = UILabel()
-    
-    func setupSubtitleLabel() {
-        subtitleLabel.numberOfLines = 0
-        subtitleLabel.lineBreakMode = NSLineBreakMode.byWordWrapping
-        subtitleLabel.text = questionnaire.steps[currentStep].subtitle
-        subtitleLabel.textColor = UIColor.gray
-        
-        let labelWidth: CGFloat = view.frame.size.width - 30
-        let labelSize: CGSize = subtitleLabel.sizeThatFits(CGSize(width: labelWidth, height: CGFloat.greatestFiniteMagnitude))
-        
-        subtitleLabel.frame = CGRect(x: Double(15), y: Double(15) + Double(label.frame.size.height), width: Double(labelSize.width), height: Double(labelSize.height))
-    }
+class MultipleChoiceController: StepController, UITableViewDelegate, UITableViewDataSource {
     
     ////////////////////////
     //                    //
@@ -112,7 +28,7 @@ class MultipleChoiceController: UIViewController, UITableViewDelegate, UITableVi
         
         tableView.layoutIfNeeded()
         
-        if (questionnaire.steps[currentStep].subtitle != nil) {
+        if (survey.steps[currentStep].subtitle != nil) {
             tableView.frame = CGRect(x: 0, y: 15 + label.frame.size.height + subtitleLabel.frame.size.height + 15, width: view.frame.width, height: tableView.contentSize.height)
         } else {
             tableView.frame = CGRect(x: 0, y: 15 + label.frame.size.height + 15, width: view.frame.width, height: tableView.contentSize.height) /* the y co-ordinate is set to "15 + label.frame.size.height + 15" as we want 15 pixels of padding on the top and bottom */
@@ -120,13 +36,13 @@ class MultipleChoiceController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return questionnaire.steps[currentStep].multiple_choice_answers!.count
+        return (survey.steps[currentStep].multiple_choice?.answers.count)!
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.textLabel?.text = questionnaire.steps[currentStep].multiple_choice_answers?[indexPath.row]
-        cell.textLabel?.numberOfLines = 0;
+        cell.textLabel?.text = survey.steps[currentStep].multiple_choice?.answers[indexPath.row]
+        cell.textLabel?.numberOfLines = 0
         cell.textLabel?.lineBreakMode = .byWordWrapping
         return cell
     }
@@ -154,17 +70,17 @@ class MultipleChoiceController: UIViewController, UITableViewDelegate, UITableVi
     let nextButton = UIButton()
     
     func setupNextButton() {
-        if (questionnaire.steps[currentStep].subtitle != nil) {
+        if (survey.steps[currentStep].subtitle != nil) {
             nextButton.frame = CGRect(x: view.frame.size.width/3, y: 15 + label.frame.size.height + subtitleLabel.frame.size.height + 15 + tableView.contentSize.height + 20, width: view.frame.size.width/3, height: 40)
         } else {
             nextButton.frame = CGRect(x: view.frame.size.width/3, y: 15 + label.frame.size.height + 15 + tableView.contentSize.height + 20, width: view.frame.size.width/3, height: 40)
         }
         
         nextButton.backgroundColor = UIColor.white
-        nextButton.setTitleColor(UIColor.init(r: 14, g: 122, b: 254), for: .normal)
+        nextButton.setTitleColor(UIColor.init(r: 204, g: 0, b: 0), for: .normal)
         nextButton.setTitle("Next", for: .normal)
         nextButton.layer.borderWidth = 1
-        nextButton.layer.borderColor = UIColor.init(r: 14, g: 122, b: 254).cgColor
+        nextButton.layer.borderColor = UIColor.init(r: 204, g: 0, b: 0).cgColor
         nextButton.layer.cornerRadius = 4
         
         nextButton.addTarget(self, action: #selector(handleButtons), for: .touchUpInside)
@@ -182,18 +98,18 @@ class MultipleChoiceController: UIViewController, UITableViewDelegate, UITableVi
         let skipLabelWidth: CGFloat = view.frame.size.width
         let skipLabelSize: CGSize = skipLabel.sizeThatFits(CGSize(width: skipLabelWidth, height: CGFloat.greatestFiniteMagnitude))
         
-        if (questionnaire.steps[currentStep].subtitle != nil) {
+        if (survey.steps[currentStep].subtitle != nil) {
             skipButton.frame = CGRect(x: 0, y: 15 + label.frame.size.height + subtitleLabel.frame.size.height + 15 + tableView.contentSize.height + 20 + nextButton.frame.size.height + 5, width: view.frame.size.width, height: skipLabelSize.height)
         } else {
             skipButton.frame = CGRect(x: 0, y: 15 + label.frame.size.height + 15 + tableView.contentSize.height + 20 + nextButton.frame.size.height + 5, width: view.frame.size.width, height: skipLabelSize.height)
         }
         
-        skipButton.setTitleColor(UIColor.init(r: 14, g: 122, b: 254), for: .normal)
+        skipButton.setTitleColor(UIColor.init(r: 204, g: 0, b: 0), for: .normal)
         skipButton.setTitle("Skip this question", for: .normal)
         
         skipButton.addTarget(self, action: #selector(handleButtons), for: .touchUpInside)
         
-        if (questionnaire.steps[currentStep].isSkippable!) {
+        if (survey.steps[currentStep].isSkippable) {
             skipButton.isEnabled = true
             skipButton.alpha = 1
         } else {
@@ -202,57 +118,22 @@ class MultipleChoiceController: UIViewController, UITableViewDelegate, UITableVi
         }
     }
     
-    func handleButtons() {
-        if (!(questionnaire.steps[currentStep].isSkippable!)) {
-            let patientAnswer = questionnaire.steps[currentStep].multiple_choice_answers?[selectedAnswer]
-            patientAnswers[questionnaire.steps[currentStep].title] = patientAnswer
+    override func handleButtons() {
+        if (!(survey.steps[currentStep].isSkippable)) {
+            let unique_id = UserDefaults.standard.object(forKey: "unique_id") as? String
+            let title = survey.title
+            
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+            let time = dateFormatter.string(from: Date())
+            
+            let question = survey.steps[currentStep].title
+            let answer = survey.steps[currentStep].multiple_choice?.answers[selectedAnswer]
+            
+            answers.append(["unique_id":unique_id!, "title":title, "time":time, "question":question, "answer":answer!])
         }
         
-        let nextStep = currentStep + 1
-        
-        /* set the back bar button item */
-        let backBarButtonItem = UIBarButtonItem()
-        backBarButtonItem.title = "Back"
-        navigationItem.backBarButtonItem = backBarButtonItem
-        
-        if (questionnaire.steps[nextStep].type == "instruction") {
-            let instructionController = InstructionController()
-            instructionController.questionnaire = questionnaire
-            instructionController.currentStep = nextStep
-            instructionController.patientAnswers = patientAnswers
-            
-            nextButton.isEnabled = false
-            nextButton.alpha = 0.5;
-            
-            self.navigationController?.pushViewController(instructionController, animated: true)
-        } else if (questionnaire.steps[nextStep].type == "multiple_choice") {
-            let multipleChoiceController = MultipleChoiceController()
-            multipleChoiceController.questionnaire = questionnaire
-            multipleChoiceController.currentStep = nextStep
-            multipleChoiceController.patientAnswers = patientAnswers
-            
-            nextButton.isEnabled = false
-            nextButton.alpha = 0.5;
-            
-            self.navigationController?.pushViewController(multipleChoiceController, animated: true)
-        } else if (questionnaire.steps[nextStep].type == "text_field") {
-            let textFieldController = TextFieldController()
-            textFieldController.questionnaire = questionnaire
-            textFieldController.currentStep = nextStep
-            textFieldController.patientAnswers = patientAnswers
-            
-            nextButton.isEnabled = false
-            nextButton.alpha = 0.5
-            
-            self.navigationController?.pushViewController(textFieldController, animated: true)
-        } else if (questionnaire.steps[nextStep].type == "scale") {
-            let scaleController = ScaleController()
-            scaleController.questionnaire = questionnaire
-            scaleController.currentStep = nextStep
-            scaleController.patientAnswers = patientAnswers
-            
-            self.navigationController?.pushViewController(scaleController, animated: true)
-        }
+        super.handleButtons()
     }
     
     ////////////////////
@@ -275,7 +156,7 @@ class MultipleChoiceController: UIViewController, UITableViewDelegate, UITableVi
         setupLabel()
         scrollView.addSubview(label)
         
-        if (questionnaire.steps[currentStep].subtitle != nil) {
+        if (survey.steps[currentStep].subtitle != nil) {
             setupSubtitleLabel()
             scrollView.addSubview(subtitleLabel)
         }
@@ -297,7 +178,7 @@ class MultipleChoiceController: UIViewController, UITableViewDelegate, UITableVi
         
         var scrollViewHeight = 0
         
-        if (questionnaire.steps[currentStep].subtitle != nil) {
+        if (survey.steps[currentStep].subtitle != nil) {
             scrollViewHeight = 15 + Int(label.frame.size.height) + Int(subtitleLabel.frame.size.height) + 15 + Int(tableView.contentSize.height) + 20 + 40 + 5 + Int(skipButton.frame.size.height) + 20
         } else {
             scrollViewHeight = 15 + Int(label.frame.size.height) + 15 + Int(tableView.contentSize.height) + 20 + 40 + 5 + Int(skipButton.frame.size.height) + 20

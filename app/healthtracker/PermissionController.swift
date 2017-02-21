@@ -105,6 +105,7 @@ class PermissionController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        self.navigationController?.navigationBar.tintColor = UIColor.init(r: 204, g: 0, b: 0)
         
         headingLabel.text = heading
         contentLabel.text = content
