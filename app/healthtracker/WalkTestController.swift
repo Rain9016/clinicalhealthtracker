@@ -14,17 +14,25 @@ class WalkTestController: UIViewController {
     let audioManager = AudioManager.sharedInstance
     var timer = Timer()
     
-    var duration = 30 * 1 //6 minutes
-    var initial_countdown = 3
+    var duration = 60 * 6 //6 minutes
+    var previous_steps = 0
+    var stationary_count = 0
+    var audio_queue: [String] = [String]()
     
-    var threshold = 10
-    var forward_heading = 0
-    var backward_heading = 0
+    //heading variables
+    let headingThreshold = 15
+    var startHeading = 0
+    var startHeadingMin = 0
+    var startHeadingMax = 0
+    var returnHeading = 0
+    var returnHeadingMin = 0
+    var returnHeadingMax = 0
+    var laps = 0
     
     let time_label: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 50)
-        label.text = "00:30"
+        label.text = "06:00"
         return label
     }()
     
@@ -38,6 +46,9 @@ class WalkTestController: UIViewController {
     
     func cancelButtonAction() {
         stop()
+        reset()
+        locationManager.stopUpdatingHeading()
+        pedometerManager.stopUpdates()
         dismiss(animated: true, completion: nil)
     }
     
@@ -49,6 +60,11 @@ class WalkTestController: UIViewController {
         if (timer.isValid) {
             timer.invalidate()
         }
+    }
+    
+    func reset() {
+        pedometerManager.reset()
+        self.laps = 0
     }
     
     //////////////////////////
@@ -70,107 +86,132 @@ class WalkTestController: UIViewController {
             timer.invalidate()
             
             audioManager.playAudio(name: "intro-pt2")
-            timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(intro_pt2_countdown), userInfo: nil, repeats: true)
+            timer = Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(intro_pt2_countdown), userInfo: nil, repeats: true)
             return
         }
     }
     
     /* [3] wait for 3 seconds, start pedometer updates, start 6 minute countdown */
     func intro_pt2_countdown() {
-        initial_countdown = initial_countdown - 1 //we're not waiting for audio to stop playing as the audio runs for a little longer than 3 seconds. We want to start the countdown as soon as the patient hears the word "Go".
-        
-        if (initial_countdown == 0) {
-            timer.invalidate()
-            pedometerManager.startUpdates()
+
+        //we're not waiting for audio to stop playing as the audio runs for a little longer than 3 seconds. We want to start the countdown as soon as the patient hears the word "Go".
+        timer.invalidate()
+        setupHeadings()
+        pedometerManager.startUpdates()
             
-            timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(countdown), userInfo: nil, repeats: true)
-            return
-        }
+        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(countdown), userInfo: nil, repeats: true)
     }
     
     /* [4] 6 minute countdown */
     func countdown() {
         duration = duration - 1
+        
         let (m, s) = secondsToMinutesSeconds(seconds: duration)
         time_label.text = "\(formatTime(time: m)):\(formatTime(time: s))"
-        steps_label.text = "steps: \(pedometerManager.steps)"
-        distance_label.text = "distance: \(pedometerManager.distance)"
+        //steps_label.text = "steps: \(pedometerManager.steps)"
+        //distance_label.text = "distance: \(pedometerManager.distance)"
         
-        /* if time == 0, stop updating heading, start conclusion pt 1 */
-        if (duration == 0) {
-            stop()
-            locationManager.stopUpdatingHeading()
-            
-            audioManager.playAudio(name: "conclusion-pt1")
-            timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(conclusion_pt1_countdown), userInfo: nil, repeats: true)
-            return
+        if let currentHeading = locationManager.currentHeading {
+            if (laps%2 == 0) {
+                if (Int(currentHeading) > returnHeadingMin && Int(currentHeading) < returnHeadingMax) {
+                    laps += 1
+                    //lapsLabel.text = "laps: \(laps)"
+                }
+            } else if (laps%2 == 1) {
+                if (Int(currentHeading) > startHeadingMin && Int(currentHeading) < startHeadingMax) {
+                    laps += 1
+                    //lapsLabel.text = "laps: \(laps)"
+                }
+            }
         }
         
-        /* if time == 15, start 15 second countdown */
-        if (duration == 15) {
-            if (audioManager.isPlaying()) {
-                audioManager.stopAudio()
+        guard duration > 15 else {
+            /* if time == 15, start 15 second countdown */
+            if (duration == 15) {
+                if (audioManager.isPlaying()) {
+                    audioManager.stopAudio()
+                }
+                audioManager.playAudio(name: "fifteen-sec-countdown")
             }
-            audioManager.playAudio(name: "fifteen-sec-countdown")
+
+            /* if time == 0, stop updating heading, start conclusion pt 1 */
+            if (duration == 0) {
+                stop()
+                locationManager.stopUpdatingHeading()
+            
+                audioManager.playAudio(name: "conclusion-pt1")
+                timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(conclusion_pt1_countdown), userInfo: nil, repeats: true)
+            }
             return
         }
         
         if (duration%60 == 0) {
             if (duration == 60 * 5) {
-                if (audioManager.isPlaying()) {
-                    audioManager.stopAudio()
-                }
-                audioManager.playAudio(name: "countdown-pt1")
+                audio_queue.append("time-remaining-pt1")
+                addEncouragement()
             } else if (duration == 60 * 4) {
-                if (audioManager.isPlaying()) {
-                    audioManager.stopAudio()
-                }
-                audioManager.playAudio(name: "countdown-pt2")
+                audio_queue.append("time-remaining-pt2")
+                addEncouragement()
             } else if (duration == 60 * 3) {
-                if (audioManager.isPlaying()) {
-                    audioManager.stopAudio()
-                }
-                audioManager.playAudio(name: "countdown-pt3")
+                audio_queue.append("time-remaining-pt3")
+                addEncouragement()
             } else if (duration == 60 * 2) {
-                if (audioManager.isPlaying()) {
-                    audioManager.stopAudio()
-                }
-                audioManager.playAudio(name: "countdown-pt4")
+                audio_queue.append("time-remaining-pt4")
+                addEncouragement()
             } else if (duration == 60 * 1) {
-                if (audioManager.isPlaying()) {
-                    audioManager.stopAudio()
+                audio_queue.append("time-remaining-pt5")
+                addEncouragement()
+            }
+        /* play 1 of 8 encouragement audio every 30 seconds */
+        } else if (duration%30 == 0) {
+            addEncouragement()
+        }
+        
+        /* if steps hasn't increased for 20 seconds, play stationary encouragement */
+        if (pedometerManager.steps == previous_steps) {
+            stationary_count = stationary_count + 1
+            
+            if (stationary_count == 20) {
+                audio_queue.append("stationary-encouragement")
+                stationary_count = 0
+            }
+        } else {
+            stationary_count = 0
+            previous_steps = pedometerManager.steps
+        }
+        
+        if (audio_queue.count > 0) {
+            if (!audioManager.isPlaying()) {
+                if let audio = audio_queue.first {
+                    audioManager.playAudio(name: audio)
+                    audio_queue.removeFirst()
                 }
-                audioManager.playAudio(name: "countdown-pt5")
             }
-            return
-        /* play 1 of 8 encouragement audio every 15 seconds */
-        } else if (duration%15 == 0) {
-            if (audioManager.isPlaying()) {
-                audioManager.stopAudio()
-            }
-            
-            let random_number = arc4random_uniform(8) + 1;
-            
-            switch random_number {
-            case 1:
-                audioManager.playAudio(name: "encouragement-pt1")
-            case 2:
-                audioManager.playAudio(name: "encouragement-pt2")
-            case 3:
-                audioManager.playAudio(name: "encouragement-pt3")
-            case 4:
-                audioManager.playAudio(name: "encouragement-pt4")
-            case 5:
-                audioManager.playAudio(name: "encouragement-pt5")
-            case 6:
-                audioManager.playAudio(name: "encouragement-pt6")
-            case 7:
-                audioManager.playAudio(name: "encouragement-pt7")
-            case 8:
-                audioManager.playAudio(name: "encouragement-pt8")
-            default:
-                return
-            }
+        }
+    }
+    
+    /* encouragement will not play if other audio is playing */
+    func addEncouragement() {
+        let random_number = arc4random_uniform(8) + 1;
+        
+        switch random_number {
+        case 1:
+            audio_queue.append("encouragement-pt1")
+        case 2:
+            audio_queue.append("encouragement-pt2")
+        case 3:
+            audio_queue.append("encouragement-pt3")
+        case 4:
+            audio_queue.append("encouragement-pt4")
+        case 5:
+            audio_queue.append("encouragement-pt5")
+        case 6:
+            audio_queue.append("encouragement-pt6")
+        case 7:
+            audio_queue.append("encouragement-pt7")
+        case 8:
+            audio_queue.append("encouragement-pt8")
+        default:
             return
         }
     }
@@ -190,15 +231,20 @@ class WalkTestController: UIViewController {
         timer.invalidate()
         pedometerManager.stopUpdates()
         
-        steps_label.text = "steps: \(pedometerManager.steps)"
-        distance_label.text = "distance: \(pedometerManager.distance)"
+        //steps_label.text = "steps: \(pedometerManager.steps)"
+        //distance_label.text = "distance: \(pedometerManager.distance)"
+        
+        let unique_id = UserDefaults.standard.object(forKey: "unique_id") as? String
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        let time = dateFormatter.string(from: Date())
+        
+        let data_to_send = DataToSend.sharedInstance
+        data_to_send.walk_test_data["walk_test_data"]?.append(["unique_id":unique_id!, "time":time, "steps":String(pedometerManager.steps), "distance":String(pedometerManager.distance), "laps":String(self.laps)])
         
         audioManager.playAudio(name: "conclusion-pt2")
-        
-        //STORE STEPS AND DISTANCE
-        
-        pedometerManager.steps = 0
-        pedometerManager.distance = 0
+        reset()
         
         let activityCompleteController = ActivityCompleteController()
         activityCompleteController.activity = "walk_test"
@@ -251,12 +297,52 @@ class WalkTestController: UIViewController {
         return time < 10 ? "0\(time)" : "\(time)"
     }
     
+    func setupHeadings() {
+        guard let currentHeading = locationManager.currentHeading else {
+            return
+        }
+        startHeading = Int(currentHeading)
+        
+        startHeadingMin = startHeading - headingThreshold
+        
+        if (startHeadingMin < 0) {
+            startHeadingMin += 360
+        }
+        
+        startHeadingMax = startHeading + headingThreshold
+        
+        if (startHeadingMax > 360) {
+            startHeadingMax -= 360
+        }
+        
+        returnHeading = startHeading - 180
+        
+        if (returnHeading < 0) {
+            returnHeading += 360
+        } else if (returnHeading > 360) {
+            returnHeading -= 360
+        }
+        
+        returnHeadingMin = returnHeading - headingThreshold
+        
+        if (returnHeadingMin < 0) {
+            returnHeadingMin += 360
+        }
+        
+        returnHeadingMax = returnHeading + headingThreshold
+        
+        if (returnHeadingMax > 360) {
+            returnHeadingMax -= 360
+        }
+    }
+    
     ////////////////////////////
     //                        //
     //  FOR TESTING PURPOSES  //
     //                        //
     ////////////////////////////
     
+    /*
     let steps_label: UILabel = {
         let label = UILabel()
         label.text = "steps: 0"
@@ -268,6 +354,13 @@ class WalkTestController: UIViewController {
         label.text = "distance: 0"
         return label
     }()
+    
+    let lapsLabel: UILabel = {
+        let label = UILabel()
+        label.text = "laps: 0"
+        return label
+    }()
+ */
     
     /////////////////////
     //                 //
@@ -300,8 +393,10 @@ class WalkTestController: UIViewController {
         walking_image.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -20).isActive = true
         
         /* for testing purposes */
+        /*
         view.addSubview(steps_label)
         view.addSubview(distance_label)
+        view.addSubview(lapsLabel)
         
         steps_label.translatesAutoresizingMaskIntoConstraints = false
         steps_label.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
@@ -310,5 +405,10 @@ class WalkTestController: UIViewController {
         distance_label.translatesAutoresizingMaskIntoConstraints = false
         distance_label.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         distance_label.topAnchor.constraint(equalTo: steps_label.bottomAnchor, constant: 5).isActive = true
+        
+        lapsLabel.translatesAutoresizingMaskIntoConstraints = false
+        lapsLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        lapsLabel.topAnchor.constraint(equalTo: distance_label.bottomAnchor, constant: 5).isActive = true
+ */
     }
 }

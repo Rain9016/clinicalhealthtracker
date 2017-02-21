@@ -105,7 +105,8 @@ class LoginController: UIViewController {
     
     func authenticate() {
         let request: URLRequest = {
-            let urlString = "http://cht.dev/web-service/authenticate.php"
+            let urlString = "https://www.clinicalhealthtracker.com/web-service/authenticate.php"
+            //let urlString = "http://cht.dev/web-service/authenticate.php"
             let url = URL(string: urlString)
             var request = URLRequest(url: url!)
             request.httpMethod = "POST"
@@ -153,9 +154,9 @@ class LoginController: UIViewController {
         if textField.text == "" {
             sendAlert(title: "Error", message: "Please enter your unique ID")
         } else {
-            UserDefaults.standard.set(self.textField.text, forKey: "unique_id") //DELETE!
-            self.dismiss(animated: false, completion: nil) //DELETE!
-            //authenticate()
+            //UserDefaults.standard.set(self.textField.text, forKey: "unique_id") //DELETE!
+            //self.dismiss(animated: false, completion: nil) //DELETE!
+            authenticate()
         }
     }
 }

@@ -66,7 +66,7 @@ class WalkTestInstructionController: UIViewController {
     
     let cancel_button: UIBarButtonItem = {
         let barButtonItem = UIBarButtonItem()
-        barButtonItem.title = "Cancel"
+        barButtonItem.title = "Close"
         barButtonItem.style = .done
         barButtonItem.action = #selector(cancelButtonAction)
         return barButtonItem
@@ -139,15 +139,14 @@ class WalkTestInstructionController: UIViewController {
         label.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20).isActive = true
         label.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
         
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.widthAnchor.constraint(equalToConstant: 100).isActive = true
-        button.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        button.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
-        
         switch page {
         case 0:
-            label.text = "The object of this test is to walk as far as possible for six minutes. You will walk back and forth. Six minutes is a long time to walk, so you will be exerting yourself. You may get out of breath, or find it exhausting. You should walk and not run, at your own pace. You can slow down, stop, and rest as you need to. You may lean against the wall, or sit down while resting.\n\nYou should perform the test on a level, flat surface. You will need to set a start point and a point around which you will walk. You should try to make this distance as close to 30 meters as possible. You should perform the test in someone else’s presence, so they can call for assistance if required."
+            label.text = "The object of this test, is to walk as far as possible for six minutes. You will walk back and forth. Six minutes is a long time to walk, so you will be exerting yourself. You may get out of breath, or find it exhausting. You should walk and not run, at your own pace. You can slow down, stop, and rest as you need to. You may lean against the wall, or sit down while resting.\n\nYou should perform the test on a level, flat surface. You will need to set a start point and a point around which you will walk. You should try to make this distance as close to 30 meters as possible. You should perform the test in someone else’s presence, so they can call for assistance if required."
             
+            button.translatesAutoresizingMaskIntoConstraints = false
+            button.widthAnchor.constraint(equalToConstant: 100).isActive = true
+            button.heightAnchor.constraint(equalToConstant: 40).isActive = true
+            button.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
             button.topAnchor.constraint(equalTo: label.bottomAnchor, constant: 20).isActive = true
             button.setTitle("Next", for: .normal)
         case 1:
@@ -155,7 +154,7 @@ class WalkTestInstructionController: UIViewController {
             
             second_label_heading.text = "Before you begin.."
             
-            second_label.text = "Press the \"Finish\" button below to return to the main page. From there you will be able to begin the walk test. Upon pressing the \"Begin\" button, you will be told to stand still, face the direction you will be walking, place your phone in your pocket or in your hand by your side, and a countdown will commence. When the countdown finishes and you hear the word go, start walking."
+            second_label.text = "Press the \"Close\" button in the top right-hand corner of the screen to close the instructions and return to the main page. From there you will be able to begin the walk test. Upon pressing the \"Begin\" button, you will be told to stand still, face the direction you will be walking, place your phone in your pocket or in your hand by your side, and a countdown will commence. When the countdown finishes and you hear the word go, start walking."
             
             contentView.addSubview(second_label_heading)
             contentView.addSubview(second_label)
@@ -169,9 +168,6 @@ class WalkTestInstructionController: UIViewController {
             second_label.widthAnchor.constraint(equalTo: contentView.widthAnchor, constant: -40).isActive = true
             second_label.topAnchor.constraint(equalTo: second_label_heading.bottomAnchor, constant: 20).isActive = true
             second_label.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
-            
-            button.topAnchor.constraint(equalTo: second_label.bottomAnchor, constant: 20).isActive = true
-            button.setTitle("Finish", for: .normal)
         default:
             return
         }
@@ -179,7 +175,14 @@ class WalkTestInstructionController: UIViewController {
         let padding_bottom = UIView()
         contentView.addSubview(padding_bottom)
         padding_bottom.translatesAutoresizingMaskIntoConstraints = false
-        padding_bottom.topAnchor.constraint(equalTo: button.bottomAnchor, constant: 20).isActive = true
+        switch page {
+        case 0:
+            padding_bottom.topAnchor.constraint(equalTo: button.bottomAnchor, constant: 25).isActive = true
+        case 1:
+            padding_bottom.topAnchor.constraint(equalTo: second_label.bottomAnchor, constant: 25).isActive = true
+        default:
+            return
+        }
         padding_bottom.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
     }
     

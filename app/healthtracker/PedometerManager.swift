@@ -68,6 +68,17 @@ class PedometerManager: NSObject {
         
         pedometer.stopUpdates()
     }
+    
+    ////////////////////////////////
+    //                            //
+    //  RESET STEPS AND DISTANCE  //
+    //                            //
+    ////////////////////////////////
+    func reset() {
+        self.steps = 0
+        self.distance = 0
+    }
+    
     ///////////////////////////////////////////
     //                                       //
     //  CHECK IF STEP COUNTING IS AVAILABLE  //

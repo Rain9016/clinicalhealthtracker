@@ -27,10 +27,12 @@ class ActivityCompleteController: UIViewController {
     }()
     
     func doneButtonAction() {
-        /* if conclusion audio from walk test is playing */
-        let audioManager = AudioManager.sharedInstance
-        if (audioManager.isPlaying()) {
-            audioManager.stopAudio()
+        if (activity == "walk_test") {
+            /* if conclusion audio from walk test is playing */
+            let audioManager = AudioManager.sharedInstance
+            if (audioManager.isPlaying()) {
+                audioManager.stopAudio()
+            }
         }
         
         dismiss(animated: true, completion: nil)
@@ -80,6 +82,8 @@ class ActivityCompleteController: UIViewController {
         case "walk_test":
             title_label.text = "Walk Test Complete"
             content_label.text = "Your results will be recorded and analysed by your clinician."
+            
+            send_data(type: "walk_test")
         default:
             return
         }

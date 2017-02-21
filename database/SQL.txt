@@ -102,6 +102,16 @@ CREATE TABLE `survey_data` (
   PRIMARY KEY (`id`)
 )
 
+CREATE TABLE `walk_test_data` (
+  `id` BIGINT UNSIGNED AUTO_INCREMENT,
+  `unique_id` VARCHAR(50) NOT NULL,
+  `time` TIMESTAMP NOT NULL DEFAULT 0,
+  `steps` INT NOT NULL,
+  `distance` INT NOT NULL,
+  `laps` INT NOT NULL,
+  PRIMARY KEY (`id`)
+)
+
 //http://stackoverflow.com/questions/9748954/is-it-possible-to-define-a-timestamp-column-that-is-not-null-and-has-no-default
 //http://stackoverflow.com/questions/3651798/remove-on-update-condition-without-drop-mysql-table
 ALTER TABLE `hk_data` CHANGE `start_time` `start_time` TIMESTAMP NOT NULL DEFAULT 0;

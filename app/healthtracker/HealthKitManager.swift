@@ -46,4 +46,12 @@ class HealthKitManager: NSObject {
             print("HealthKit unavailable")
         }
     }
+    
+    func isAvailable() -> Bool {
+        if HKHealthStore.isHealthDataAvailable() {
+            return true
+        }
+        
+        return false
+    }
 }

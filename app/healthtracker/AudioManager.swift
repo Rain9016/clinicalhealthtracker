@@ -43,4 +43,12 @@ class AudioManager: NSObject {
         
         return false
     }
+    
+    func getDuration(name: String) -> Double {
+        let audioPath = Bundle.main.path(forResource: name, ofType: "mp3")
+        
+        let asset = AVURLAsset(url: NSURL(fileURLWithPath: audioPath!) as URL, options: nil)
+        let audioDuration = asset.duration
+        return CMTimeGetSeconds(audioDuration)
+    }
 }

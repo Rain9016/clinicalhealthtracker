@@ -8,7 +8,7 @@
 
 import UIKit
 
-class WalkTestMainController: UIViewController {
+class WalkTestPreludeController: UIViewController {
 
     let instructions_label: UILabel = {
         let label = UILabel()
