@@ -26,11 +26,11 @@
 		<true/>
 	</dict>
 	<key>NSHealthShareUsageDescription</key>
-	<string></string>
+	<string>Your step and distance data will be recorded every 15 minutes</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>Your location will be recorded every 15 minutes to measure your activity space</string>
 	<key>NSMotionUsageDescription</key>
-	<string></string>
+	<string>Your step count and distance walked will be recorded during the 6 minute walk test</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>ionicons.ttf</string>
