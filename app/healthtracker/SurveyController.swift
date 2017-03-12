@@ -415,7 +415,7 @@ class SurveyController: UIViewController, UITableViewDelegate, UITableViewDataSo
         
         surveys.append(WHODAS)
         
-        /* EQ-5D */
+        /* Adelaide Activities Profile */
         
         var adelaideActivitiesProfile = Survey(title: "Adelaide Activities Profile")
         
