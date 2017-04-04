@@ -1,5 +1,6 @@
 <?php
     require_once 'functions.php';
+    require_once $_SERVER['DOCUMENT_ROOT'] . "/db/connect.php";
 
     /* IF ALL FIELDS NOT FILLED OUT */
     if (!empty($_POST)) {
@@ -28,7 +29,7 @@
     if(!empty($_POST['username']) && !empty($_POST['password']) && !empty($_POST['email']) && !empty($_POST['secret_code']))
     {
         $db_name = "secure_login";
-        $db = db_connect($db_name);
+        $db = connect($db_name);
         $username = $_POST['username'];
         $password = $_POST['password'];
         $email = $_POST['email'];
@@ -61,7 +62,7 @@
                 register($username, $hashed_password, $email, $db);
 
                 header("Location: index.php");
-                die();
+                exit;
             }
         }
     }
@@ -72,19 +73,10 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clinical Health Tracker</title>
-<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700">
-<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Lobster">
 <style type="text/css">
     *, :before, :after {
         margin: 0;
         padding: 0;
-    }
-
-    html {
-    }
-
-    body {
-        font-family: 'Open Sans', sans-serif;
     }
 
     @media (min-width : 320px) {

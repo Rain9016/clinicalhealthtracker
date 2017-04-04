@@ -49,14 +49,14 @@ CREATE TABLE choices (
 CREATE TABLE answers (
     `id` BIGINT UNSIGNED AUTO_INCREMENT,
     `answer` VARCHAR(100) NOT NULL,
-    `user_id` BIGINT UNSIGNED NOT NULL,
+    `patient_id` BIGINT UNSIGNED NOT NULL,
     `question_id` BIGINT UNSIGNED NOT NULL,
     PRIMARY KEY (`id`),
-    CONSTRAINT `fk_answers_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+    CONSTRAINT `fk_answers_users` FOREIGN KEY (`patient_id`) REFERENCES `patients` (`id`) ON DELETE CASCADE,
     CONSTRAINT `fk_answers_questions` FOREIGN KEY (`question_id`) REFERENCES `questions` (`id`) ON DELETE CASCADE
 )
 
-CREATE TABLE users (
+CREATE TABLE patients (
     `id` BIGINT UNSIGNED AUTO_INCREMENT,
     `unique_id` VARCHAR(50) NOT NULL,
     `first_name` CHAR(50) NOT NULL,
