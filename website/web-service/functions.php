@@ -5,7 +5,7 @@ function get_user($unique_id) {
     $db_name = "trial_data";
     $db = connect($db_name);
 
-    $query = "SELECT first_name FROM users WHERE unique_id=:unique_id";
+    $query = "SELECT first_name FROM patients WHERE unique_id=:unique_id";
     $query_params = array(':unique_id'=>$unique_id);
 
     try {

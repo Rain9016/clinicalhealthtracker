@@ -10,6 +10,7 @@ import UIKit
 import CoreLocation
 import HealthKit
 import CoreMotion
+import UserNotifications
 
 class PermissionController: UIViewController {
     var pages = [PermissionPage]()
@@ -65,6 +66,16 @@ class PermissionController: UIViewController {
             case "Motion & Fitness":
                 print("motion & fitness")
                 _ = PedometerManager.sharedInstance
+            case "Notifications":
+                print("notifications")
+                if #available(iOS 10.0, *) {
+                    let center = UNUserNotificationCenter.current()
+                    center.requestAuthorization(options: [.alert, .sound, .badge]) { (granted, error) in
+                    }
+                } else {
+                    let settings = UIUserNotificationSettings(types: [.alert, .sound, .badge], categories: nil)
+                    UIApplication.shared.registerUserNotificationSettings(settings)
+                }
                 
                 button.backgroundColor = UIColor.init(r: 204, g: 0, b: 0)
                 button.setTitleColor(UIColor.white, for: .normal)
@@ -152,6 +163,8 @@ class PermissionController: UIViewController {
             imageView.rightAnchor.constraint(equalTo: view.centerXAnchor, constant: 80).isActive = true //healtkit
         case "Motion & Fitness":
             imageView.rightAnchor.constraint(equalTo: view.centerXAnchor, constant: 50).isActive = true //motion & fitness
+        case "Notifications":
+            imageView.rightAnchor.constraint(equalTo: view.centerXAnchor, constant: 70).isActive = true //notifications
         default:
             break
         }

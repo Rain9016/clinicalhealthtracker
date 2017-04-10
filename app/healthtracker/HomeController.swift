@@ -10,7 +10,7 @@
 import UIKit
 import HealthKit
 import CoreLocation
-import LocalAuthentication /* Needed to check whether device passcode has been set */
+import UserNotifications
 
 class HomeController: UIViewController, CLLocationManagerDelegate {
     
@@ -21,7 +21,9 @@ class HomeController: UIViewController, CLLocationManagerDelegate {
         
         let thirdPage = PermissionPage(heading: "Motion & Fitness", content: "Health App requires access to Health & Fitness in order to track and record your step count and distance walked during the walk test. Please press the \"Allow\" button below, and allow Health App to access your location services when prompted.", unicodeEscaped: "\u{f3bb}")
         
-        return [firstPage, secondPage, thirdPage]
+        let fourthPage = PermissionPage(heading: "Notifications", content: "Health App requires you to allow notifications. You will be reminded on a weekly basis to open up Health App, so that it can record your HealhtKit data (step count and distance walked). Please press the \"Allow\" button below, and allow Health App to send you notifications when prompted.", unicodeEscaped: "\u{f399}")
+        
+        return [firstPage, secondPage, thirdPage, fourthPage]
     }()
 
     var healthKitManager: HealthKitManager?
@@ -36,7 +38,7 @@ class HomeController: UIViewController, CLLocationManagerDelegate {
     var distance = [String]()
     var last_hk_update = Date()
     
-    var is_recording = false
+    var has_launched = false
     var timer: Timer?
     var update_interval: TimeInterval = 60 * 15 //every 15 minutes
     
@@ -184,19 +186,28 @@ class HomeController: UIViewController, CLLocationManagerDelegate {
             return
         }
         
-        ///////////////////////////////////////////////////////////////////
-        //                                                               //
-        //  IF HEALTHKIT HISTORY HAS NOT BEEN SENT, SEND HEALTHKIT DATA  //
-        //                                                               //
-        ///////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //                                                                                                         //
+        //  IF HEALTHKIT HISTORY HAS NOT BEEN SENT (I.E. IF LAST_HK_UPDATE HAS NOT BEEN SET), SEND HEALTHKIT DATA  //
+        //                                                                                                         //
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////
         
         healthKitManager = HealthKitManager.sharedInstance
         
-        if (UserDefaults.standard.object(forKey: "hk_history_sent") as? Bool) != true {
-            get_hk_data() //get healthkit data in background
+        /* if HealthKit history has not yet been sent (i.e. this is the patient's first time opening the application, send HealthKit history */
+        if UserDefaults.standard.object(forKey: "hk_history_sent") == nil {
+        //if (UserDefaults.standard.object(forKey: "hk_history_sent") as? Bool) != true
+            print("sending hk history")
+            get_hk_data()
             send_data(type: "healthkit")
             
             UserDefaults.standard.set(true, forKey: "hk_history_sent")
+        /* otherwise, get HealthKit data from the last time the patient's HealthKit data was updated up until now */
+        } else if UserDefaults.standard.object(forKey: "last_hk_update") != nil && !(has_launched) {
+            self.last_hk_update = UserDefaults.standard.object(forKey: "last_hk_update") as! Date
+            
+            get_hk_data(start_date: self.last_hk_update)
+            send_data(type: "healthkit")
         }
         
         /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -207,23 +218,101 @@ class HomeController: UIViewController, CLLocationManagerDelegate {
         
         locationManager = LocationManager.sharedInstance
         
-        if !(is_recording) {
+        if !(has_launched) {
+            /* set unique id */
             unique_id = UserDefaults.standard.object(forKey: "unique_id") as? String
             
+            /* add observer to send healthkit data when app enters foreground */
+            let notificationCenter = NotificationCenter.default
+            notificationCenter.addObserver(self, selector: #selector(send_hk_data), name: Notification.Name("send_hk_data"), object: nil)
+            
+            /* start updating location */
             locationManager?.startUpdatingLocation()
         
+            /* update location */
             updateLocation()
+            
+            /* start timer to send stored data every 15 minutes */
             self.timer = Timer.scheduledTimer(timeInterval: self.update_interval, target: self, selector: #selector(self.countdown), userInfo: nil, repeats: true)
             
-            is_recording = true
+            has_launched = true
         }
+        
+        ///////////////////////////////////////////////////////////////////
+        //                                                               //
+        //  IF NOTIFICATIONS ARE ENABLED, SCHEDULE WEEKLY NOTIFICATIONS  //
+        //                                                               //
+        ///////////////////////////////////////////////////////////////////
+        
+        let settings: UIUserNotificationSettings? = UIApplication.shared.currentUserNotificationSettings
+        var notificationsEnabled = false
+        
+        /* check whether notifications are enabled */
+        if (settings?.types != UIUserNotificationType.init(rawValue: 0)) {
+            notificationsEnabled = true
+        }
+        
+        /* if notifications are enabled, schedule notification */
+        if (notificationsEnabled) {
+            if #available(iOS 10.0, *) {
+                let center = UNUserNotificationCenter.current()
+                var requestsCount = 0
+                center.getPendingNotificationRequests(completionHandler: { (requests) in
+                    requestsCount = requests.count
+                })
+                
+                if requestsCount == 0 {
+                    //cancel all local notifications and reschedule
+                    center.removeAllDeliveredNotifications()
+                    center.removeAllPendingNotificationRequests()
+                    
+                    //create notification
+                    let content = UNMutableNotificationContent()
+                    content.title = "Send HealthKit Data"
+                    content.body = "Health App needs to be opened to send your HealthKit data to the database."
+                    content.sound = UNNotificationSound.default()
+                    content.badge = 1
+                    
+                    //create notification trigger
+                    let date = Date(timeIntervalSinceNow: 60)
+                    let triggerDate = Calendar.current.dateComponents([.second], from: date) //.second = 60 seconds?
+                    let trigger = UNCalendarNotificationTrigger(dateMatching: triggerDate, repeats: true)
+                    
+                    //schedule notification
+                    let identifier = "send_hk_data"
+                    let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
+                    center.add(request, withCompletionHandler: { (error) in
+                        if error != nil {
+                            print("Error: An error occured while creating local notification with identifier " + identifier)
+                        }
+                    })
+                }
+            } else {
+                if UIApplication.shared.scheduledLocalNotifications?.count == 0 {
+                    
+                    //create notification
+                    let notification = UILocalNotification()
+                    notification.alertTitle = "Send HealthKit Data"
+                    notification.alertBody = "Health App needs to be opened to send your HealthKit data to the database."
+                    notification.soundName = UILocalNotificationDefaultSoundName
+                    notification.applicationIconBadgeNumber = 1
+                
+                    //create notification triger
+                    notification.fireDate = Date(timeIntervalSinceNow: 60)
+                    notification.repeatInterval = NSCalendar.Unit.minute
+                
+                    //schedule notification
+                    UIApplication.shared.scheduleLocalNotification(notification)
+                }
+            }
+        }
+        
+        print("gets here")
     }
     
     func countdown() {
-        if !devicePasscodeSet() {
-            get_hk_data(start_date: last_hk_update)
-            send_data(type: "healthkit")
-        }
+        //get_hk_data(start_date: last_hk_update) //NO LONGER NEEDED, AS HK DATA SENDS WHEN APP ENTERS FOREGROUND
+        send_data(type: "healthkit")
         
         send_data(type: "survey")
         send_data(type: "walk_test")
@@ -249,16 +338,6 @@ class HomeController: UIViewController, CLLocationManagerDelegate {
             self.send_data(type: "location")
             self.locationManager?.decreaseAccuracy()
         }
-    }
-    
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    //                                                                                       //
-    //  THIS WILL CHECK IF A DEVICE PASSCODE HAS BEEN SET.                                   //
-    //  IF IT HAS, DO NOT GET HEALTHKIT DATA AS THE APP WILL CRASH WHEN THE PHONE IS LOCKED  //
-    //                                                                                       //
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    private func devicePasscodeSet() -> Bool {
-        return LAContext().canEvaluatePolicy(.deviceOwnerAuthentication, error: nil)
     }
 }
 
@@ -335,6 +414,7 @@ extension HomeController {
                 
                 if let end_date = results?.last?.endDate {
                     self.last_hk_update = end_date + 1
+                    UserDefaults.standard.set(end_date, forKey: "last_hk_update")
                 }
                 
                 self.semaphore.signal()
@@ -370,6 +450,11 @@ extension HomeController {
         }
         
         healthKitManager!.healthStore?.execute(query)
+    }
+    
+    func send_hk_data() {
+        get_hk_data(start_date: self.last_hk_update)
+        send_data(type: "healthkit")
     }
     
     /////////////////////////
@@ -425,7 +510,7 @@ extension UIViewController {
             if (stored_data.hk_data["hk_data"]?.count)! > 0 {
                 data_to_send = stored_data.hk_data
                 //url_string = "https://www.clinicalhealthtracker.com/web-service/insert-hk-data.php"
-                url_string = "http://cht.dev/web-service/insert-hk-data.php"
+                url_string = "http://localhost:8888/web-service/insert-hk-data.php"
             } else {
                 print("no hk data to send")
                 return
@@ -434,7 +519,7 @@ extension UIViewController {
             if (stored_data.location_data["location_data"]?.count)! > 0 {
                 data_to_send = stored_data.location_data
                 //url_string = "https://www.clinicalhealthtracker.com/web-service/insert-location-data.php"
-                url_string = "http://cht.dev/web-service/insert-location-data.php"
+                url_string = "http://localhost:8888/web-service/insert-location-data.php"
             } else {
                 print("no location data to send")
                 return
@@ -443,7 +528,7 @@ extension UIViewController {
             if (stored_data.survey_data["survey_data"]?.count)! > 0 {
                 data_to_send = stored_data.survey_data
                 //url_string = "https://www.clinicalhealthtracker.com/web-service/insert-survey-data.php"
-                url_string = "http://cht.dev/web-service/insert-survey-data.php"
+                url_string = "http://localhost:8888/web-service/insert-survey-data.php"
             } else {
                 print("no survey data to send")
                 return
@@ -452,7 +537,7 @@ extension UIViewController {
             if (stored_data.walk_test_data["walk_test_data"]?.count)! > 0 {
                 data_to_send = stored_data.walk_test_data
                 //url_string = "https://www.clinicalhealthtracker.com/web-service/insert-walk-test-data.php"
-                url_string = "http://cht.dev/web-service/insert-walk-test-data.php"
+                url_string = "http://localhost:8888/web-service/insert-walk-test-data.php"
             } else {
                 print("no walk test data to send")
                 return
