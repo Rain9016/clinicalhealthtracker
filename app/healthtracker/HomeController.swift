@@ -182,8 +182,14 @@ class HomeController: UIViewController, CLLocationManagerDelegate {
             permissionController.unicodeEscaped = (pages.first?.unicodeEscaped)!
             
             let navController = UINavigationController(rootViewController: permissionController)
+            navController.view.layoutIfNeeded()
             present(navController, animated: true, completion: nil)
             return
+        }
+        
+        if !(has_launched) {
+            /* set unique id */
+            unique_id = UserDefaults.standard.object(forKey: "unique_id") as? String
         }
         
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -195,8 +201,7 @@ class HomeController: UIViewController, CLLocationManagerDelegate {
         healthKitManager = HealthKitManager.sharedInstance
         
         /* if HealthKit history has not yet been sent (i.e. this is the patient's first time opening the application, send HealthKit history */
-        if UserDefaults.standard.object(forKey: "hk_history_sent") == nil {
-        //if (UserDefaults.standard.object(forKey: "hk_history_sent") as? Bool) != true
+        if !isKeyPresentInUserDefaults(key: "hk_history_sent") {
             print("sending hk history")
             get_hk_data()
             send_data(type: "healthkit")
@@ -219,9 +224,6 @@ class HomeController: UIViewController, CLLocationManagerDelegate {
         locationManager = LocationManager.sharedInstance
         
         if !(has_launched) {
-            /* set unique id */
-            unique_id = UserDefaults.standard.object(forKey: "unique_id") as? String
-            
             /* add observer to send healthkit data when app enters foreground */
             let notificationCenter = NotificationCenter.default
             notificationCenter.addObserver(self, selector: #selector(send_hk_data), name: Notification.Name("send_hk_data"), object: nil)
@@ -274,8 +276,10 @@ class HomeController: UIViewController, CLLocationManagerDelegate {
                     content.badge = 1
                     
                     //create notification trigger
-                    let date = Date(timeIntervalSinceNow: 60)
+                    let date = Date().addingTimeInterval(60)
+                    //let date = Date().addingTimeInterval(60 * 60 * 24 * 7)
                     let triggerDate = Calendar.current.dateComponents([.second], from: date) //.second = 60 seconds?
+                    //let triggerDate = Calendar.current.dateComponents([.weekday, .hour, .minute, .second], from: date)
                     let trigger = UNCalendarNotificationTrigger(dateMatching: triggerDate, repeats: true)
                     
                     //schedule notification
@@ -298,20 +302,17 @@ class HomeController: UIViewController, CLLocationManagerDelegate {
                     notification.applicationIconBadgeNumber = 1
                 
                     //create notification triger
-                    notification.fireDate = Date(timeIntervalSinceNow: 60)
-                    notification.repeatInterval = NSCalendar.Unit.minute
+                    notification.fireDate = Date().addingTimeInterval(60 * 60 * 24 * 7)
+                    notification.repeatInterval = NSCalendar.Unit.weekOfYear
                 
                     //schedule notification
                     UIApplication.shared.scheduleLocalNotification(notification)
                 }
             }
         }
-        
-        print("gets here")
     }
     
     func countdown() {
-        //get_hk_data(start_date: last_hk_update) //NO LONGER NEEDED, AS HK DATA SENDS WHEN APP ENTERS FOREGROUND
         send_data(type: "healthkit")
         
         send_data(type: "survey")
@@ -338,6 +339,10 @@ class HomeController: UIViewController, CLLocationManagerDelegate {
             self.send_data(type: "location")
             self.locationManager?.decreaseAccuracy()
         }
+    }
+    
+    func isKeyPresentInUserDefaults(key: String) -> Bool {
+        return UserDefaults.standard.object(forKey: key) != nil
     }
 }
 
@@ -414,7 +419,7 @@ extension HomeController {
                 
                 if let end_date = results?.last?.endDate {
                     self.last_hk_update = end_date + 1
-                    UserDefaults.standard.set(end_date, forKey: "last_hk_update")
+                    UserDefaults.standard.set(self.last_hk_update, forKey: "last_hk_update")
                 }
                 
                 self.semaphore.signal()
@@ -509,8 +514,8 @@ extension UIViewController {
         case "healthkit":
             if (stored_data.hk_data["hk_data"]?.count)! > 0 {
                 data_to_send = stored_data.hk_data
-                //url_string = "https://www.clinicalhealthtracker.com/web-service/insert-hk-data.php"
-                url_string = "http://localhost:8888/web-service/insert-hk-data.php"
+                url_string = "https://www.clinicalhealthtracker.com/web-service/insert-hk-data.php"
+                //url_string = "http://localhost:8888/web-service/insert-hk-data.php"
             } else {
                 print("no hk data to send")
                 return
@@ -518,8 +523,8 @@ extension UIViewController {
         case "location":
             if (stored_data.location_data["location_data"]?.count)! > 0 {
                 data_to_send = stored_data.location_data
-                //url_string = "https://www.clinicalhealthtracker.com/web-service/insert-location-data.php"
-                url_string = "http://localhost:8888/web-service/insert-location-data.php"
+                url_string = "https://www.clinicalhealthtracker.com/web-service/insert-location-data.php"
+                //url_string = "http://localhost:8888/web-service/insert-location-data.php"
             } else {
                 print("no location data to send")
                 return
@@ -527,8 +532,8 @@ extension UIViewController {
         case "survey":
             if (stored_data.survey_data["survey_data"]?.count)! > 0 {
                 data_to_send = stored_data.survey_data
-                //url_string = "https://www.clinicalhealthtracker.com/web-service/insert-survey-data.php"
-                url_string = "http://localhost:8888/web-service/insert-survey-data.php"
+                url_string = "https://www.clinicalhealthtracker.com/web-service/insert-survey-data.php"
+                //url_string = "http://localhost:8888/web-service/insert-survey-data.php"
             } else {
                 print("no survey data to send")
                 return
@@ -536,8 +541,8 @@ extension UIViewController {
         case "walk_test":
             if (stored_data.walk_test_data["walk_test_data"]?.count)! > 0 {
                 data_to_send = stored_data.walk_test_data
-                //url_string = "https://www.clinicalhealthtracker.com/web-service/insert-walk-test-data.php"
-                url_string = "http://localhost:8888/web-service/insert-walk-test-data.php"
+                url_string = "https://www.clinicalhealthtracker.com/web-service/insert-walk-test-data.php"
+                //url_string = "http://localhost:8888/web-service/insert-walk-test-data.php"
             } else {
                 print("no walk test data to send")
                 return

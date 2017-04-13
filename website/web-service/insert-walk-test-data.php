@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($result) {
         $response['error'] = false;
-        $response['message'] = 'Survey data successfully submitted to the database';
+        $response['message'] = 'Walk test data successfully submitted to the database';
     } else {
         $response['error'] = true;
         $response['message'] = 'There was an error submitting your survey data to the database';

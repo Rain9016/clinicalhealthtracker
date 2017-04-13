@@ -105,8 +105,8 @@ class LoginController: UIViewController {
     
     func authenticate() {
         let request: URLRequest = {
-            //let urlString = "https://www.clinicalhealthtracker.com/web-service/authenticate.php"
-            let urlString = "http://localhost:8888/web-service/authenticate.php"
+            let urlString = "https://www.clinicalhealthtracker.com/web-service/authenticate.php"
+            //let urlString = "http://localhost:8888/web-service/authenticate.php"
             let url = URL(string: urlString)
             var request = URLRequest(url: url!)
             request.httpMethod = "POST"

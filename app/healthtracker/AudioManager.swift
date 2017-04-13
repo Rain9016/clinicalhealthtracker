@@ -27,6 +27,14 @@ class AudioManager: NSObject {
             print("error playing audio")
         }
         
+        let session = AVAudioSession.sharedInstance()
+        
+        do {
+            try session.setCategory(AVAudioSessionCategoryPlayback)
+        } catch {
+            print("error playing audio in background")
+        }
+        
         audioPlayer.play()
     }
     
