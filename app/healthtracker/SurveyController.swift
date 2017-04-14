@@ -707,7 +707,7 @@ class SurveyController: UIViewController, UITableViewDelegate, UITableViewDataSo
         let survey = surveys[selectedSurvey]
         
         guard survey.steps.count > 0 else {
-            print("Questionnaire contains no steps")
+            //print("Questionnaire contains no steps")
             return
         }
         

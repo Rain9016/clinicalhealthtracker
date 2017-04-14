@@ -15,7 +15,6 @@
 		C30EAC301E51AFEA00353701 /* ActivityCompleteController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C30EAC2F1E51AFEA00353701 /* ActivityCompleteController.swift */; };
 		C31471DE1E3B19E5009E65F3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C31471DD1E3B19E5009E65F3 /* AppDelegate.swift */; };
 		C31471E51E3B19E5009E65F3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C31471E41E3B19E5009E65F3 /* Assets.xcassets */; };
-		C31471E81E3B19E5009E65F3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C31471E61E3B19E5009E65F3 /* LaunchScreen.storyboard */; };
 		C31471F01E3B1A1A009E65F3 /* CustomTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C31471EF1E3B1A1A009E65F3 /* CustomTabBarController.swift */; };
 		C31471F31E3B1ABB009E65F3 /* ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C31471F21E3B1ABB009E65F3 /* ionicons.ttf */; };
 		C31471F51E3B1ADE009E65F3 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C31471F41E3B1ADE009E65F3 /* Extensions.swift */; };
@@ -71,7 +70,6 @@
 		C31471DA1E3B19E5009E65F3 /* healthtracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = healthtracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C31471DD1E3B19E5009E65F3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C31471E41E3B19E5009E65F3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		C31471E71E3B19E5009E65F3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C31471E91E3B19E5009E65F3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C31471EF1E3B1A1A009E65F3 /* CustomTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomTabBarController.swift; sourceTree = "<group>"; };
 		C31471F21E3B1ABB009E65F3 /* ionicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = ionicons.ttf; sourceTree = "<group>"; };
@@ -156,7 +154,6 @@
 				C3ABFB351E3B1CD200095384 /* healthtracker.entitlements */,
 				C31471DD1E3B19E5009E65F3 /* AppDelegate.swift */,
 				C31471E41E3B19E5009E65F3 /* Assets.xcassets */,
-				C31471E61E3B19E5009E65F3 /* LaunchScreen.storyboard */,
 				C31471E91E3B19E5009E65F3 /* Info.plist */,
 				C31471EF1E3B1A1A009E65F3 /* CustomTabBarController.swift */,
 				C31471F41E3B1ADE009E65F3 /* Extensions.swift */,
@@ -304,7 +301,6 @@
 				C36EB7241E5947B4009FFD06 /* encouragement-pt8.mp3 in Resources */,
 				C36EB72D1E5947B4009FFD06 /* time-remaining-pt1.mp3 in Resources */,
 				C36EB72A1E5947B4009FFD06 /* intro-pt1.mp3 in Resources */,
-				C31471E81E3B19E5009E65F3 /* LaunchScreen.storyboard in Resources */,
 				C36EB7351E594A06009FFD06 /* instruction-p1-pt1.mp3 in Resources */,
 				C36EB7311E5947B4009FFD06 /* time-remaining-pt5.mp3 in Resources */,
 				C36EB72F1E5947B4009FFD06 /* time-remaining-pt3.mp3 in Resources */,
@@ -364,17 +360,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXVariantGroup section */
-		C31471E61E3B19E5009E65F3 /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				C31471E71E3B19E5009E65F3 /* Base */,
-			);
-			name = LaunchScreen.storyboard;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		C31471EA1E3B19E5009E65F3 /* Debug */ = {
@@ -474,12 +459,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = healthtracker/healthtracker.entitlements;
 				DEVELOPMENT_TEAM = BPTF3Y8XNN;
 				INFOPLIST_FILE = healthtracker/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.yourcompany.healthtracker;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.samuelgluck.healthtracker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -490,12 +477,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = healthtracker/healthtracker.entitlements;
 				DEVELOPMENT_TEAM = BPTF3Y8XNN;
 				INFOPLIST_FILE = healthtracker/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.yourcompany.healthtracker;
+				PRODUCT_BUNDLE_IDENTIFIER = com.samuelgluck.healthtracker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 1;

@@ -111,7 +111,7 @@ class WalkTestController: UIViewController {
     /* [4] 6 minute countdown */
     func countdown() {
         //prints the amount of time the app has to run in the background, it seems to count down from 180. Though, when audio is played, it seems to bring the app into the foreground (signified by the large time remaining). When the audio stops playing, the background timer begins counting down from 180 again.
-        print(UIApplication.shared.backgroundTimeRemaining)
+        //print(UIApplication.shared.backgroundTimeRemaining)
         
         duration = duration - 1
         

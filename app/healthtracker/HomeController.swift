@@ -15,13 +15,13 @@ import UserNotifications
 class HomeController: UIViewController, CLLocationManagerDelegate {
     
     let pages: [PermissionPage] = {
-        let firstPage = PermissionPage(heading: "Location Services", content: "Health App requires use of your location services. This app will monitor your location and record your GPS coordinates every 15 minutes in order to map out an activity space. Please press the \"Allow\" button below, and allow Health App to access your location services when prompted.", unicodeEscaped: "\u{f46d}")
+        let firstPage = PermissionPage(heading: "Location Services", content: "Health Tracker requires use of your location services. As long as it remains open, Health Tracker will monitor your location and record your GPS coordinates every 15 minutes in order to measure your activity space. Please press the \"Allow\" button below, and allow Health App to access your location services when prompted.", unicodeEscaped: "\u{f46d}")
         
-        let secondPage = PermissionPage(heading: "HealthKit", content: "Health App requires access to HealthKit in order to access and record your steps and distance history. This app will also continue to monitor and record your step count and distance walked. Please press the \"Allow\" button below, and allow Health App to access your location services when prompted.", unicodeEscaped: "\u{f442}")
+        let secondPage = PermissionPage(heading: "HealthKit", content: "Health Tracker requires access to HealthKit in order to access and record your step count and distances walked history. As long as it remains installed and you open it on a weekly basis, Health Tracker will continue to monitor and record your step count and distances walked. Please press the \"Allow\" button below, and allow Health App to access HealthKit when prompted.", unicodeEscaped: "\u{f442}")
         
-        let thirdPage = PermissionPage(heading: "Motion & Fitness", content: "Health App requires access to Health & Fitness in order to track and record your step count and distance walked during the walk test. Please press the \"Allow\" button below, and allow Health App to access your location services when prompted.", unicodeEscaped: "\u{f3bb}")
+        let thirdPage = PermissionPage(heading: "Notifications", content: "Health Tracker requires you to allow notifications. You will be reminded on a weekly basis to open up Health Tracker, so that it can access and record your HealthKit data (step count and distances walked). Please press the \"Allow\" button below, and allow Health Tracker to send you notifications when prompted.", unicodeEscaped: "\u{f399}")
         
-        let fourthPage = PermissionPage(heading: "Notifications", content: "Health App requires you to allow notifications. You will be reminded on a weekly basis to open up Health App, so that it can record your HealhtKit data (step count and distance walked). Please press the \"Allow\" button below, and allow Health App to send you notifications when prompted.", unicodeEscaped: "\u{f399}")
+        let fourthPage = PermissionPage(heading: "Motion & Fitness", content: "Health Tracker requires access to Motion & Fitness in order to track and record your step count and distance walked during the 6 minute walk test. Please press the \"Allow\" button below, and allow Health App to access your location services when prompted.", unicodeEscaped: "\u{f3bb}")
         
         return [firstPage, secondPage, thirdPage, fourthPage]
     }()
@@ -152,6 +152,12 @@ class HomeController: UIViewController, CLLocationManagerDelegate {
         content_label.widthAnchor.constraint(equalTo: contentView.widthAnchor, constant: -40).isActive = true
         content_label.topAnchor.constraint(equalTo: container.bottomAnchor, constant: 20).isActive = true
         content_label.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
+        
+        let padding_bottom = UIView()
+        contentView.addSubview(padding_bottom)
+        padding_bottom.translatesAutoresizingMaskIntoConstraints = false
+        padding_bottom.topAnchor.constraint(equalTo: content_label.bottomAnchor, constant: 25).isActive = true
+        padding_bottom.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
     }
 
     
@@ -202,7 +208,6 @@ class HomeController: UIViewController, CLLocationManagerDelegate {
         
         /* if HealthKit history has not yet been sent (i.e. this is the patient's first time opening the application, send HealthKit history */
         if !isKeyPresentInUserDefaults(key: "hk_history_sent") {
-            print("sending hk history")
             get_hk_data()
             send_data(type: "healthkit")
             
@@ -271,7 +276,7 @@ class HomeController: UIViewController, CLLocationManagerDelegate {
                     //create notification
                     let content = UNMutableNotificationContent()
                     content.title = "Send HealthKit Data"
-                    content.body = "Health App needs to be opened to send your HealthKit data to the database."
+                    content.body = "Please open Health Tracker to send your step count and distances walked to the database"
                     content.sound = UNNotificationSound.default()
                     content.badge = 1
                     
@@ -287,7 +292,7 @@ class HomeController: UIViewController, CLLocationManagerDelegate {
                     let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
                     center.add(request, withCompletionHandler: { (error) in
                         if error != nil {
-                            print("Error: An error occured while creating local notification with identifier " + identifier)
+                            //print("Error: An error occured while creating local notification with identifier " + identifier)
                         }
                     })
                 }
@@ -297,7 +302,7 @@ class HomeController: UIViewController, CLLocationManagerDelegate {
                     //create notification
                     let notification = UILocalNotification()
                     notification.alertTitle = "Send HealthKit Data"
-                    notification.alertBody = "Health App needs to be opened to send your HealthKit data to the database."
+                    notification.alertBody = "Please open Health Tracker to send your step count and distances walked to the database"
                     notification.soundName = UILocalNotificationDefaultSoundName
                     notification.applicationIconBadgeNumber = 1
                 
@@ -382,12 +387,6 @@ extension HomeController {
             hk_data.removeAll()
             distance.removeAll()
         }
-        
-        /*
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-        print(dateFormatter.string(from: self.last_hk_update))
- */
     }
     
     func get_step_data(start_date: Date? = nil) {
@@ -404,7 +403,7 @@ extension HomeController {
         let query = HKSampleQuery(sampleType: healthKitManager!.stepCount!, predicate: predicate, limit: Int(HKObjectQueryNoLimit), sortDescriptors: nil)
         { (query, results, error) in
             if error != nil {
-                print("error =>", error.debugDescription)
+                //print("error =>", error.debugDescription)
             } else {
                 for entry in results as! [HKQuantitySample] {
                     let dateFormatter = DateFormatter()
@@ -443,7 +442,7 @@ extension HomeController {
         let query = HKSampleQuery(sampleType: healthKitManager!.distanceWalkingRunning!, predicate: predicate, limit: Int(HKObjectQueryNoLimit), sortDescriptors: nil)
         { (query, results, error) in
             if error != nil {
-                print("error =>", error.debugDescription)
+                //print("error =>", error.debugDescription)
             } else {
                 for entry in results as! [HKQuantitySample] {
                     let distance = String(Int(entry.quantity.doubleValue(for: HKUnit.meter())))
@@ -497,7 +496,7 @@ extension UIViewController {
         //                                    //
         ////////////////////////////////////////
         guard currentReachabilityStatus == .reachableViaWiFi else {
-            print("Not connected to wi-fi")
+            //print("Not connected to wi-fi")
             return
         }
         
@@ -517,7 +516,7 @@ extension UIViewController {
                 url_string = "https://www.clinicalhealthtracker.com/web-service/insert-hk-data.php"
                 //url_string = "http://localhost:8888/web-service/insert-hk-data.php"
             } else {
-                print("no hk data to send")
+                //print("no hk data to send")
                 return
             }
         case "location":
@@ -526,7 +525,7 @@ extension UIViewController {
                 url_string = "https://www.clinicalhealthtracker.com/web-service/insert-location-data.php"
                 //url_string = "http://localhost:8888/web-service/insert-location-data.php"
             } else {
-                print("no location data to send")
+                //print("no location data to send")
                 return
             }
         case "survey":
@@ -535,7 +534,7 @@ extension UIViewController {
                 url_string = "https://www.clinicalhealthtracker.com/web-service/insert-survey-data.php"
                 //url_string = "http://localhost:8888/web-service/insert-survey-data.php"
             } else {
-                print("no survey data to send")
+                //print("no survey data to send")
                 return
             }
         case "walk_test":
@@ -544,7 +543,7 @@ extension UIViewController {
                 url_string = "https://www.clinicalhealthtracker.com/web-service/insert-walk-test-data.php"
                 //url_string = "http://localhost:8888/web-service/insert-walk-test-data.php"
             } else {
-                print("no walk test data to send")
+                //print("no walk test data to send")
                 return
             }
         default:
@@ -573,7 +572,7 @@ extension UIViewController {
             
             let task = session.dataTask(with: request, completionHandler: { (data, response, error) in
                 if error != nil {
-                    print("error =>", error.debugDescription)
+                    //print("error =>", error.debugDescription)
                     return
                 }
                 
@@ -582,7 +581,7 @@ extension UIViewController {
                     let err = data["error"] as! Bool
                     
                     if err {
-                        print(data["message"]!)
+                        //print(data["message"]!)
                         return
                     //////////////////////////////////////////////////////
                     //                                                  //
@@ -590,7 +589,7 @@ extension UIViewController {
                     //                                                  //
                     //////////////////////////////////////////////////////
                     } else {
-                        print(data["message"]!)
+                        //print(data["message"]!)
                         
                         switch type {
                         case "healthkit":
@@ -606,14 +605,14 @@ extension UIViewController {
                         }
                     }
                 } catch {
-                    print("error =>", error.localizedDescription) //e.g. The data couldn’t be read because it isn’t in the correct format
+                    //print("error =>", error.localizedDescription) //e.g. The data couldn’t be read because it isn’t in the correct format
                     return
                 }
             })
             
             task.resume()
         } catch {
-            print(error.localizedDescription)
+            //print(error.localizedDescription)
         }
     }
 }

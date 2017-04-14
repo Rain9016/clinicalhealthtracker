@@ -52,8 +52,6 @@ class PermissionController: UIViewController {
         if (!permission_requested) {
             switch self.heading {
             case "Location Services":
-                print("location services")
-            
                 guard CLLocationManager.locationServicesEnabled() else {
                     sendAlert(title: "Error", message: "In order to use this app, Location Services must be enabled. Please to go Settings > Privacy > Location Services and enable Location Services")
                     return
@@ -61,21 +59,9 @@ class PermissionController: UIViewController {
             
                 _ = LocationManager.sharedInstance
             case "HealthKit":
-                print("healthkit")
                 _ = HealthKitManager.sharedInstance
             case "Motion & Fitness":
-                print("motion & fitness")
                 _ = PedometerManager.sharedInstance
-            case "Notifications":
-                print("notifications")
-                if #available(iOS 10.0, *) {
-                    let center = UNUserNotificationCenter.current()
-                    center.requestAuthorization(options: [.alert, .sound, .badge]) { (granted, error) in
-                    }
-                } else {
-                    let settings = UIUserNotificationSettings(types: [.alert, .sound, .badge], categories: nil)
-                    UIApplication.shared.registerUserNotificationSettings(settings)
-                }
                 
                 button.backgroundColor = UIColor.init(r: 204, g: 0, b: 0)
                 button.setTitleColor(UIColor.white, for: .normal)
@@ -84,8 +70,16 @@ class PermissionController: UIViewController {
                 
                 permission_requested = true
                 return
+            case "Notifications":
+                if #available(iOS 10.0, *) {
+                    let center = UNUserNotificationCenter.current()
+                    center.requestAuthorization(options: [.alert, .sound, .badge]) { (granted, error) in
+                    }
+                } else {
+                    let settings = UIUserNotificationSettings(types: [.alert, .sound, .badge], categories: nil)
+                    UIApplication.shared.registerUserNotificationSettings(settings)
+                }
             default:
-                print("default")
                 return
             }
             

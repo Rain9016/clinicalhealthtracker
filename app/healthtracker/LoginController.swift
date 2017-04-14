@@ -121,7 +121,7 @@ class LoginController: UIViewController {
         
         let task = session.dataTask(with: request, completionHandler: { (data, response, error) in
             if error != nil {
-                print("error", error.debugDescription)
+                //print("error", error.debugDescription)
                 return
             }
             
@@ -142,7 +142,7 @@ class LoginController: UIViewController {
                     }
                 }
             } catch {
-                print("error", error.localizedDescription)
+                //print("error", error.localizedDescription)
                 return
             }
         })
