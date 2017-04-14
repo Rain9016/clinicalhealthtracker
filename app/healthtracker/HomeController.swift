@@ -31,7 +31,7 @@ class HomeController: UIViewController, CLLocationManagerDelegate {
     
     var unique_id: String?
     
-    let semaphore = DispatchSemaphore(value: 0) //create semaphore
+    let semaphore = DispatchSemaphore(value: 0) /* create semaphore */
     
     var dataToSend = DataToSend.sharedInstance
     var hk_data = [[String:String]]()
@@ -40,7 +40,7 @@ class HomeController: UIViewController, CLLocationManagerDelegate {
     
     var has_launched = false
     var timer: Timer?
-    var update_interval: TimeInterval = 60 * 15 //every 15 minutes
+    var update_interval: TimeInterval = 60 * 15 /* every 15 minutes */
     
     /////////////////////////
     //                     //
@@ -281,10 +281,8 @@ class HomeController: UIViewController, CLLocationManagerDelegate {
                     content.badge = 1
                     
                     //create notification trigger
-                    let date = Date().addingTimeInterval(60)
-                    //let date = Date().addingTimeInterval(60 * 60 * 24 * 7)
-                    let triggerDate = Calendar.current.dateComponents([.second], from: date) //.second = 60 seconds?
-                    //let triggerDate = Calendar.current.dateComponents([.weekday, .hour, .minute, .second], from: date)
+                    let date = Date().addingTimeInterval(60 * 60 * 24 * 7)
+                    let triggerDate = Calendar.current.dateComponents([.weekday, .hour, .minute, .second], from: date)
                     let trigger = UNCalendarNotificationTrigger(dateMatching: triggerDate, repeats: true)
                     
                     //schedule notification

@@ -18,7 +18,6 @@ class LoginController: UIViewController {
         textField.layer.borderColor = UIColor.lightGray.cgColor
         textField.layer.borderWidth = 1
         /* http://stackoverflow.com/questions/25367502/create-space-at-the-beginning-of-a-uitextfield */
-        //textField.layer.sublayerTransform = CATransform3DMakeTranslation(10, 0, 0)
         return textField
     }()
     
@@ -154,8 +153,6 @@ class LoginController: UIViewController {
         if textField.text == "" {
             sendAlert(title: "Error", message: "Please enter your unique ID")
         } else {
-            //UserDefaults.standard.set(self.textField.text, forKey: "unique_id") //DELETE!
-            //self.dismiss(animated: false, completion: nil) //DELETE!
             authenticate()
         }
     }
