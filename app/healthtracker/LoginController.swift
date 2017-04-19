@@ -36,7 +36,7 @@ class LoginController: UIViewController, UITextFieldDelegate {
     }()
     
     let imageView: UIImageView = {
-        let imageName = "app-icon"
+        let imageName = "Icon"
         let image = UIImage(named: imageName)
         let imageView = UIImageView(image: image!)
         return imageView

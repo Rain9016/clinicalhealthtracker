@@ -17,9 +17,9 @@ class HomeController: UIViewController, CLLocationManagerDelegate {
     let pages: [PermissionPage] = {
         let firstPage = PermissionPage(heading: "Location Services", content: "Health Tracker requires use of your location services. As long as it remains open, Health Tracker will monitor your location and record your GPS coordinates every 15 minutes in order to measure your activity space. Please press the \"Allow\" button below, and allow Health App to access your location services when prompted.", unicodeEscaped: "\u{f46d}")
         
-        let secondPage = PermissionPage(heading: "HealthKit", content: "Health Tracker requires access to HealthKit in order to access and record your step count and distances walked history. As long as it remains installed and you open it on a weekly basis, Health Tracker will continue to monitor and record your step count and distances walked. Please press the \"Allow\" button below, and allow Health App to access HealthKit when prompted.", unicodeEscaped: "\u{f442}")
+        let secondPage = PermissionPage(heading: "Health", content: "Health Tracker requires access to Health in order to access and record your step count and distances walked history. As long as it remains installed and you open it on a weekly basis, Health Tracker will continue to monitor and record your step count and distances walked. Please press the \"Allow\" button below, and allow Health App to access Health when prompted.", unicodeEscaped: "\u{f442}")
         
-        let thirdPage = PermissionPage(heading: "Notifications", content: "Health Tracker requires you to allow notifications. You will be reminded on a weekly basis to open up Health Tracker, so that it can access and record your HealthKit data (step count and distances walked). Please press the \"Allow\" button below, and allow Health Tracker to send you notifications when prompted.", unicodeEscaped: "\u{f399}")
+        let thirdPage = PermissionPage(heading: "Notifications", content: "Health Tracker requires you to allow notifications. You will be reminded on a weekly basis to open up Health Tracker, so that it can access and record your Health data (step count and distances walked). Please press the \"Allow\" button below, and allow Health Tracker to send you notifications when prompted.", unicodeEscaped: "\u{f399}")
         
         let fourthPage = PermissionPage(heading: "Motion & Fitness", content: "Health Tracker requires access to Motion & Fitness in order to track and record your step count and distance walked during the 6 minute walk test. Please press the \"Allow\" button below, and allow Health App to access your location services when prompted.", unicodeEscaped: "\u{f3bb}")
         
@@ -66,7 +66,7 @@ class HomeController: UIViewController, CLLocationManagerDelegate {
     }()
     
     let imageView: UIImageView = {
-        let imageName = "app-icon"
+        let imageName = "Icon"
         let image = UIImage(named: imageName)
         let imageView = UIImageView(image: image!)
         return imageView
@@ -275,7 +275,7 @@ class HomeController: UIViewController, CLLocationManagerDelegate {
                     
                     //create notification
                     let content = UNMutableNotificationContent()
-                    content.title = "Send HealthKit Data"
+                    content.title = "Send Health Data"
                     content.body = "Please open Health Tracker to send your step count and distances walked to the database"
                     content.sound = UNNotificationSound.default()
                     content.badge = 1
@@ -299,7 +299,7 @@ class HomeController: UIViewController, CLLocationManagerDelegate {
                     
                     //create notification
                     let notification = UILocalNotification()
-                    notification.alertTitle = "Send HealthKit Data"
+                    notification.alertTitle = "Send Health Data"
                     notification.alertBody = "Please open Health Tracker to send your step count and distances walked to the database"
                     notification.soundName = UILocalNotificationDefaultSoundName
                     notification.applicationIconBadgeNumber = 1
