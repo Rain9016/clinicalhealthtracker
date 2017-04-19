@@ -8,7 +8,7 @@
 
 import UIKit
 
-class LoginController: UIViewController {
+class LoginController: UIViewController, UITextFieldDelegate {
     
     let textField: UITextField = {
         let textField = UITextField()
@@ -50,11 +50,13 @@ class LoginController: UIViewController {
         return label
     }()
     
+    let activityIndicator = ActivityIndicator.sharedInstance
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         view.backgroundColor = .white
-        self.hideKeyboardWhenTappedAround()
+        self.textField.delegate = self
         
         view.addSubview(textField)
         
@@ -103,6 +105,8 @@ class LoginController: UIViewController {
     }
     
     func authenticate() {
+        activityIndicator.showActivityIndicator(uiView: self.view)
+        
         let request: URLRequest = {
             let urlString = "https://www.clinicalhealthtracker.com/web-service/authenticate.php"
             //let urlString = "http://localhost:8888/web-service/authenticate.php"
@@ -131,11 +135,13 @@ class LoginController: UIViewController {
                 
                 if err {
                     DispatchQueue.main.async {
+                        self.activityIndicator.hideActivityIndicator(uiView: self.view)
                         self.sendAlert(title: "Error", message: data["message"] as! String)
                     }
                     return
                 } else {
                     DispatchQueue.main.async {
+                        self.activityIndicator.hideActivityIndicator(uiView: self.view)
                         UserDefaults.standard.set(self.textField.text, forKey: "unique_id")
                         self.dismiss(animated: false, completion: nil)
                     }
@@ -155,5 +161,19 @@ class LoginController: UIViewController {
         } else {
             authenticate()
         }
+    }
+    ////////////////////////
+    //                    //
+    //  DISMISS KEYBOARD  //
+    //                    //
+    ////////////////////////
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return(true)
     }
 }

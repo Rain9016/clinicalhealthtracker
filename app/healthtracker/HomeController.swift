@@ -493,7 +493,9 @@ extension UIViewController {
         //  IF NOT CONNECTED TO WIFI, RETURN  //
         //                                    //
         ////////////////////////////////////////
-        guard currentReachabilityStatus == .reachableViaWiFi else {
+        let reachability = Reachability.init()!
+        
+        guard reachability.currentReachabilityStatus == .reachableViaWiFi else {
             //print("Not connected to wi-fi")
             return
         }

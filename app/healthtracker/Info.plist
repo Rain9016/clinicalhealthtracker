@@ -28,6 +28,8 @@
 	<string>As long as this app remains open, your location will be recorded every 15 minutes</string>
 	<key>NSMotionUsageDescription</key>
 	<string>Your step count and distance walked will be recorded during the 6 minute walk test</string>
+	<key>NSHealthUpdateUsageDescription</key>
+	<string>Your step count and distances walked will be recorded every time you open this app</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>ionicons.ttf</string>
