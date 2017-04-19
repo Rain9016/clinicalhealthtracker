@@ -44,7 +44,7 @@ class LoginController: UIViewController, UITextFieldDelegate {
     
     let label: UILabel = {
         let label = UILabel()
-        label.text = "healthapp"
+        label.text = "healthtracker"
         label.font = UIFont(name: "Lobster 1.4", size: 40)
         label.textAlignment = .center
         return label

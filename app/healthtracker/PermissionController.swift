@@ -58,7 +58,7 @@ class PermissionController: UIViewController {
                 }
             
                 _ = LocationManager.sharedInstance
-            case "HealthKit":
+            case "Health":
                 _ = HealthKitManager.sharedInstance
             case "Motion & Fitness":
                 _ = PedometerManager.sharedInstance
