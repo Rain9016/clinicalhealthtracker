@@ -10,18 +10,20 @@
 import UIKit
 import HealthKit
 import CoreLocation
-import LocalAuthentication /* Needed to check whether device passcode has been set */
+import UserNotifications
 
 class HomeController: UIViewController, CLLocationManagerDelegate {
     
     let pages: [PermissionPage] = {
-        let firstPage = PermissionPage(heading: "Location Services", content: "Health App requires use of your location services. This app will monitor your location and record your GPS coordinates every 15 minutes in order to map out an activity space. Please press the \"Allow\" button below, and allow Health App to access your location services when prompted.", unicodeEscaped: "\u{f46d}")
+        let firstPage = PermissionPage(heading: "Location Services", content: "Health Tracker requires use of your location services. As long as it remains open, Health Tracker will monitor your location and record your GPS coordinates every 15 minutes in order to measure your activity space. Please press the \"Allow\" button below, and allow Health App to access your location services when prompted.", unicodeEscaped: "\u{f46d}")
         
-        let secondPage = PermissionPage(heading: "HealthKit", content: "Health App requires access to HealthKit in order to access and record your steps and distance history. This app will also continue to monitor and record your step count and distance walked. Please press the \"Allow\" button below, and allow Health App to access your location services when prompted.", unicodeEscaped: "\u{f442}")
+        let secondPage = PermissionPage(heading: "Health", content: "Health Tracker requires access to Health in order to access and record your step count and distances walked history. As long as it remains installed and you open it on a weekly basis, Health Tracker will continue to monitor and record your step count and distances walked. Please press the \"Allow\" button below, and allow Health App to access Health when prompted.", unicodeEscaped: "\u{f442}")
         
-        let thirdPage = PermissionPage(heading: "Motion & Fitness", content: "Health App requires access to Health & Fitness in order to track and record your step count and distance walked during the walk test. Please press the \"Allow\" button below, and allow Health App to access your location services when prompted.", unicodeEscaped: "\u{f3bb}")
+        let thirdPage = PermissionPage(heading: "Notifications", content: "Health Tracker requires you to allow notifications. You will be reminded on a weekly basis to open up Health Tracker, so that it can access and record your Health data (step count and distances walked). Please press the \"Allow\" button below, and allow Health Tracker to send you notifications when prompted.", unicodeEscaped: "\u{f399}")
         
-        return [firstPage, secondPage, thirdPage]
+        let fourthPage = PermissionPage(heading: "Motion & Fitness", content: "Health Tracker requires access to Motion & Fitness in order to track and record your step count and distance walked during the 6 minute walk test. Please press the \"Allow\" button below, and allow Health App to access your location services when prompted.", unicodeEscaped: "\u{f3bb}")
+        
+        return [firstPage, secondPage, thirdPage, fourthPage]
     }()
 
     var healthKitManager: HealthKitManager?
@@ -29,16 +31,16 @@ class HomeController: UIViewController, CLLocationManagerDelegate {
     
     var unique_id: String?
     
-    let semaphore = DispatchSemaphore(value: 0) //create semaphore
+    let semaphore = DispatchSemaphore(value: 0) /* create semaphore */
     
     var dataToSend = DataToSend.sharedInstance
     var hk_data = [[String:String]]()
     var distance = [String]()
     var last_hk_update = Date()
     
-    var is_recording = false
+    var has_launched = false
     var timer: Timer?
-    var update_interval: TimeInterval = 60 * 15 //every 15 minutes
+    var update_interval: TimeInterval = 60 * 15 /* every 15 minutes */
     
     /////////////////////////
     //                     //
@@ -64,7 +66,7 @@ class HomeController: UIViewController, CLLocationManagerDelegate {
     }()
     
     let imageView: UIImageView = {
-        let imageName = "app-icon"
+        let imageName = "Icon"
         let image = UIImage(named: imageName)
         let imageView = UIImageView(image: image!)
         return imageView
@@ -72,7 +74,7 @@ class HomeController: UIViewController, CLLocationManagerDelegate {
     
     let logo_label: UILabel = {
         let label = UILabel()
-        label.text = "healthapp"
+        label.text = "healthtracker"
         label.font = UIFont(name: "Lobster 1.4", size: 40)
         label.textAlignment = .center
         return label
@@ -150,6 +152,12 @@ class HomeController: UIViewController, CLLocationManagerDelegate {
         content_label.widthAnchor.constraint(equalTo: contentView.widthAnchor, constant: -40).isActive = true
         content_label.topAnchor.constraint(equalTo: container.bottomAnchor, constant: 20).isActive = true
         content_label.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
+        
+        let padding_bottom = UIView()
+        contentView.addSubview(padding_bottom)
+        padding_bottom.translatesAutoresizingMaskIntoConstraints = false
+        padding_bottom.topAnchor.constraint(equalTo: content_label.bottomAnchor, constant: 25).isActive = true
+        padding_bottom.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
     }
 
     
@@ -180,23 +188,36 @@ class HomeController: UIViewController, CLLocationManagerDelegate {
             permissionController.unicodeEscaped = (pages.first?.unicodeEscaped)!
             
             let navController = UINavigationController(rootViewController: permissionController)
+            navController.view.layoutIfNeeded()
             present(navController, animated: true, completion: nil)
             return
         }
         
-        ///////////////////////////////////////////////////////////////////
-        //                                                               //
-        //  IF HEALTHKIT HISTORY HAS NOT BEEN SENT, SEND HEALTHKIT DATA  //
-        //                                                               //
-        ///////////////////////////////////////////////////////////////////
+        if !(has_launched) {
+            /* set unique id */
+            unique_id = UserDefaults.standard.object(forKey: "unique_id") as? String
+        }
+        
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //                                                                                                         //
+        //  IF HEALTHKIT HISTORY HAS NOT BEEN SENT (I.E. IF LAST_HK_UPDATE HAS NOT BEEN SET), SEND HEALTHKIT DATA  //
+        //                                                                                                         //
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////
         
         healthKitManager = HealthKitManager.sharedInstance
         
-        if (UserDefaults.standard.object(forKey: "hk_history_sent") as? Bool) != true {
-            get_hk_data() //get healthkit data in background
+        /* if HealthKit history has not yet been sent (i.e. this is the patient's first time opening the application, send HealthKit history */
+        if !isKeyPresentInUserDefaults(key: "hk_history_sent") {
+            get_hk_data()
             send_data(type: "healthkit")
             
             UserDefaults.standard.set(true, forKey: "hk_history_sent")
+        /* otherwise, get HealthKit data from the last time the patient's HealthKit data was updated up until now */
+        } else if UserDefaults.standard.object(forKey: "last_hk_update") != nil && !(has_launched) {
+            self.last_hk_update = UserDefaults.standard.object(forKey: "last_hk_update") as! Date
+            
+            get_hk_data(start_date: self.last_hk_update)
+            send_data(type: "healthkit")
         }
         
         /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -207,23 +228,95 @@ class HomeController: UIViewController, CLLocationManagerDelegate {
         
         locationManager = LocationManager.sharedInstance
         
-        if !(is_recording) {
-            unique_id = UserDefaults.standard.object(forKey: "unique_id") as? String
+        if !(has_launched) {
+            /* add observer to send healthkit data when app enters foreground */
+            let notificationCenter = NotificationCenter.default
+            notificationCenter.addObserver(self, selector: #selector(send_hk_data), name: Notification.Name("send_hk_data"), object: nil)
             
+            /* start updating location */
             locationManager?.startUpdatingLocation()
         
+            /* update location */
             updateLocation()
+            
+            /* start timer to send stored data every 15 minutes */
             self.timer = Timer.scheduledTimer(timeInterval: self.update_interval, target: self, selector: #selector(self.countdown), userInfo: nil, repeats: true)
             
-            is_recording = true
+            has_launched = true
+        }
+        
+        ///////////////////////////////////////////////////////////////////
+        //                                                               //
+        //  IF NOTIFICATIONS ARE ENABLED, SCHEDULE WEEKLY NOTIFICATIONS  //
+        //                                                               //
+        ///////////////////////////////////////////////////////////////////
+        
+        let settings: UIUserNotificationSettings? = UIApplication.shared.currentUserNotificationSettings
+        var notificationsEnabled = false
+        
+        /* check whether notifications are enabled */
+        if (settings?.types != UIUserNotificationType.init(rawValue: 0)) {
+            notificationsEnabled = true
+        }
+        
+        /* if notifications are enabled, schedule notification */
+        if (notificationsEnabled) {
+            if #available(iOS 10.0, *) {
+                let center = UNUserNotificationCenter.current()
+                var requestsCount = 0
+                center.getPendingNotificationRequests(completionHandler: { (requests) in
+                    requestsCount = requests.count
+                })
+                
+                if requestsCount == 0 {
+                    //cancel all local notifications and reschedule
+                    center.removeAllDeliveredNotifications()
+                    center.removeAllPendingNotificationRequests()
+                    
+                    //create notification
+                    let content = UNMutableNotificationContent()
+                    content.title = "Send Health Data"
+                    content.body = "Please open Health Tracker to send your step count and distances walked to the database"
+                    content.sound = UNNotificationSound.default()
+                    content.badge = 1
+                    
+                    //create notification trigger
+                    let date = Date().addingTimeInterval(60 * 60 * 24 * 7)
+                    let triggerDate = Calendar.current.dateComponents([.weekday, .hour, .minute, .second], from: date)
+                    let trigger = UNCalendarNotificationTrigger(dateMatching: triggerDate, repeats: true)
+                    
+                    //schedule notification
+                    let identifier = "send_hk_data"
+                    let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
+                    center.add(request, withCompletionHandler: { (error) in
+                        if error != nil {
+                            //print("Error: An error occured while creating local notification with identifier " + identifier)
+                        }
+                    })
+                }
+            } else {
+                if UIApplication.shared.scheduledLocalNotifications?.count == 0 {
+                    
+                    //create notification
+                    let notification = UILocalNotification()
+                    notification.alertTitle = "Send Health Data"
+                    notification.alertBody = "Please open Health Tracker to send your step count and distances walked to the database"
+                    notification.soundName = UILocalNotificationDefaultSoundName
+                    notification.applicationIconBadgeNumber = 1
+                
+                    //create notification triger
+                    notification.fireDate = Date().addingTimeInterval(60 * 60 * 24 * 7)
+                    notification.repeatInterval = NSCalendar.Unit.weekOfYear
+                
+                    //schedule notification
+                    UIApplication.shared.scheduleLocalNotification(notification)
+                }
+            }
         }
     }
     
     func countdown() {
-        if !devicePasscodeSet() {
-            get_hk_data(start_date: last_hk_update)
-            send_data(type: "healthkit")
-        }
+        send_data(type: "healthkit")
         
         send_data(type: "survey")
         send_data(type: "walk_test")
@@ -251,14 +344,8 @@ class HomeController: UIViewController, CLLocationManagerDelegate {
         }
     }
     
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    //                                                                                       //
-    //  THIS WILL CHECK IF A DEVICE PASSCODE HAS BEEN SET.                                   //
-    //  IF IT HAS, DO NOT GET HEALTHKIT DATA AS THE APP WILL CRASH WHEN THE PHONE IS LOCKED  //
-    //                                                                                       //
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    private func devicePasscodeSet() -> Bool {
-        return LAContext().canEvaluatePolicy(.deviceOwnerAuthentication, error: nil)
+    func isKeyPresentInUserDefaults(key: String) -> Bool {
+        return UserDefaults.standard.object(forKey: key) != nil
     }
 }
 
@@ -298,12 +385,6 @@ extension HomeController {
             hk_data.removeAll()
             distance.removeAll()
         }
-        
-        /*
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-        print(dateFormatter.string(from: self.last_hk_update))
- */
     }
     
     func get_step_data(start_date: Date? = nil) {
@@ -320,7 +401,7 @@ extension HomeController {
         let query = HKSampleQuery(sampleType: healthKitManager!.stepCount!, predicate: predicate, limit: Int(HKObjectQueryNoLimit), sortDescriptors: nil)
         { (query, results, error) in
             if error != nil {
-                print("error =>", error.debugDescription)
+                //print("error =>", error.debugDescription)
             } else {
                 for entry in results as! [HKQuantitySample] {
                     let dateFormatter = DateFormatter()
@@ -335,6 +416,7 @@ extension HomeController {
                 
                 if let end_date = results?.last?.endDate {
                     self.last_hk_update = end_date + 1
+                    UserDefaults.standard.set(self.last_hk_update, forKey: "last_hk_update")
                 }
                 
                 self.semaphore.signal()
@@ -358,7 +440,7 @@ extension HomeController {
         let query = HKSampleQuery(sampleType: healthKitManager!.distanceWalkingRunning!, predicate: predicate, limit: Int(HKObjectQueryNoLimit), sortDescriptors: nil)
         { (query, results, error) in
             if error != nil {
-                print("error =>", error.debugDescription)
+                //print("error =>", error.debugDescription)
             } else {
                 for entry in results as! [HKQuantitySample] {
                     let distance = String(Int(entry.quantity.doubleValue(for: HKUnit.meter())))
@@ -370,6 +452,11 @@ extension HomeController {
         }
         
         healthKitManager!.healthStore?.execute(query)
+    }
+    
+    func send_hk_data() {
+        get_hk_data(start_date: self.last_hk_update)
+        send_data(type: "healthkit")
     }
     
     /////////////////////////
@@ -406,8 +493,10 @@ extension UIViewController {
         //  IF NOT CONNECTED TO WIFI, RETURN  //
         //                                    //
         ////////////////////////////////////////
-        guard currentReachabilityStatus == .reachableViaWiFi else {
-            print("Not connected to wi-fi")
+        let reachability = Reachability.init()!
+        
+        guard reachability.currentReachabilityStatus == .reachableViaWiFi else {
+            //print("Not connected to wi-fi")
             return
         }
         
@@ -424,37 +513,37 @@ extension UIViewController {
         case "healthkit":
             if (stored_data.hk_data["hk_data"]?.count)! > 0 {
                 data_to_send = stored_data.hk_data
-                //url_string = "https://www.clinicalhealthtracker.com/web-service/insert-hk-data.php"
-                url_string = "http://cht.dev/web-service/insert-hk-data.php"
+                url_string = "https://www.clinicalhealthtracker.com/web-service/insert-hk-data.php"
+                //url_string = "http://localhost:8888/web-service/insert-hk-data.php"
             } else {
-                print("no hk data to send")
+                //print("no hk data to send")
                 return
             }
         case "location":
             if (stored_data.location_data["location_data"]?.count)! > 0 {
                 data_to_send = stored_data.location_data
-                //url_string = "https://www.clinicalhealthtracker.com/web-service/insert-location-data.php"
-                url_string = "http://cht.dev/web-service/insert-location-data.php"
+                url_string = "https://www.clinicalhealthtracker.com/web-service/insert-location-data.php"
+                //url_string = "http://localhost:8888/web-service/insert-location-data.php"
             } else {
-                print("no location data to send")
+                //print("no location data to send")
                 return
             }
         case "survey":
             if (stored_data.survey_data["survey_data"]?.count)! > 0 {
                 data_to_send = stored_data.survey_data
-                //url_string = "https://www.clinicalhealthtracker.com/web-service/insert-survey-data.php"
-                url_string = "http://cht.dev/web-service/insert-survey-data.php"
+                url_string = "https://www.clinicalhealthtracker.com/web-service/insert-survey-data.php"
+                //url_string = "http://localhost:8888/web-service/insert-survey-data.php"
             } else {
-                print("no survey data to send")
+                //print("no survey data to send")
                 return
             }
         case "walk_test":
             if (stored_data.walk_test_data["walk_test_data"]?.count)! > 0 {
                 data_to_send = stored_data.walk_test_data
-                //url_string = "https://www.clinicalhealthtracker.com/web-service/insert-walk-test-data.php"
-                url_string = "http://cht.dev/web-service/insert-walk-test-data.php"
+                url_string = "https://www.clinicalhealthtracker.com/web-service/insert-walk-test-data.php"
+                //url_string = "http://localhost:8888/web-service/insert-walk-test-data.php"
             } else {
-                print("no walk test data to send")
+                //print("no walk test data to send")
                 return
             }
         default:
@@ -483,7 +572,7 @@ extension UIViewController {
             
             let task = session.dataTask(with: request, completionHandler: { (data, response, error) in
                 if error != nil {
-                    print("error =>", error.debugDescription)
+                    //print("error =>", error.debugDescription)
                     return
                 }
                 
@@ -492,7 +581,7 @@ extension UIViewController {
                     let err = data["error"] as! Bool
                     
                     if err {
-                        print(data["message"]!)
+                        //print(data["message"]!)
                         return
                     //////////////////////////////////////////////////////
                     //                                                  //
@@ -500,7 +589,7 @@ extension UIViewController {
                     //                                                  //
                     //////////////////////////////////////////////////////
                     } else {
-                        print(data["message"]!)
+                        //print(data["message"]!)
                         
                         switch type {
                         case "healthkit":
@@ -516,14 +605,14 @@ extension UIViewController {
                         }
                     }
                 } catch {
-                    print("error =>", error.localizedDescription) //e.g. The data couldn’t be read because it isn’t in the correct format
+                    //print("error =>", error.localizedDescription) //e.g. The data couldn’t be read because it isn’t in the correct format
                     return
                 }
             })
             
             task.resume()
         } catch {
-            print(error.localizedDescription)
+            //print(error.localizedDescription)
         }
     }
 }

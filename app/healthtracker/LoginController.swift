@@ -8,7 +8,7 @@
 
 import UIKit
 
-class LoginController: UIViewController {
+class LoginController: UIViewController, UITextFieldDelegate {
     
     let textField: UITextField = {
         let textField = UITextField()
@@ -18,7 +18,6 @@ class LoginController: UIViewController {
         textField.layer.borderColor = UIColor.lightGray.cgColor
         textField.layer.borderWidth = 1
         /* http://stackoverflow.com/questions/25367502/create-space-at-the-beginning-of-a-uitextfield */
-        //textField.layer.sublayerTransform = CATransform3DMakeTranslation(10, 0, 0)
         return textField
     }()
     
@@ -37,7 +36,7 @@ class LoginController: UIViewController {
     }()
     
     let imageView: UIImageView = {
-        let imageName = "app-icon"
+        let imageName = "Icon"
         let image = UIImage(named: imageName)
         let imageView = UIImageView(image: image!)
         return imageView
@@ -45,17 +44,19 @@ class LoginController: UIViewController {
     
     let label: UILabel = {
         let label = UILabel()
-        label.text = "healthapp"
+        label.text = "healthtracker"
         label.font = UIFont(name: "Lobster 1.4", size: 40)
         label.textAlignment = .center
         return label
     }()
     
+    let activityIndicator = ActivityIndicator.sharedInstance
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         view.backgroundColor = .white
-        self.hideKeyboardWhenTappedAround()
+        self.textField.delegate = self
         
         view.addSubview(textField)
         
@@ -104,9 +105,11 @@ class LoginController: UIViewController {
     }
     
     func authenticate() {
+        activityIndicator.showActivityIndicator(uiView: self.view)
+        
         let request: URLRequest = {
             let urlString = "https://www.clinicalhealthtracker.com/web-service/authenticate.php"
-            //let urlString = "http://cht.dev/web-service/authenticate.php"
+            //let urlString = "http://localhost:8888/web-service/authenticate.php"
             let url = URL(string: urlString)
             var request = URLRequest(url: url!)
             request.httpMethod = "POST"
@@ -121,7 +124,7 @@ class LoginController: UIViewController {
         
         let task = session.dataTask(with: request, completionHandler: { (data, response, error) in
             if error != nil {
-                print("error", error.debugDescription)
+                //print("error", error.debugDescription)
                 return
             }
             
@@ -132,17 +135,19 @@ class LoginController: UIViewController {
                 
                 if err {
                     DispatchQueue.main.async {
+                        self.activityIndicator.hideActivityIndicator(uiView: self.view)
                         self.sendAlert(title: "Error", message: data["message"] as! String)
                     }
                     return
                 } else {
                     DispatchQueue.main.async {
+                        self.activityIndicator.hideActivityIndicator(uiView: self.view)
                         UserDefaults.standard.set(self.textField.text, forKey: "unique_id")
                         self.dismiss(animated: false, completion: nil)
                     }
                 }
             } catch {
-                print("error", error.localizedDescription)
+                //print("error", error.localizedDescription)
                 return
             }
         })
@@ -154,9 +159,21 @@ class LoginController: UIViewController {
         if textField.text == "" {
             sendAlert(title: "Error", message: "Please enter your unique ID")
         } else {
-            //UserDefaults.standard.set(self.textField.text, forKey: "unique_id") //DELETE!
-            //self.dismiss(animated: false, completion: nil) //DELETE!
             authenticate()
         }
+    }
+    ////////////////////////
+    //                    //
+    //  DISMISS KEYBOARD  //
+    //                    //
+    ////////////////////////
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return(true)
     }
 }

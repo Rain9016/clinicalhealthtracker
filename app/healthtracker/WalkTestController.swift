@@ -29,6 +29,8 @@ class WalkTestController: UIViewController {
     var returnHeadingMax = 0
     var laps = 0
     
+    var taskID: UIBackgroundTaskIdentifier!
+    
     let time_label: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 50)
@@ -45,6 +47,7 @@ class WalkTestController: UIViewController {
     }()
     
     func cancelButtonAction() {
+        UIApplication.shared.endBackgroundTask(taskID)
         stop()
         reset()
         locationManager.stopUpdatingHeading()
@@ -73,6 +76,9 @@ class WalkTestController: UIViewController {
     //                      //
     //////////////////////////
     override func viewDidAppear(_ animated: Bool) {
+        //Start background task
+        taskID = UIApplication.shared.beginBackgroundTask(expirationHandler: {})
+        
         locationManager.startUpdatingHeading()
         
         /* [1] start introduction */
@@ -104,6 +110,9 @@ class WalkTestController: UIViewController {
     
     /* [4] 6 minute countdown */
     func countdown() {
+        //prints the amount of time the app has to run in the background, it seems to count down from 180. Though, when audio is played, it seems to bring the app into the foreground (signified by the large time remaining). When the audio stops playing, the background timer begins counting down from 180 again.
+        //print(UIApplication.shared.backgroundTimeRemaining)
+        
         duration = duration - 1
         
         let (m, s) = secondsToMinutesSeconds(seconds: duration)
@@ -245,6 +254,8 @@ class WalkTestController: UIViewController {
         
         audioManager.playAudio(name: "conclusion-pt2")
         reset()
+        
+        UIApplication.shared.endBackgroundTask(taskID)
         
         let activityCompleteController = ActivityCompleteController()
         activityCompleteController.activity = "walk_test"

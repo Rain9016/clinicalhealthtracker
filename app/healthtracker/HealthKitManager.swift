@@ -39,11 +39,11 @@ class HealthKitManager: NSObject {
                 if success {
                     //self.printSteps()
                 } else {
-                    print(error.debugDescription)
+                    //print(error.debugDescription)
                 }
             })
         } else {
-            print("HealthKit unavailable")
+            //print("HealthKit unavailable")
         }
     }
     

@@ -32,12 +32,12 @@ class PedometerManager: NSObject {
             
             pedometer.queryPedometerData(from: Date(), to: Date(), withHandler: { (data, error) in
                 if (error != nil) {
-                    print(error.debugDescription) //105 means you are not authorized
+                    //print(error.debugDescription) //105 means you are not authorized
                     return
                 }
             })
         } else {
-            print("Pedometer unavailable")
+            //print("Pedometer unavailable")
         }
     }
     

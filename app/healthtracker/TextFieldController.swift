@@ -72,7 +72,7 @@ class TextFieldController: StepController, UITextFieldDelegate {
         nextButton.layer.borderColor = UIColor.init(r: 204, g: 0, b: 0).cgColor
         nextButton.layer.cornerRadius = 4
         
-        nextButton.addTarget(self, action: #selector(handleButtons), for: .touchUpInside)
+        nextButton.addTarget(self, action: #selector(handleNext), for: .touchUpInside)
         
         nextButton.isEnabled = false
         nextButton.alpha = 0.2
@@ -96,7 +96,7 @@ class TextFieldController: StepController, UITextFieldDelegate {
         skipButton.setTitleColor(UIColor.init(r: 204, g: 0, b: 0), for: .normal)
         skipButton.setTitle("Skip this question", for: .normal)
         
-        skipButton.addTarget(self, action: #selector(handleButtons), for: .touchUpInside)
+        skipButton.addTarget(self, action: #selector(handleSkip), for: .touchUpInside)
         
         if survey.steps[currentStep].isSkippable {
             skipButton.isEnabled = true
@@ -107,22 +107,24 @@ class TextFieldController: StepController, UITextFieldDelegate {
         }
     }
     
-    override func handleButtons() {
-        if (!(survey.steps[currentStep].isSkippable)) {
-            let unique_id = UserDefaults.standard.object(forKey: "unique_id") as? String
-            let title = survey.title
+    func handleNext() {
+        let unique_id = UserDefaults.standard.object(forKey: "unique_id") as? String
+        let title = survey.title
             
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-            let time = dateFormatter.string(from: Date())
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        let time = dateFormatter.string(from: Date())
             
-            let question = survey.steps[currentStep].title
-            let answer = textField.text
+        let question = survey.steps[currentStep].title
+        let answer = textField.text
             
-            answers.append(["unique_id":unique_id!, "title":title, "time":time, "question":question, "answer":answer!])
-        }
+        answers.append(["unique_id":unique_id!, "title":title, "time":time, "question":question, "answer":answer!])
         
-        super.handleButtons()
+        handleButtons()
+    }
+    
+    func handleSkip() {
+        handleButtons()
     }
     
     ////////////////////

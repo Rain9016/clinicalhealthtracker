@@ -10,17 +10,17 @@
     if (!empty($_POST)) {
         if(empty($_POST['first_name']))
         {
-            echo("Please enter username.<br />");
+            echo("Please enter first name.<br />");
         }
 
         if(empty($_POST['last_name']))
         {
-            echo("Please enter password.<br />");
+            echo("Please enter last name.<br />");
         }
 
         if(empty($_POST['email']))
         {
-            echo("Please enter password.<br />");
+            echo("Please enter e-mail.<br />");
         }
     }
 
@@ -45,7 +45,7 @@
         if ($result) {
             $unique_id = uniqid();
 
-            $query = "INSERT INTO users (unique_id, first_name, last_name, email, trial_id) VALUES (:unique_id, :first_name, :last_name, :email, :trial_id)";
+            $query = "INSERT INTO patients (unique_id, first_name, last_name, email, trial_id) VALUES (:unique_id, :first_name, :last_name, :email, :trial_id)";
             $query_params = array(':unique_id'=>$unique_id, ':first_name'=>$first_name, ':last_name'=>$last_name, ':email'=>$email, ':trial_id'=>$trial_id);
 
             try {
@@ -81,7 +81,6 @@ sign up<br />
 <input type="text" placeholder="email" name="email" required><br>
 <?php
     $query = "SELECT * FROM trials";
-    $query_params = array(':user_id'=>$user_id);
 
     try {
         $stmt = $db->prepare($query);

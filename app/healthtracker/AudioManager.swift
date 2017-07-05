@@ -24,7 +24,15 @@ class AudioManager: NSObject {
             audioPlayer = try AVAudioPlayer(contentsOf: NSURL(fileURLWithPath: audioPath!) as URL)
             audioPlayer.prepareToPlay()
         } catch {
-            print("error playing audio")
+            //print("error playing audio")
+        }
+        
+        let session = AVAudioSession.sharedInstance()
+        
+        do {
+            try session.setCategory(AVAudioSessionCategoryPlayback)
+        } catch {
+            //print("error playing audio in background")
         }
         
         audioPlayer.play()

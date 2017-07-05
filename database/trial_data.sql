@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.4.10
--- http://www.phpmyadmin.net
+-- version 4.6.5.2
+-- https://www.phpmyadmin.net/
 --
--- Host: localhost:3306
--- Generation Time: Feb 07, 2017 at 03:37 PM
--- Server version: 5.5.42
--- PHP Version: 7.0.8
+-- Host: localhost
+-- Generation Time: Apr 05, 2017 at 12:10 AM
+-- Server version: 5.6.35
+-- PHP Version: 7.1.1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -21,11 +21,11 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `answers` (
-  `id` bigint(20) unsigned NOT NULL,
+  `id` bigint(20) UNSIGNED NOT NULL,
   `answer` varchar(100) NOT NULL,
-  `user_id` bigint(20) unsigned NOT NULL,
-  `question_id` bigint(20) unsigned NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `patient_id` bigint(20) UNSIGNED NOT NULL,
+  `question_id` bigint(20) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
 
 -- --------------------------------------------------------
 
@@ -34,10 +34,10 @@ CREATE TABLE `answers` (
 --
 
 CREATE TABLE `choices` (
-  `id` bigint(20) unsigned NOT NULL,
+  `id` bigint(20) UNSIGNED NOT NULL,
   `choice` varchar(100) NOT NULL,
-  `question_id` bigint(20) unsigned NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+  `question_id` bigint(20) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `choices`
@@ -53,15 +53,31 @@ INSERT INTO `choices` (`id`, `choice`, `question_id`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `patients`
+--
+
+CREATE TABLE `patients` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `unique_id` varchar(50) NOT NULL,
+  `first_name` char(50) NOT NULL,
+  `last_name` char(50) NOT NULL,
+  `email` varchar(50) NOT NULL,
+  `trial_id` int(11) NOT NULL,
+  `last_update` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `questions`
 --
 
 CREATE TABLE `questions` (
-  `id` bigint(20) unsigned NOT NULL,
+  `id` bigint(20) UNSIGNED NOT NULL,
   `question` varchar(100) NOT NULL,
   `type` varchar(50) NOT NULL,
-  `trial_id` bigint(20) unsigned NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=latin1;
+  `trial_id` bigint(20) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `questions`
@@ -93,10 +109,10 @@ INSERT INTO `questions` (`id`, `question`, `type`, `trial_id`) VALUES
 --
 
 CREATE TABLE `trials` (
-  `id` bigint(20) unsigned NOT NULL,
+  `id` bigint(20) UNSIGNED NOT NULL,
   `name` varchar(50) NOT NULL,
   `extra_info` tinyint(4) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `trials`
@@ -104,22 +120,6 @@ CREATE TABLE `trials` (
 
 INSERT INTO `trials` (`id`, `name`, `extra_info`) VALUES
 (1, 'Cardiac Surgery', 1);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `users`
---
-
-CREATE TABLE `users` (
-  `id` bigint(20) unsigned NOT NULL,
-  `unique_id` varchar(50) NOT NULL,
-  `first_name` char(50) NOT NULL,
-  `last_name` char(50) NOT NULL,
-  `email` varchar(50) NOT NULL,
-  `trial_id` int(11) NOT NULL,
-  `last_update` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Indexes for dumped tables
@@ -130,7 +130,7 @@ CREATE TABLE `users` (
 --
 ALTER TABLE `answers`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `fk_answers_users` (`user_id`),
+  ADD KEY `fk_answers_patients` (`patient_id`),
   ADD KEY `fk_answers_questions` (`question_id`);
 
 --
@@ -139,6 +139,12 @@ ALTER TABLE `answers`
 ALTER TABLE `choices`
   ADD PRIMARY KEY (`id`),
   ADD KEY `fk_choices_questions` (`question_id`);
+
+--
+-- Indexes for table `patients`
+--
+ALTER TABLE `patients`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `questions`
@@ -154,12 +160,6 @@ ALTER TABLE `trials`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `users`
---
-ALTER TABLE `users`
-  ADD PRIMARY KEY (`id`);
-
---
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -167,27 +167,27 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `answers`
 --
 ALTER TABLE `answers`
-  MODIFY `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `choices`
 --
 ALTER TABLE `choices`
-  MODIFY `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+--
+-- AUTO_INCREMENT for table `patients`
+--
+ALTER TABLE `patients`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `questions`
 --
 ALTER TABLE `questions`
-  MODIFY `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=18;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 --
 -- AUTO_INCREMENT for table `trials`
 --
 ALTER TABLE `trials`
-  MODIFY `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
---
--- AUTO_INCREMENT for table `users`
---
-ALTER TABLE `users`
-  MODIFY `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- Constraints for dumped tables
 --
@@ -196,7 +196,7 @@ ALTER TABLE `users`
 -- Constraints for table `answers`
 --
 ALTER TABLE `answers`
-  ADD CONSTRAINT `fk_answers_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_answers_patients` FOREIGN KEY (`patient_id`) REFERENCES `patients` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `fk_answers_questions` FOREIGN KEY (`question_id`) REFERENCES `questions` (`id`) ON DELETE CASCADE;
 
 --

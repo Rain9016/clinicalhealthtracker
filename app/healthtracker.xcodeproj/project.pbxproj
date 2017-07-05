@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8388D1121EA52C74006475E5 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8388D1111EA52C74006475E5 /* Reachability.swift */; };
+		8388D1381EA54BF6006475E5 /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8388D1371EA54BF6006475E5 /* ActivityIndicator.swift */; };
 		C3067D2A1E41F17B002C22A7 /* Lobster 1.4.otf in Resources */ = {isa = PBXBuildFile; fileRef = C3067D291E41F17B002C22A7 /* Lobster 1.4.otf */; };
 		C3067D361E46BB21002C22A7 /* PermissionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3067D351E46BB21002C22A7 /* PermissionController.swift */; };
 		C3067D3D1E481769002C22A7 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3067D3C1E481769002C22A7 /* LocationManager.swift */; };
@@ -15,7 +17,6 @@
 		C30EAC301E51AFEA00353701 /* ActivityCompleteController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C30EAC2F1E51AFEA00353701 /* ActivityCompleteController.swift */; };
 		C31471DE1E3B19E5009E65F3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C31471DD1E3B19E5009E65F3 /* AppDelegate.swift */; };
 		C31471E51E3B19E5009E65F3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C31471E41E3B19E5009E65F3 /* Assets.xcassets */; };
-		C31471E81E3B19E5009E65F3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C31471E61E3B19E5009E65F3 /* LaunchScreen.storyboard */; };
 		C31471F01E3B1A1A009E65F3 /* CustomTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C31471EF1E3B1A1A009E65F3 /* CustomTabBarController.swift */; };
 		C31471F31E3B1ABB009E65F3 /* ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C31471F21E3B1ABB009E65F3 /* ionicons.ttf */; };
 		C31471F51E3B1ADE009E65F3 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C31471F41E3B1ADE009E65F3 /* Extensions.swift */; };
@@ -24,7 +25,6 @@
 		C31471FB1E3B1B2B009E65F3 /* InstructionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C31471FA1E3B1B2B009E65F3 /* InstructionController.swift */; };
 		C31471FD1E3B1B43009E65F3 /* MultipleChoiceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C31471FC1E3B1B43009E65F3 /* MultipleChoiceController.swift */; };
 		C31471FF1E3B1B5F009E65F3 /* SurveyController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C31471FE1E3B1B5F009E65F3 /* SurveyController.swift */; };
-		C31472011E3B1B7B009E65F3 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = C31472001E3B1B7B009E65F3 /* Reachability.swift */; };
 		C31472031E3B1B90009E65F3 /* ScaleController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C31472021E3B1B90009E65F3 /* ScaleController.swift */; };
 		C31472051E3B1BA0009E65F3 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = C31472041E3B1BA0009E65F3 /* Models.swift */; };
 		C31472071E3B1BB4009E65F3 /* TextFieldController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C31472061E3B1BB4009E65F3 /* TextFieldController.swift */; };
@@ -62,6 +62,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		8388D1111EA52C74006475E5 /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
+		8388D1371EA54BF6006475E5 /* ActivityIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
 		C3067D291E41F17B002C22A7 /* Lobster 1.4.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Lobster 1.4.otf"; sourceTree = "<group>"; };
 		C3067D351E46BB21002C22A7 /* PermissionController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PermissionController.swift; sourceTree = "<group>"; };
 		C3067D3C1E481769002C22A7 /* LocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
@@ -71,7 +73,6 @@
 		C31471DA1E3B19E5009E65F3 /* healthtracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = healthtracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C31471DD1E3B19E5009E65F3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C31471E41E3B19E5009E65F3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		C31471E71E3B19E5009E65F3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C31471E91E3B19E5009E65F3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C31471EF1E3B1A1A009E65F3 /* CustomTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomTabBarController.swift; sourceTree = "<group>"; };
 		C31471F21E3B1ABB009E65F3 /* ionicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = ionicons.ttf; sourceTree = "<group>"; };
@@ -81,7 +82,6 @@
 		C31471FA1E3B1B2B009E65F3 /* InstructionController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InstructionController.swift; sourceTree = "<group>"; };
 		C31471FC1E3B1B43009E65F3 /* MultipleChoiceController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MultipleChoiceController.swift; sourceTree = "<group>"; };
 		C31471FE1E3B1B5F009E65F3 /* SurveyController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SurveyController.swift; sourceTree = "<group>"; };
-		C31472001E3B1B7B009E65F3 /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		C31472021E3B1B90009E65F3 /* ScaleController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScaleController.swift; sourceTree = "<group>"; };
 		C31472041E3B1BA0009E65F3 /* Models.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		C31472061E3B1BB4009E65F3 /* TextFieldController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextFieldController.swift; sourceTree = "<group>"; };
@@ -156,12 +156,10 @@
 				C3ABFB351E3B1CD200095384 /* healthtracker.entitlements */,
 				C31471DD1E3B19E5009E65F3 /* AppDelegate.swift */,
 				C31471E41E3B19E5009E65F3 /* Assets.xcassets */,
-				C31471E61E3B19E5009E65F3 /* LaunchScreen.storyboard */,
 				C31471E91E3B19E5009E65F3 /* Info.plist */,
 				C31471EF1E3B1A1A009E65F3 /* CustomTabBarController.swift */,
 				C31471F41E3B1ADE009E65F3 /* Extensions.swift */,
 				C31471F81E3B1B14009E65F3 /* HomeController.swift */,
-				C31472001E3B1B7B009E65F3 /* Reachability.swift */,
 				C31472041E3B1BA0009E65F3 /* Models.swift */,
 				C3ABFB6C1E41598200095384 /* LoginController.swift */,
 				C3067D351E46BB21002C22A7 /* PermissionController.swift */,
@@ -180,6 +178,8 @@
 				C36EB68C1E544CD9009FFD06 /* WalkTestPreludeController.swift */,
 				C36EB68A1E543A4E009FFD06 /* WalkTestInstructionController.swift */,
 				C36EB6A01E554C73009FFD06 /* WalkTestController.swift */,
+				8388D1111EA52C74006475E5 /* Reachability.swift */,
+				8388D1371EA54BF6006475E5 /* ActivityIndicator.swift */,
 			);
 			path = healthtracker;
 			sourceTree = "<group>";
@@ -304,7 +304,6 @@
 				C36EB7241E5947B4009FFD06 /* encouragement-pt8.mp3 in Resources */,
 				C36EB72D1E5947B4009FFD06 /* time-remaining-pt1.mp3 in Resources */,
 				C36EB72A1E5947B4009FFD06 /* intro-pt1.mp3 in Resources */,
-				C31471E81E3B19E5009E65F3 /* LaunchScreen.storyboard in Resources */,
 				C36EB7351E594A06009FFD06 /* instruction-p1-pt1.mp3 in Resources */,
 				C36EB7311E5947B4009FFD06 /* time-remaining-pt5.mp3 in Resources */,
 				C36EB72F1E5947B4009FFD06 /* time-remaining-pt3.mp3 in Resources */,
@@ -341,6 +340,7 @@
 				C3067D3D1E481769002C22A7 /* LocationManager.swift in Sources */,
 				C31471FB1E3B1B2B009E65F3 /* InstructionController.swift in Sources */,
 				C36EB6931E548891009FFD06 /* AudioManager.swift in Sources */,
+				8388D1381EA54BF6006475E5 /* ActivityIndicator.swift in Sources */,
 				C36EB68B1E543A4E009FFD06 /* WalkTestInstructionController.swift in Sources */,
 				C36EB68D1E544CD9009FFD06 /* WalkTestPreludeController.swift in Sources */,
 				C36EB6A11E554C73009FFD06 /* WalkTestController.swift in Sources */,
@@ -351,11 +351,11 @@
 				C31472031E3B1B90009E65F3 /* ScaleController.swift in Sources */,
 				C31471FF1E3B1B5F009E65F3 /* SurveyController.swift in Sources */,
 				C31471F91E3B1B14009E65F3 /* HomeController.swift in Sources */,
+				8388D1121EA52C74006475E5 /* Reachability.swift in Sources */,
 				C31471FD1E3B1B43009E65F3 /* MultipleChoiceController.swift in Sources */,
 				C31471F01E3B1A1A009E65F3 /* CustomTabBarController.swift in Sources */,
 				C31471F71E3B1AFF009E65F3 /* HealthKitManager.swift in Sources */,
 				C31472071E3B1BB4009E65F3 /* TextFieldController.swift in Sources */,
-				C31472011E3B1B7B009E65F3 /* Reachability.swift in Sources */,
 				C3067D671E48BD39002C22A7 /* PedometerManager.swift in Sources */,
 				C31471F51E3B1ADE009E65F3 /* Extensions.swift in Sources */,
 				C30EAC2E1E4C92EE00353701 /* DataToSend.swift in Sources */,
@@ -364,17 +364,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXVariantGroup section */
-		C31471E61E3B19E5009E65F3 /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				C31471E71E3B19E5009E65F3 /* Base */,
-			);
-			name = LaunchScreen.storyboard;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		C31471EA1E3B19E5009E65F3 /* Debug */ = {
@@ -474,14 +463,17 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = healthtracker/healthtracker.entitlements;
 				DEVELOPMENT_TEAM = BPTF3Y8XNN;
 				INFOPLIST_FILE = healthtracker/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.yourcompany.healthtracker;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.samuelgluck.healthtracker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -489,14 +481,16 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = healthtracker/healthtracker.entitlements;
 				DEVELOPMENT_TEAM = BPTF3Y8XNN;
 				INFOPLIST_FILE = healthtracker/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.yourcompany.healthtracker;
+				PRODUCT_BUNDLE_IDENTIFIER = com.samuelgluck.healthtracker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

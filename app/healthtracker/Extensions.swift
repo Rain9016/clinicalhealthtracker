@@ -28,21 +28,7 @@ extension UIImage {
     }
 }
 
-extension UIViewController {
-    /************************************************************/
-    /* DISMISS KEYBOARD WHEN SCREEN TAPPED OUTSIDE OF KEYBOARD  */
-    /************************************************************/
-    //http://stackoverflow.com/questions/24126678/close-ios-keyboard-by-touching-anywhere-using-swift
-    
-    func hideKeyboardWhenTappedAround() {
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard))
-        view.addGestureRecognizer(tap)
-    }
-    
-    func dismissKeyboard() {
-        view.endEditing(true)
-    }
-    
+extension UIViewController {    
     /*****************************/
     /* SEND AN ALERT TO THE USER */
     /*****************************/
