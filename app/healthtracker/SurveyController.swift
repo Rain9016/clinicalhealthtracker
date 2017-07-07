@@ -81,7 +81,7 @@ class SurveyController: UIViewController, UITableViewDelegate, UITableViewDataSo
         step.scale?.min_value = 0
         step.scale?.max_value = 100
         step.scale?.default_value = 50
-        step.scale?.step = 5
+        step.scale?.step = 1
         EQ5D.steps.append(step)
         
         surveys.append(EQ5D)

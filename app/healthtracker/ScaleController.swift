@@ -100,12 +100,21 @@ class ScaleController: StepController {
         let sizeBetweenTicks = Float(scale.frame.size.width - 30)/numberOfTicks
         var currentPosition = 15 + sizeBetweenTicks
         
+        var currentNumberOfTicks = 0
         while (currentPosition < Float(scale.frame.size.width - 15)) {
             let tick = CALayer()
-            tick.frame = CGRect(x: CGFloat(currentPosition), y: scale.frame.size.height/2 - 5, width: 1, height: 10)
-            tick.backgroundColor = UIColor.black.cgColor
-            scale.layer.addSublayer(tick)
             
+            if ((currentNumberOfTicks + 1) % 10 == 0) { // i.e. we're on our 10th tick
+                tick.frame = CGRect(x: CGFloat(currentPosition), y: scale.frame.size.height/2 - 5, width: 1, height: 10)
+                tick.backgroundColor = UIColor.black.cgColor
+                scale.layer.addSublayer(tick)
+            } else {
+                tick.frame = CGRect(x: CGFloat(currentPosition), y: scale.frame.size.height/2 - 3, width: 1, height: 6)
+                tick.backgroundColor = UIColor.black.cgColor
+                scale.layer.addSublayer(tick)
+            }
+            
+            currentNumberOfTicks = currentNumberOfTicks + 1
             currentPosition = currentPosition + sizeBetweenTicks
         }
         
