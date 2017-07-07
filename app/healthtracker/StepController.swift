@@ -73,7 +73,12 @@ class StepController: UIViewController {
     func setupLabel() {
         label.numberOfLines = 0
         label.lineBreakMode = NSLineBreakMode.byWordWrapping
-        label.text = survey.steps[currentStep].title
+        
+        if (survey.steps[currentStep].isSkippable) {
+            label.text = survey.steps[currentStep].title + " Otherwise if N/A, press \"Skip this question\" at the bottom of the page."
+        } else {
+            label.text = survey.steps[currentStep].title
+        }
         label.font = label.font.withSize(20)
         
         let labelWidth: CGFloat = view.frame.size.width - 30
