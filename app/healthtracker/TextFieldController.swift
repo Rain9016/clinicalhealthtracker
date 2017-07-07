@@ -137,6 +137,7 @@ class TextFieldController: StepController, UITextFieldDelegate {
         super.viewDidLoad()
         
         view.backgroundColor = UIColor.white
+        self.textField.delegate = self // used to hide the keyboard when user presses "return" on textFieldShouldReturn()
         
         setupNavigationBar()
         
@@ -176,5 +177,24 @@ class TextFieldController: StepController, UITextFieldDelegate {
         }
         
         scrollView.contentSize = CGSize(width: view.frame.width, height: CGFloat(scrollViewHeight))
+        
+        ////////////////////////
+        //                    //
+        //  DISMISS KEYBOARD  //
+        //                    //
+        ////////////////////////
+
+        // from: https://stackoverflow.com/questions/32281651/how-to-dismiss-keyboard-when-touching-anywhere-outside-uitextfield-in-swift
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.tap(gesture:)))
+        self.view.addGestureRecognizer(tapGesture)
+    }
+    
+    func tap(gesture: UITapGestureRecognizer) {
+        textField.resignFirstResponder()
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return(true)
     }
 }
