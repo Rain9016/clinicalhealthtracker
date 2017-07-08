@@ -75,7 +75,7 @@ class StepController: UIViewController {
         label.lineBreakMode = NSLineBreakMode.byWordWrapping
         
         if (survey.steps[currentStep].isSkippable) {
-            label.text = survey.steps[currentStep].title + " Otherwise if N/A, press \"Skip this question\" at the bottom of the page."
+            label.text = survey.steps[currentStep].title + " Otherwise if N\u{00A0}\u{2044}\u{00A0}A, press \"Skip this question\" at the bottom of the page."
         } else {
             label.text = survey.steps[currentStep].title
         }
