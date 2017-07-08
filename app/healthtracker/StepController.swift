@@ -139,7 +139,7 @@ class StepController: UIViewController {
             multipleChoiceController.answers = answers
             
             self.navigationController?.pushViewController(multipleChoiceController, animated: true)
-        } else if (survey.steps[nextStep].type == "text_field") {
+        } else if (survey.steps[nextStep].type == "text_field" || survey.steps[nextStep].type == "numeric") {
             let textFieldController = TextFieldController()
             textFieldController.survey = survey
             textFieldController.currentStep = nextStep

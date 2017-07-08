@@ -244,10 +244,10 @@ class SurveyController: UIViewController, UITableViewDelegate, UITableViewDataSo
         step.multiple_choice?.answers.append(contentsOf: answers)
         WHODAS.steps.append(step)
         
-        step = Step(title: "How old are you now?", type: "text_field")
+        step = Step(title: "How old are you now?", type: "numeric")
         WHODAS.steps.append(step)
         
-        step = Step(title: "How many years in all did you spend studying in school, college or university?", type: "text_field")
+        step = Step(title: "How many years in all did you spend studying in school, college or university?", type: "numeric")
         WHODAS.steps.append(step)
         
         step = Step(title: "What is your current marital status?", type: "multiple_choice")
@@ -404,13 +404,13 @@ class SurveyController: UIViewController, UITableViewDelegate, UITableViewDataSo
         step.multiple_choice?.answers.append(contentsOf: answers)
         WHODAS.steps.append(step)
         
-        step = Step(title: "Overall, in the past 30 days, how many days were these difficulties present?", type: "text_field")
+        step = Step(title: "Overall, in the past 30 days, how many days were these difficulties present?", type: "numeric")
         WHODAS.steps.append(step)
         
-        step = Step(title: "In the past 30 days, for how many days were you totally unable to carry out your usual activities or work because of any health condition?", type: "text_field")
+        step = Step(title: "In the past 30 days, for how many days were you totally unable to carry out your usual activities or work because of any health condition?", type: "numeric")
         WHODAS.steps.append(step)
         
-        step = Step(title: "In the past 30 days, not counting the days that you were totally unable, for how many days did you cut back or reduce your usual activities or work because of any health condition?", type: "text_field")
+        step = Step(title: "In the past 30 days, not counting the days that you were totally unable, for how many days did you cut back or reduce your usual activities or work because of any health condition?", type: "numeric")
         WHODAS.steps.append(step)
         
         surveys.append(WHODAS)
@@ -735,7 +735,7 @@ class SurveyController: UIViewController, UITableViewDelegate, UITableViewDataSo
             
             let newNavigationController = UINavigationController(rootViewController: multipleChoiceController)
             present(newNavigationController, animated: true, completion: nil)
-        } else if (survey.steps[currentStep].type == "text_field") {
+        } else if (survey.steps[currentStep].type == "text_field" || survey.steps[currentStep].type == "numeric") {
             let textFieldController = TextFieldController()
             textFieldController.survey = survey
             textFieldController.currentStep = currentStep

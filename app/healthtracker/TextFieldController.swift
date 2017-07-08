@@ -27,6 +27,9 @@ class TextFieldController: StepController, UITextFieldDelegate {
             textField.frame = CGRect(x: 15, y: 15 + label.frame.size.height + 15, width: view.frame.width - 15, height: 44)
         }
         textField.placeholder = "Tap to write"
+        if (survey.steps[currentStep].type == "numeric") {
+            textField.keyboardType = .numberPad
+        }
         textField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
         
         let topBorder = CALayer()
