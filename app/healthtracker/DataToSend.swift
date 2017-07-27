@@ -18,6 +18,7 @@ class DataToSend: NSObject {
     var location_data = [String:[[String:String]]]()
     var survey_data = [String:[[String:String]]]()
     var walk_test_data = [String:[[String:String]]]()
+    var height_weight_data = [String:[[String:String]]]()
     
     override init() {
         super.init()
@@ -26,5 +27,6 @@ class DataToSend: NSObject {
         location_data = ["location_data":[]]
         survey_data = ["survey_data":[]]
         walk_test_data = ["walk_test_data":[]]
+        height_weight_data = ["height_weight_data":[]]
     }
 }

@@ -101,4 +101,18 @@ class WalkTestPreludeController: UIViewController {
         begin_button.widthAnchor.constraint(equalToConstant: 140).isActive = true
         begin_button.heightAnchor.constraint(equalToConstant: 40).isActive = true
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        //////////////////////////////////////////////////////////////////////////////////////
+        //                                                                                  //
+        //  IF USER HAS NOT YET SUBMITTED THEIR HEIGHT AND WEIGHT, PRESENT SCREEN TO DO SO  //
+        //                                                                                  //
+        //////////////////////////////////////////////////////////////////////////////////////
+        
+        guard (UserDefaults.standard.object(forKey: "heightWeightSubmitted") as? Bool) == true else {
+            let heightWeightController = HeightWeightController()
+            present(heightWeightController, animated: true, completion: nil)
+            return
+        }
+    }
 }
