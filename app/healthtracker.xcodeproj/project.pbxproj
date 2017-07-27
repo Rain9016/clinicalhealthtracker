@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		8388D1121EA52C74006475E5 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8388D1111EA52C74006475E5 /* Reachability.swift */; };
 		8388D1381EA54BF6006475E5 /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8388D1371EA54BF6006475E5 /* ActivityIndicator.swift */; };
+		83A439771F2A2EAD006FD53B /* HeightWeightController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A439761F2A2EAD006FD53B /* HeightWeightController.swift */; };
 		C3067D2A1E41F17B002C22A7 /* Lobster 1.4.otf in Resources */ = {isa = PBXBuildFile; fileRef = C3067D291E41F17B002C22A7 /* Lobster 1.4.otf */; };
 		C3067D361E46BB21002C22A7 /* PermissionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3067D351E46BB21002C22A7 /* PermissionController.swift */; };
 		C3067D3D1E481769002C22A7 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3067D3C1E481769002C22A7 /* LocationManager.swift */; };
@@ -64,6 +65,7 @@
 /* Begin PBXFileReference section */
 		8388D1111EA52C74006475E5 /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		8388D1371EA54BF6006475E5 /* ActivityIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
+		83A439761F2A2EAD006FD53B /* HeightWeightController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HeightWeightController.swift; sourceTree = "<group>"; };
 		C3067D291E41F17B002C22A7 /* Lobster 1.4.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Lobster 1.4.otf"; sourceTree = "<group>"; };
 		C3067D351E46BB21002C22A7 /* PermissionController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PermissionController.swift; sourceTree = "<group>"; };
 		C3067D3C1E481769002C22A7 /* LocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
@@ -180,6 +182,7 @@
 				C36EB6A01E554C73009FFD06 /* WalkTestController.swift */,
 				8388D1111EA52C74006475E5 /* Reachability.swift */,
 				8388D1371EA54BF6006475E5 /* ActivityIndicator.swift */,
+				83A439761F2A2EAD006FD53B /* HeightWeightController.swift */,
 			);
 			path = healthtracker;
 			sourceTree = "<group>";
@@ -360,6 +363,7 @@
 				C31471F51E3B1ADE009E65F3 /* Extensions.swift in Sources */,
 				C30EAC2E1E4C92EE00353701 /* DataToSend.swift in Sources */,
 				C36EB6891E53D57D009FFD06 /* StepController.swift in Sources */,
+				83A439771F2A2EAD006FD53B /* HeightWeightController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
