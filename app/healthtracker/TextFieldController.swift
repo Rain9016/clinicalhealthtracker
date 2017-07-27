@@ -19,6 +19,9 @@ class TextFieldController: StepController, UITextFieldDelegate {
     let textField = UITextField()
     
     func setupTextField() {
+        textField.autocorrectionType = .no
+        textField.spellCheckingType = .no
+        
         let tableView = UITableView()
         
         if (survey.steps[currentStep].subtitle != nil) {
