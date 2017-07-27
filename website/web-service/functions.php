@@ -124,3 +124,28 @@ function insert_walk_test_data($data) {
 
     return true;
 }
+
+function insert_height_weight_data($data) {
+    $db_name = "patient_data";
+    $db = connect($db_name);
+
+    $query = "INSERT INTO height_weight_data (unique_id, time, height, weight) VALUES (:unique_id, :time, :height, :weight)";
+
+    foreach ($data as $entry) {
+        $query_params = array(':unique_id'=>$entry["unique_id"], ':time'=>$entry["time"], ':height'=>$entry["height"], ':weight'=>$entry["weight"]);
+
+        try {
+            $stmt = $db->prepare($query);
+            $result = $stmt->execute($query_params);
+        } catch (PDOException $e) {
+            //die($e->getMessage()); //DELETE!
+            return false;
+        }
+
+        if (!$result) {
+            return false;
+        }
+    }
+
+    return true;
+}
