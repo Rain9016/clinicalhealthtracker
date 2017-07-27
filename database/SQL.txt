@@ -73,6 +73,15 @@ CREATE TABLE patients (
 //                //
 ////////////////////
 
+CREATE TABLE height_weight_data (
+    `id` BIGINT UNSIGNED AUTO_INCREMENT,
+    `unique_id` VARCHAR(50) NOT NULL,
+    `time` TIMESTAMP NOT NULL DEFAULT 0,
+    `height` VARCHAR(10) NOT NULL,
+    `weight` VARCHAR(10) NOT NULL,
+    PRIMARY KEY (`id`)
+)
+
 CREATE TABLE location_data (
     `id` BIGINT UNSIGNED AUTO_INCREMENT,
     `unique_id` VARCHAR(50) NOT NULL,
