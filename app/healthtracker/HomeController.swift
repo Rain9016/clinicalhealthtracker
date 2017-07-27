@@ -518,7 +518,7 @@ extension UIViewController {
                 //url_string = "https://www.clinicalhealthtracker.com/web-service/insert-hk-data.php"
                 url_string = "http://localhost:8888/web-service/insert-hk-data.php"
             } else {
-                print("no hk data to send")
+                //print("no hk data to send")
                 return
             }
         case "location":
@@ -583,7 +583,7 @@ extension UIViewController {
             
             let task = session.dataTask(with: request, completionHandler: { (data, response, error) in
                 if error != nil {
-                    print("error =>", error.debugDescription)
+                    //print("error =>", error.debugDescription)
                     return
                 }
                 
@@ -592,7 +592,7 @@ extension UIViewController {
                     let err = data["error"] as! Bool
                     
                     if err {
-                        print(data["message"]!)
+                        //print(data["message"]!)
                         return
                     //////////////////////////////////////////////////////
                     //                                                  //
@@ -600,7 +600,7 @@ extension UIViewController {
                     //                                                  //
                     //////////////////////////////////////////////////////
                     } else {
-                        print(data["message"]!)
+                        //print(data["message"]!)
                         
                         switch type {
                         case "healthkit":
@@ -618,14 +618,14 @@ extension UIViewController {
                         }
                     }
                 } catch {
-                    print("error =>", error.localizedDescription) //e.g. The data couldn’t be read because it isn’t in the correct format
+                    //print("error =>", error.localizedDescription) //e.g. The data couldn’t be read because it isn’t in the correct format
                     return
                 }
             })
             
             task.resume()
         } catch {
-            print(error.localizedDescription)
+            //print(error.localizedDescription)
         }
     }
 }
