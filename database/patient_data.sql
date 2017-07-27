@@ -2,10 +2,10 @@
 -- version 4.6.5.2
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: Apr 05, 2017 at 01:07 AM
+-- Host: localhost:8889
+-- Generation Time: Jul 27, 2017 at 04:00 PM
 -- Server version: 5.6.35
--- PHP Version: 7.1.1
+-- PHP Version: 7.0.15
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -13,6 +13,20 @@ SET time_zone = "+00:00";
 --
 -- Database: `patient_data`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `height_weight_data`
+--
+
+CREATE TABLE `height_weight_data` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `unique_id` varchar(50) NOT NULL,
+  `time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `height` varchar(10) NOT NULL,
+  `weight` varchar(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -78,6 +92,12 @@ CREATE TABLE `walk_test_data` (
 --
 
 --
+-- Indexes for table `height_weight_data`
+--
+ALTER TABLE `height_weight_data`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `hk_data`
 --
 ALTER TABLE `hk_data`
@@ -105,6 +125,11 @@ ALTER TABLE `walk_test_data`
 -- AUTO_INCREMENT for dumped tables
 --
 
+--
+-- AUTO_INCREMENT for table `height_weight_data`
+--
+ALTER TABLE `height_weight_data`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `hk_data`
 --
