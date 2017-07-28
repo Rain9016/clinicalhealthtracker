@@ -40,7 +40,7 @@ class HomeController: UIViewController, CLLocationManagerDelegate {
     
     var has_launched = false
     var timer: Timer?
-    var update_interval: TimeInterval = 60 * 15 /* every 15 minutes */
+    var update_interval: TimeInterval = 60 * 5 /* every 5 minutes */
     
     /////////////////////////
     //                     //
@@ -515,8 +515,8 @@ extension UIViewController {
         case "healthkit":
             if (stored_data.hk_data["hk_data"]?.count)! > 0 {
                 data_to_send = stored_data.hk_data
-                //url_string = "https://www.clinicalhealthtracker.com/web-service/insert-hk-data.php"
-                url_string = "http://localhost:8888/web-service/insert-hk-data.php"
+                url_string = "https://www.clinicalhealthtracker.com/web-service/insert-hk-data.php"
+                //url_string = "http://localhost:8888/web-service/insert-hk-data.php"
             } else {
                 //print("no hk data to send")
                 return
@@ -524,8 +524,8 @@ extension UIViewController {
         case "location":
             if (stored_data.location_data["location_data"]?.count)! > 0 {
                 data_to_send = stored_data.location_data
-                //url_string = "https://www.clinicalhealthtracker.com/web-service/insert-location-data.php"
-                url_string = "http://localhost:8888/web-service/insert-location-data.php"
+                url_string = "https://www.clinicalhealthtracker.com/web-service/insert-location-data.php"
+                //url_string = "http://localhost:8888/web-service/insert-location-data.php"
             } else {
                 //print("no location data to send")
                 return
@@ -533,8 +533,8 @@ extension UIViewController {
         case "survey":
             if (stored_data.survey_data["survey_data"]?.count)! > 0 {
                 data_to_send = stored_data.survey_data
-                //url_string = "https://www.clinicalhealthtracker.com/web-service/insert-survey-data.php"
-                url_string = "http://localhost:8888/web-service/insert-survey-data.php"
+                url_string = "https://www.clinicalhealthtracker.com/web-service/insert-survey-data.php"
+                //url_string = "http://localhost:8888/web-service/insert-survey-data.php"
             } else {
                 //print("no survey data to send")
                 return
@@ -542,8 +542,8 @@ extension UIViewController {
         case "walk_test":
             if (stored_data.walk_test_data["walk_test_data"]?.count)! > 0 {
                 data_to_send = stored_data.walk_test_data
-                //url_string = "https://www.clinicalhealthtracker.com/web-service/insert-walk-test-data.php"
-                url_string = "http://localhost:8888/web-service/insert-walk-test-data.php"
+                url_string = "https://www.clinicalhealthtracker.com/web-service/insert-walk-test-data.php"
+                //url_string = "http://localhost:8888/web-service/insert-walk-test-data.php"
             } else {
                 //print("no walk test data to send")
                 return
@@ -551,8 +551,8 @@ extension UIViewController {
         case "height_weight":
             if (stored_data.height_weight_data["height_weight_data"]?.count)! > 0 {
                 data_to_send = stored_data.height_weight_data
-                //url_string = "https://www.clinicalhealthtracker.com/web-service/insert-height-weight-data.php"
-                url_string = "http://localhost:8888/web-service/insert-height-weight-data.php"
+                url_string = "https://www.clinicalhealthtracker.com/web-service/insert-height-weight-data.php"
+                //url_string = "http://localhost:8888/web-service/insert-height-weight-data.php"
             } else {
                 //print("no height weight data to send")
                 return
