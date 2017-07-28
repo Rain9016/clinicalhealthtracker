@@ -23,6 +23,7 @@ SET time_zone = "+00:00";
 CREATE TABLE `answers` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `answer` varchar(100) NOT NULL,
+  `patient_unique_id` varchar(50) NOT NULL,
   `patient_id` bigint(20) UNSIGNED NOT NULL,
   `question_id` bigint(20) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
