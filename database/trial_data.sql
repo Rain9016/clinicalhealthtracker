@@ -211,4 +211,3 @@ ALTER TABLE `choices`
 --
 ALTER TABLE `questions`
   ADD CONSTRAINT `fk_questions_trial` FOREIGN KEY (`trial_id`) REFERENCES `trials` (`id`) ON DELETE CASCADE;
-  
