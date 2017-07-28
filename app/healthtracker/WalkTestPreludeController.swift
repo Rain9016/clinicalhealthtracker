@@ -54,7 +54,6 @@ class WalkTestPreludeController: UIViewController {
 
     func instructionsButtonAction() {
         let instructionController = WalkTestInstructionController()
-        instructionController.page = 0
         
         let newNavigationController = UINavigationController(rootViewController: instructionController)
         present(newNavigationController, animated: true, completion: nil)
