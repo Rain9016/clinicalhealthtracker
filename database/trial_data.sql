@@ -2,10 +2,10 @@
 -- version 4.6.5.2
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: Apr 05, 2017 at 12:10 AM
+-- Host: localhost:8889
+-- Generation Time: Jul 28, 2017 at 07:44 AM
 -- Server version: 5.6.35
--- PHP Version: 7.1.1
+-- PHP Version: 7.0.15
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -23,9 +23,10 @@ SET time_zone = "+00:00";
 CREATE TABLE `answers` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `answer` varchar(100) NOT NULL,
+  `patient_unique_id` varchar(50) NOT NULL,
   `patient_id` bigint(20) UNSIGNED NOT NULL,
   `question_id` bigint(20) UNSIGNED NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -130,7 +131,7 @@ INSERT INTO `trials` (`id`, `name`, `extra_info`) VALUES
 --
 ALTER TABLE `answers`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `fk_answers_patients` (`patient_id`),
+  ADD KEY `fk_answers_users` (`patient_id`),
   ADD KEY `fk_answers_questions` (`question_id`);
 
 --
@@ -177,7 +178,7 @@ ALTER TABLE `choices`
 -- AUTO_INCREMENT for table `patients`
 --
 ALTER TABLE `patients`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT for table `questions`
 --
@@ -187,7 +188,7 @@ ALTER TABLE `questions`
 -- AUTO_INCREMENT for table `trials`
 --
 ALTER TABLE `trials`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- Constraints for dumped tables
 --
@@ -196,8 +197,8 @@ ALTER TABLE `trials`
 -- Constraints for table `answers`
 --
 ALTER TABLE `answers`
-  ADD CONSTRAINT `fk_answers_patients` FOREIGN KEY (`patient_id`) REFERENCES `patients` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `fk_answers_questions` FOREIGN KEY (`question_id`) REFERENCES `questions` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `fk_answers_questions` FOREIGN KEY (`question_id`) REFERENCES `questions` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_answers_users` FOREIGN KEY (`patient_id`) REFERENCES `patients` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `choices`

@@ -70,8 +70,8 @@
                 $answer = $_POST[$row['id']];
                 $question_id = $row['id'];
 
-                $query = "INSERT INTO answers (answer, patient_id, question_id) VALUES (:answer, :patient_id, :question_id)";
-                $query_params = array(':answer'=>$answer, ':patient_id'=>$patient_id, ':question_id'=>$question_id);
+                $query = "INSERT INTO answers (answer, patient_unique_id, patient_id, question_id) VALUES (:answer, :patient_unique_id, :patient_id, :question_id)";
+                $query_params = array(':answer'=>$answer, ':patient_unique_id'=>$unique_id, ':patient_id'=>$patient_id, ':question_id'=>$question_id);
 
                 try {
                     $stmt = $db->prepare($query);
