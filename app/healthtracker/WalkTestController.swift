@@ -14,7 +14,7 @@ class WalkTestController: UIViewController {
     let audioManager = AudioManager.sharedInstance
     var timer = Timer()
     
-    var duration = 1 * 60 //6 minutes
+    var duration = 6 * 60 //6 minutes
     var previous_steps = 0
     var stationary_count = 0
     var audio_queue: [String] = [String]()

@@ -81,8 +81,7 @@ class ActivityCompleteController: UIViewController {
             send_data(type: "survey")
         case "walk_test":
             title_label.text = "Walk Test Complete"
-            content_label.text = "steps: " + (data_to_send.walk_test_data["walk_test_data"]?.last?["steps"])! + ", distance: " + (data_to_send.walk_test_data["walk_test_data"]?.last?["distance"])! + ", laps: " + (data_to_send.walk_test_data["walk_test_data"]?.last?["laps"])!
-            //content_label.text = "Your results will be recorded and analysed by your clinician."
+            content_label.text = "Your results will be recorded and analysed by your clinician."
             
             send_data(type: "walk_test")
         default:
