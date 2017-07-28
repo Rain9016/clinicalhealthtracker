@@ -14,7 +14,7 @@ class WalkTestController: UIViewController {
     let audioManager = AudioManager.sharedInstance
     var timer = Timer()
     
-    var duration = 60 * 6 //6 minutes
+    var duration = 1 * 60 //6 minutes
     var previous_steps = 0
     var stationary_count = 0
     var audio_queue: [String] = [String]()
@@ -134,46 +134,26 @@ class WalkTestController: UIViewController {
             }
         }
         
-        guard duration > 15 else {
-            /* if time == 15, start 15 second countdown */
-            if (duration == 15) {
-                if (audioManager.isPlaying()) {
-                    audioManager.stopAudio()
-                }
-                audioManager.playAudio(name: "fifteen-sec-countdown")
-            }
-
-            /* if time == 0, stop updating heading, start conclusion pt 1 */
-            if (duration == 0) {
-                stop()
-                locationManager.stopUpdatingHeading()
+        /* if time == 0, stop updating heading, start conclusion pt 1 */
+        if (duration == 0) {
+            stop()
+            locationManager.stopUpdatingHeading()
             
-                audioManager.playAudio(name: "conclusion-pt1")
-                timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(conclusion_pt1_countdown), userInfo: nil, repeats: true)
-            }
+            audioManager.playAudio(name: "6-minute-mark")
+            timer = Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(conclusion), userInfo: nil, repeats: true)
             return
-        }
-        
-        if (duration%60 == 0) {
+        } else if (duration%60 == 0) {
             if (duration == 60 * 5) {
-                audio_queue.append("time-remaining-pt1")
-                addEncouragement()
+                audio_queue.append("1-minute-mark")
             } else if (duration == 60 * 4) {
-                audio_queue.append("time-remaining-pt2")
-                addEncouragement()
+                audio_queue.append("2-minute-mark")
             } else if (duration == 60 * 3) {
-                audio_queue.append("time-remaining-pt3")
-                addEncouragement()
+                audio_queue.append("3-minute-mark")
             } else if (duration == 60 * 2) {
-                audio_queue.append("time-remaining-pt4")
-                addEncouragement()
+                audio_queue.append("4-minute-mark")
             } else if (duration == 60 * 1) {
-                audio_queue.append("time-remaining-pt5")
-                addEncouragement()
+                audio_queue.append("5-minute-mark")
             }
-        /* play 1 of 8 encouragement audio every 30 seconds */
-        } else if (duration%30 == 0) {
-            addEncouragement()
         }
         
         /* if steps hasn't increased for 20 seconds, play stationary encouragement */
@@ -199,45 +179,15 @@ class WalkTestController: UIViewController {
         }
     }
     
-    /* encouragement will not play if other audio is playing */
-    func addEncouragement() {
-        let random_number = arc4random_uniform(8) + 1;
-        
-        switch random_number {
-        case 1:
-            audio_queue.append("encouragement-pt1")
-        case 2:
-            audio_queue.append("encouragement-pt2")
-        case 3:
-            audio_queue.append("encouragement-pt3")
-        case 4:
-            audio_queue.append("encouragement-pt4")
-        case 5:
-            audio_queue.append("encouragement-pt5")
-        case 6:
-            audio_queue.append("encouragement-pt6")
-        case 7:
-            audio_queue.append("encouragement-pt7")
-        case 8:
-            audio_queue.append("encouragement-pt8")
-        default:
-            return
-        }
-    }
-    
-    /* [5] wait for conclusion pt 1 to finish, start final 3 second countdown */
-    func conclusion_pt1_countdown() {
-        guard audioManager.isPlaying() else {
-            timer.invalidate()
-            
-            timer = Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(final_countdown), userInfo: nil, repeats: true)
-            return
-        }
-    }
-    
     /* [6] after 3 seconds has elapsed, stop pedometer, present activity complete controller */
-    func final_countdown() {
-        timer.invalidate()
+    func conclusion() {
+        stop()
+        audioManager.playAudio(name: "conclusion")
+        
+        /* pause here, while the pedometer catches up */
+        while (audioManager.isPlaying()) {
+        }
+        
         pedometerManager.stopUpdates()
         
         //steps_label.text = "steps: \(pedometerManager.steps)"
@@ -252,9 +202,7 @@ class WalkTestController: UIViewController {
         let data_to_send = DataToSend.sharedInstance
         data_to_send.walk_test_data["walk_test_data"]?.append(["unique_id":unique_id!, "time":time, "steps":String(pedometerManager.steps), "distance":String(pedometerManager.distance), "laps":String(self.laps)])
         
-        audioManager.playAudio(name: "conclusion-pt2")
         reset()
-        
         UIApplication.shared.endBackgroundTask(taskID)
         
         let activityCompleteController = ActivityCompleteController()
