@@ -67,7 +67,7 @@
             $isError = false;
 
             foreach ($results as $row) {
-                $answer = $_POST[$row['id']];
+                $answer = htmlspecialchars($_POST[$row['id']]);
                 $question_id = $row['id'];
 
                 $query = "INSERT INTO answers (answer, patient_unique_id, patient_id, question_id) VALUES (:answer, :patient_unique_id, :patient_id, :question_id)";

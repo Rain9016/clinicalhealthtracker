@@ -82,7 +82,8 @@ function insert_survey_data($data) {
     $query = "INSERT INTO survey_data (unique_id, title, time, question, answer) VALUES (:unique_id, :title, :time, :question, :answer)";
 
     foreach ($data as $entry) {
-        $query_params = array(':unique_id'=>$entry["unique_id"], ':title'=>$entry["title"], ':time'=>$entry["time"], ':question'=>$entry["question"], ':answer'=>$entry["answer"]);
+        $sanitizedAnswer = htmlspecialchars($entry["answer"]);
+        $query_params = array(':unique_id'=>$entry["unique_id"], ':title'=>$entry["title"], ':time'=>$entry["time"], ':question'=>$entry["question"], ':answer'=>$sanitizedAnswer);
 
         try {
             $stmt = $db->prepare($query);

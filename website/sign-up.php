@@ -25,9 +25,9 @@
     }
 
     if(!empty($_POST['first_name']) && !empty($_POST['last_name']) && !empty($_POST['email'])) {
-        $first_name = $_POST['first_name'];
-        $last_name = $_POST['last_name'];
-        $email = $_POST['email'];
+        $first_name = htmlspecialchars($_POST['first_name']);
+        $last_name = htmlspecialchars($_POST['last_name']);
+        $email = htmlspecialchars($_POST['email']);
         $trial_id = $_POST['trial_id'];
 
         $query = "SELECT extra_info FROM trials WHERE id=:trial_id";
