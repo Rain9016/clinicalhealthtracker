@@ -37,7 +37,7 @@ class StepController: UIViewController {
         self.navigationItem.rightBarButtonItem = cancelButton
     }
     
-    func cancelButtonAction() {
+    @objc func cancelButtonAction() {
         dismiss(animated: true, completion: nil)
     }
     
@@ -107,7 +107,7 @@ class StepController: UIViewController {
     //                       //
     ///////////////////////////
     
-    func handleButtons() {
+    @objc func handleButtons() {
         let nextStep = currentStep + 1
         guard nextStep < survey.steps.count else {
             let data_to_send = DataToSend.sharedInstance

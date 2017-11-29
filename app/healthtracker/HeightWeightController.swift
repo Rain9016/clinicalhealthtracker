@@ -100,7 +100,7 @@ class HeightWeightController: UIViewController, UITextFieldDelegate {
         self.view.addGestureRecognizer(tapGesture)
     }
     
-    func tap(gesture: UITapGestureRecognizer) {
+    @objc func tap(gesture: UITapGestureRecognizer) {
         heightField.resignFirstResponder()
         weightField.resignFirstResponder()
     }
@@ -134,7 +134,7 @@ class HeightWeightController: UIViewController, UITextFieldDelegate {
     //          //
     //////////////
     
-    func handleButton() {
+    @objc func handleButton() {
         if heightField.text == "" || weightField.text == "" {
             sendAlert(title: "Error", message: "Please fill out all fields")
         } else {

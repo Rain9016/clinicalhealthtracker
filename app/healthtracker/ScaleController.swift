@@ -131,7 +131,7 @@ class ScaleController: StepController {
         scale.addTarget(self, action: #selector(scaleValueDidChange), for: .valueChanged)
     }
     
-    func scaleValueDidChange() {
+    @objc func scaleValueDidChange() {
         let scaleStep = survey.steps[currentStep].scale?.step
         let roundedValue = round(scale.value / Float(scaleStep!)) * Float(scaleStep!)
         scale.value = roundedValue
@@ -202,7 +202,7 @@ class ScaleController: StepController {
         }
     }
     
-    func handleNext() {
+    @objc func handleNext() {
         let unique_id = UserDefaults.standard.object(forKey: "unique_id") as? String
         let title = survey.title
             
@@ -218,7 +218,7 @@ class ScaleController: StepController {
         handleButtons()
     }
     
-    func handleSkip() {
+    @objc func handleSkip() {
         handleButtons()
     }
     

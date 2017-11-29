@@ -703,7 +703,7 @@ class SurveyController: UIViewController, UITableViewDelegate, UITableViewDataSo
         beginButton.alpha = 0.2
     }
     
-    func handleBeginButton() {
+    @objc func handleBeginButton() {
         let survey = surveys[selectedSurvey]
         
         guard survey.steps.count > 0 else {

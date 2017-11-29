@@ -26,7 +26,7 @@ class ActivityCompleteController: UIViewController {
         return label
     }()
     
-    func doneButtonAction() {
+    @objc func doneButtonAction() {
         if (activity == "walk_test") {
             /* if conclusion audio from walk test is playing */
             let audioManager = AudioManager.sharedInstance

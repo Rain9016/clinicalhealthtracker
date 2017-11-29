@@ -315,7 +315,7 @@ class HomeController: UIViewController, CLLocationManagerDelegate {
         }
     }
     
-    func countdown() {
+    @objc func countdown() {
         send_data(type: "healthkit")
         
         send_data(type: "survey")
@@ -456,7 +456,7 @@ extension HomeController {
         healthKitManager!.healthStore?.execute(query)
     }
     
-    func send_hk_data() {
+    @objc func send_hk_data() {
         get_hk_data(start_date: self.last_hk_update)
         send_data(type: "healthkit")
     }

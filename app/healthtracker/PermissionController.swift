@@ -48,7 +48,7 @@ class PermissionController: UIViewController {
         return button
     }()
     
-    func handleButton() {
+    @objc func handleButton() {
         if (!permission_requested) {
             switch self.heading {
             case "Location Services":

@@ -47,7 +47,7 @@ class TextFieldController: StepController, UITextFieldDelegate {
     }
     
     /* http://stackoverflow.com/questions/28394933/how-do-i-check-when-a-uitextfield-changes */
-    func textFieldDidChange() {
+    @objc func textFieldDidChange() {
         if (textField.text?.isEmpty)! {
             nextButton.isEnabled = false
             nextButton.alpha = 0.2
@@ -113,7 +113,7 @@ class TextFieldController: StepController, UITextFieldDelegate {
         }
     }
     
-    func handleNext() {
+    @objc func handleNext() {
         let unique_id = UserDefaults.standard.object(forKey: "unique_id") as? String
         let title = survey.title
             
@@ -129,7 +129,7 @@ class TextFieldController: StepController, UITextFieldDelegate {
         handleButtons()
     }
     
-    func handleSkip() {
+    @objc func handleSkip() {
         handleButtons()
     }
     
@@ -195,7 +195,7 @@ class TextFieldController: StepController, UITextFieldDelegate {
         self.view.addGestureRecognizer(tapGesture)
     }
     
-    func tap(gesture: UITapGestureRecognizer) {
+    @objc func tap(gesture: UITapGestureRecognizer) {
         textField.resignFirstResponder()
     }
     

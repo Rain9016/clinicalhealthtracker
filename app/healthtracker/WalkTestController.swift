@@ -46,7 +46,7 @@ class WalkTestController: UIViewController {
         return barButtonItem
     }()
     
-    func cancelButtonAction() {
+    @objc func cancelButtonAction() {
         UIApplication.shared.endBackgroundTask(taskID)
         stop()
         reset()
@@ -87,7 +87,7 @@ class WalkTestController: UIViewController {
     }
     
     /* [2] wait for introduction to finish, start 3 second countdown */
-    func intro_pt1_countdown() {
+    @objc func intro_pt1_countdown() {
         guard audioManager.isPlaying() else {
             timer.invalidate()
             
@@ -98,7 +98,7 @@ class WalkTestController: UIViewController {
     }
     
     /* [3] wait for 3 seconds, start pedometer updates, start 6 minute countdown */
-    func intro_pt2_countdown() {
+    @objc func intro_pt2_countdown() {
 
         //we're not waiting for audio to stop playing as the audio runs for a little longer than 3 seconds. We want to start the countdown as soon as the patient hears the word "Go".
         timer.invalidate()
@@ -109,7 +109,7 @@ class WalkTestController: UIViewController {
     }
     
     /* [4] 6 minute countdown */
-    func countdown() {
+    @objc func countdown() {
         //prints the amount of time the app has to run in the background, it seems to count down from 180. Though, when audio is played, it seems to bring the app into the foreground (signified by the large time remaining). When the audio stops playing, the background timer begins counting down from 180 again.
         //print(UIApplication.shared.backgroundTimeRemaining)
         
@@ -180,7 +180,7 @@ class WalkTestController: UIViewController {
     }
     
     /* [6] after 3 seconds has elapsed, stop pedometer, present activity complete controller */
-    func conclusion() {
+    @objc func conclusion() {
         stop()
         audioManager.playAudio(name: "conclusion")
         

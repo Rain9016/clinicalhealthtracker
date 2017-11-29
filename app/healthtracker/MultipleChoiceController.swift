@@ -118,7 +118,7 @@ class MultipleChoiceController: StepController, UITableViewDelegate, UITableView
         }
     }
     
-    func handleNext() {
+    @objc func handleNext() {
         let unique_id = UserDefaults.standard.object(forKey: "unique_id") as? String
         let title = survey.title
             
@@ -134,7 +134,7 @@ class MultipleChoiceController: StepController, UITableViewDelegate, UITableView
         handleButtons()
     }
     
-    func handleSkip() {
+    @objc func handleSkip() {
         handleButtons()
     }
     
