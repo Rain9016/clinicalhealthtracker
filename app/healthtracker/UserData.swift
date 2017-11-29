@@ -8,8 +8,8 @@
 
 import Foundation
 
-class DataToSend {
-    static let shared = DataToSend()
+class UserData {
+    static let shared = UserData()
     
     private init() {}
     
