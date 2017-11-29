@@ -8,25 +8,39 @@
 
 import Foundation
 
-class DataToSend: NSObject {
-    static let sharedInstance: DataToSend = {
-        let instance = DataToSend()
-        return instance
-    }()
+class DataToSend {
+    static let shared = DataToSend()
     
-    var hk_data = [String:[[String:String]]]()
-    var location_data = [String:[[String:String]]]()
-    var survey_data = [String:[[String:String]]]()
-    var walk_test_data = [String:[[String:String]]]()
-    var height_weight_data = [String:[[String:String]]]()
+    private init() {}
     
-    override init() {
-        super.init()
-        
-        hk_data = ["hk_data":[]]
-        location_data = ["location_data":[]]
-        survey_data = ["survey_data":[]]
-        walk_test_data = ["walk_test_data":[]]
-        height_weight_data = ["height_weight_data":[]]
-    }
+    var healthData = [HealthData]()
+    var locationData = [LocationData]()
+    var surveyData = [SurveyData]()
+    var heightWeightData = [HeightWeightData]()
+    var walkTestData = [WalkTestData]()
+}
+
+struct ApiResponse: Decodable {
+    var error: Bool
+    var message: String
+}
+
+struct HealthData: Encodable {
+    
+}
+
+struct LocationData: Encodable {
+    
+}
+
+struct SurveyData: Encodable {
+    
+}
+
+struct HeightWeightData: Encodable {
+    
+}
+
+struct WalkTestData: Encodable {
+    
 }
