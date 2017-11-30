@@ -29,18 +29,18 @@ class HomeController: UIViewController, CLLocationManagerDelegate {
     var healthKitManager: HealthKitManager?
     var locationManager: LocationManager?
     
-    var unique_id: String?
+    var uniqueId: String?
     
     let semaphore = DispatchSemaphore(value: 0) /* create semaphore */
     
-    var dataToSend = DataToSend.sharedInstance
-    var hk_data = [[String:String]]()
+    var userData = UserData.shared
+    var healthData = [HealthData]()
     var distance = [String]()
-    var last_hk_update = Date()
+    var lastHealthUpdate = Date()
     
-    var has_launched = false
+    var hasLaunched = false
     var timer: Timer?
-    var update_interval: TimeInterval = 60 * 5 /* every 5 minutes */
+    var updateInterval: TimeInterval = 60 * 5 /* every 5 minutes */
     
     /////////////////////////
     //                     //
@@ -51,7 +51,7 @@ class HomeController: UIViewController, CLLocationManagerDelegate {
     let scrollView = UIScrollView()
     let contentView = UIView()
     
-    let welcome_label: UILabel = {
+    let welcomeLabel: UILabel = {
         let label = UILabel()
         label.text = "Welcome to"
         label.font = UIFont.boldSystemFont(ofSize: 20)
@@ -72,7 +72,7 @@ class HomeController: UIViewController, CLLocationManagerDelegate {
         return imageView
     }()
     
-    let logo_label: UILabel = {
+    let logoLabel: UILabel = {
         let label = UILabel()
         label.text = "healthtracker"
         label.font = UIFont(name: "Lobster 1.4", size: 40)
@@ -80,7 +80,7 @@ class HomeController: UIViewController, CLLocationManagerDelegate {
         return label
     }()
     
-    let content_label: UILabel = {
+    let contentLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
         label.lineBreakMode = NSLineBreakMode.byWordWrapping
@@ -111,19 +111,19 @@ class HomeController: UIViewController, CLLocationManagerDelegate {
         contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor).isActive = true
         contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor).isActive = true
         
-        contentView.addSubview(welcome_label)
+        contentView.addSubview(welcomeLabel)
         
-        welcome_label.translatesAutoresizingMaskIntoConstraints = false
-        welcome_label.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20).isActive = true
-        welcome_label.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
-        welcome_label.widthAnchor.constraint(equalTo: contentView.widthAnchor, constant: -40).isActive = true
+        welcomeLabel.translatesAutoresizingMaskIntoConstraints = false
+        welcomeLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20).isActive = true
+        welcomeLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
+        welcomeLabel.widthAnchor.constraint(equalTo: contentView.widthAnchor, constant: -40).isActive = true
         
         contentView.addSubview(container)
         contentView.sendSubview(toBack: container)
         
         container.translatesAutoresizingMaskIntoConstraints = false
         container.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
-        container.topAnchor.constraint(equalTo: welcome_label.bottomAnchor, constant: -10).isActive = true
+        container.topAnchor.constraint(equalTo: welcomeLabel.bottomAnchor, constant: -10).isActive = true
         
         container.addSubview(imageView)
         
@@ -133,31 +133,31 @@ class HomeController: UIViewController, CLLocationManagerDelegate {
         imageView.widthAnchor.constraint(equalToConstant: 60).isActive = true
         imageView.heightAnchor.constraint(equalToConstant: 60).isActive = true
         
-        container.addSubview(logo_label)
+        container.addSubview(logoLabel)
         
-        let labelSize: CGSize = logo_label.sizeThatFits(CGSize(width: view.frame.size.width, height: CGFloat.greatestFiniteMagnitude))
+        let labelSize: CGSize = logoLabel.sizeThatFits(CGSize(width: view.frame.size.width, height: CGFloat.greatestFiniteMagnitude))
         
-        logo_label.translatesAutoresizingMaskIntoConstraints = false
-        logo_label.widthAnchor.constraint(equalToConstant: labelSize.width + 6).isActive = true
-        logo_label.heightAnchor.constraint(equalToConstant: labelSize.height).isActive = true
-        logo_label.leftAnchor.constraint(equalTo: imageView.rightAnchor, constant: -3).isActive = true
-        logo_label.centerYAnchor.constraint(equalTo: imageView.centerYAnchor).isActive = true
+        logoLabel.translatesAutoresizingMaskIntoConstraints = false
+        logoLabel.widthAnchor.constraint(equalToConstant: labelSize.width + 6).isActive = true
+        logoLabel.heightAnchor.constraint(equalToConstant: labelSize.height).isActive = true
+        logoLabel.leftAnchor.constraint(equalTo: imageView.rightAnchor, constant: -3).isActive = true
+        logoLabel.centerYAnchor.constraint(equalTo: imageView.centerYAnchor).isActive = true
         
         container.heightAnchor.constraint(equalToConstant: 60).isActive = true
         container.widthAnchor.constraint(equalToConstant: 60 + labelSize.width + 3).isActive = true
         
-        contentView.addSubview(content_label)
+        contentView.addSubview(contentLabel)
         
-        content_label.translatesAutoresizingMaskIntoConstraints = false
-        content_label.widthAnchor.constraint(equalTo: contentView.widthAnchor, constant: -40).isActive = true
-        content_label.topAnchor.constraint(equalTo: container.bottomAnchor, constant: 20).isActive = true
-        content_label.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
+        contentLabel.translatesAutoresizingMaskIntoConstraints = false
+        contentLabel.widthAnchor.constraint(equalTo: contentView.widthAnchor, constant: -40).isActive = true
+        contentLabel.topAnchor.constraint(equalTo: container.bottomAnchor, constant: 20).isActive = true
+        contentLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
         
-        let padding_bottom = UIView()
-        contentView.addSubview(padding_bottom)
-        padding_bottom.translatesAutoresizingMaskIntoConstraints = false
-        padding_bottom.topAnchor.constraint(equalTo: content_label.bottomAnchor, constant: 25).isActive = true
-        padding_bottom.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
+        let paddingBottom = UIView()
+        contentView.addSubview(paddingBottom)
+        paddingBottom.translatesAutoresizingMaskIntoConstraints = false
+        paddingBottom.topAnchor.constraint(equalTo: contentLabel.bottomAnchor, constant: 25).isActive = true
+        paddingBottom.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
     }
 
     
@@ -168,7 +168,7 @@ class HomeController: UIViewController, CLLocationManagerDelegate {
         //                                                  //
         //////////////////////////////////////////////////////
         
-        guard (UserDefaults.standard.object(forKey: "unique_id")) != nil else {
+        guard (UserDefaults.standard.object(forKey: "uniqueId")) != nil else {
             let loginController = LoginController()
             present(loginController, animated: true, completion: nil)
             return
@@ -180,7 +180,7 @@ class HomeController: UIViewController, CLLocationManagerDelegate {
         //                                                               //
         ///////////////////////////////////////////////////////////////////
         
-        guard (UserDefaults.standard.object(forKey: "permissions_requested") as? Bool) == true else {
+        guard (UserDefaults.standard.object(forKey: "permissionsRequested") as? Bool) == true else {
             let permissionController = PermissionController()
             permissionController.pages = self.pages
             permissionController.heading = (pages.first?.heading)!
@@ -193,31 +193,31 @@ class HomeController: UIViewController, CLLocationManagerDelegate {
             return
         }
         
-        if !(has_launched) {
+        if !(hasLaunched) {
             /* set unique id */
-            unique_id = UserDefaults.standard.object(forKey: "unique_id") as? String
+            uniqueId = UserDefaults.standard.object(forKey: "uniqueId") as? String
         }
         
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //                                                                                                         //
-        //  IF HEALTHKIT HISTORY HAS NOT BEEN SENT (I.E. IF LAST_HK_UPDATE HAS NOT BEEN SET), SEND HEALTHKIT DATA  //
+        //  IF HEALTHKIT HISTORY HAS NOT BEEN SENT (I.E. IF lastHealthUpdate HAS NOT BEEN SET), SEND HEALTHKIT DATA  //
         //                                                                                                         //
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////
         
         healthKitManager = HealthKitManager.sharedInstance
         
         /* if HealthKit history has not yet been sent (i.e. this is the patient's first time opening the application, send HealthKit history */
-        if !isKeyPresentInUserDefaults(key: "hk_history_sent") {
-            get_hk_data()
-            send_data(type: "healthkit")
+        if !isKeyPresentInUserDefaults(key: "healthHistorySent") {
+            getHealthData()
+            sendData(type: "health")
             
-            UserDefaults.standard.set(true, forKey: "hk_history_sent")
+            UserDefaults.standard.set(true, forKey: "healthHistorySent")
         /* otherwise, get HealthKit data from the last time the patient's HealthKit data was updated up until now */
-        } else if UserDefaults.standard.object(forKey: "last_hk_update") != nil && !(has_launched) {
-            self.last_hk_update = UserDefaults.standard.object(forKey: "last_hk_update") as! Date
+        } else if UserDefaults.standard.object(forKey: "lastHealthUpdate") != nil && !(hasLaunched) {
+            self.lastHealthUpdate = UserDefaults.standard.object(forKey: "lastHealthUpdate") as! Date
             
-            get_hk_data(start_date: self.last_hk_update)
-            send_data(type: "healthkit")
+            getHealthData(startData: self.lastHealthUpdate)
+            sendData(type: "health")
         }
         
         /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -228,10 +228,10 @@ class HomeController: UIViewController, CLLocationManagerDelegate {
         
         locationManager = LocationManager.sharedInstance
         
-        if !(has_launched) {
+        if !(hasLaunched) {
             /* add observer to send healthkit data when app enters foreground */
             let notificationCenter = NotificationCenter.default
-            notificationCenter.addObserver(self, selector: #selector(send_hk_data), name: Notification.Name("send_hk_data"), object: nil)
+            notificationCenter.addObserver(self, selector: #selector(sendHealthData), name: Notification.Name("sendHealthData"), object: nil)
             
             /* start updating location */
             locationManager?.startUpdatingLocation()
@@ -240,9 +240,9 @@ class HomeController: UIViewController, CLLocationManagerDelegate {
             updateLocation()
             
             /* start timer to send stored data every 15 minutes */
-            self.timer = Timer.scheduledTimer(timeInterval: self.update_interval, target: self, selector: #selector(self.countdown), userInfo: nil, repeats: true)
+            self.timer = Timer.scheduledTimer(timeInterval: self.updateInterval, target: self, selector: #selector(self.countdown), userInfo: nil, repeats: true)
             
-            has_launched = true
+            hasLaunched = true
         }
         
         ///////////////////////////////////////////////////////////////////
@@ -286,7 +286,7 @@ class HomeController: UIViewController, CLLocationManagerDelegate {
                     let trigger = UNCalendarNotificationTrigger(dateMatching: triggerDate, repeats: true)
                     
                     //schedule notification
-                    let identifier = "send_hk_data"
+                    let identifier = "sendHealthData"
                     let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
                     center.add(request, withCompletionHandler: { (error) in
                         if error != nil {
@@ -316,14 +316,12 @@ class HomeController: UIViewController, CLLocationManagerDelegate {
     }
     
     @objc func countdown() {
-        send_data(type: "healthkit")
+        sendData(type: "health")
+        sendData(type: "survey")
+        sendData(type: "heightWeight")
+        sendData(type: "walkTest")
         
-        send_data(type: "survey")
-        
-        send_data(type: "height_weight")
-        send_data(type: "walk_test")
-        
-        /* get_location_data() and send_data(type: "location") within */
+        /* getLocationData() and sendData(type: "location") within */
         updateLocation()
     }
     
@@ -340,8 +338,8 @@ class HomeController: UIViewController, CLLocationManagerDelegate {
         /* get and send location 30 seconds after location accuracy has increased to give it time to locate patient */
         let when = DispatchTime.now() + .seconds(30) //the .seconds is an "implicit member expression"
         DispatchQueue.main.asyncAfter(deadline: when) {
-            self.get_location_data()
-            self.send_data(type: "location")
+            self.getLocationData()
+            self.sendData(type: "location")
             self.locationManager?.decreaseAccuracy()
         }
     }
@@ -358,46 +356,46 @@ extension HomeController {
     //                      //
     //////////////////////////
     
-    func get_hk_data(start_date: Date? = nil) {
+    func getHealthData(startData: Date? = nil) {
         guard (healthKitManager?.isAvailable())! else {
             return
         }
         
-        if let date = start_date {
-            get_step_data(start_date: date) //get healthkit data in background
+        if let date = startData {
+            getStepData(startData: date) //get healthkit data in background
             self.semaphore.wait() //wait for healthkit data
-            get_distance_data(start_date: date) //get distance data in background
+            getDistanceData(startData: date) //get distance data in background
             self.semaphore.wait() //wait for distance data
         } else {
-            get_step_data() //get healthkit data in background
+            getStepData() //get healthkit data in background
             self.semaphore.wait() //wait for healthkit data
-            get_distance_data() //get distance data in background
+            getDistanceData() //get distance data in background
             self.semaphore.wait() //wait for distance data
         }
         
-        if (hk_data.count > 0) {
+        if (healthData.count > 0) {
             //combine healthkit data (containing steps) with distance data
-            for i in 0..<hk_data.count {
-                hk_data[i]["distance"] = distance[i]
+            for i in 0..<healthData.count {
+                healthData[i].distance = distance[i]
             }
             
             //add it to dataToSend object
-            dataToSend.hk_data["hk_data"]?.append(contentsOf: self.hk_data)
+            userData.healthData.append(contentsOf: healthData)
         
-            hk_data.removeAll()
+            healthData.removeAll()
             distance.removeAll()
         }
     }
     
-    func get_step_data(start_date: Date? = nil) {
+    func getStepData(startData: Date? = nil) {
         guard (healthKitManager?.isAvailable())! else {
             return
         }
         
         var predicate: NSPredicate?
         
-        if (start_date != nil) {
-            predicate = HKQuery.predicateForSamples(withStart: start_date, end: Date(), options: [])
+        if (startData != nil) {
+            predicate = HKQuery.predicateForSamples(withStart: startData, end: Date(), options: [])
         }
         
         let query = HKSampleQuery(sampleType: healthKitManager!.stepCount!, predicate: predicate, limit: Int(HKObjectQueryNoLimit), sortDescriptors: nil)
@@ -409,16 +407,18 @@ extension HomeController {
                     let dateFormatter = DateFormatter()
                     dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
                     
-                    let start_time = dateFormatter.string(from: entry.startDate)
-                    let end_time = dateFormatter.string(from: entry.endDate)
+                    let startTime = dateFormatter.string(from: entry.startDate)
+                    let endTime = dateFormatter.string(from: entry.endDate)
                     let steps = String(Int(entry.quantity.doubleValue(for: HKUnit.count())))
                     
-                    self.hk_data.append(["unique_id":self.unique_id!, "start_time":start_time, "end_time":end_time, "steps":steps])
+                    guard let uniqueId = self.uniqueId else { return }
+                    let currentEntry = HealthData(uniqueId: uniqueId, startTime: startTime, endTime: endTime, steps: steps, distance: nil)
+                    self.healthData.append(currentEntry)
                 }
                 
-                if let end_date = results?.last?.endDate {
-                    self.last_hk_update = end_date + 1
-                    UserDefaults.standard.set(self.last_hk_update, forKey: "last_hk_update")
+                if let endDate = results?.last?.endDate {
+                    self.lastHealthUpdate = endDate + 1
+                    UserDefaults.standard.set(self.lastHealthUpdate, forKey: "lastHealthUpdate")
                 }
                 
                 self.semaphore.signal()
@@ -428,15 +428,15 @@ extension HomeController {
         healthKitManager!.healthStore?.execute(query)
     }
     
-    func get_distance_data(start_date: Date? = nil) {
+    func getDistanceData(startData: Date? = nil) {
         guard (healthKitManager?.isAvailable())! else {
             return
         }
         
         var predicate: NSPredicate?
         
-        if (start_date != nil) {
-            predicate = HKQuery.predicateForSamples(withStart: start_date, end: Date(), options: [])
+        if (startData != nil) {
+            predicate = HKQuery.predicateForSamples(withStart: startData, end: Date(), options: [])
         }
         
         let query = HKSampleQuery(sampleType: healthKitManager!.distanceWalkingRunning!, predicate: predicate, limit: Int(HKObjectQueryNoLimit), sortDescriptors: nil)
@@ -456,9 +456,9 @@ extension HomeController {
         healthKitManager!.healthStore?.execute(query)
     }
     
-    @objc func send_hk_data() {
-        get_hk_data(start_date: self.last_hk_update)
-        send_data(type: "healthkit")
+    @objc func sendHealthData() {
+        getHealthData(startData: self.lastHealthUpdate)
+        sendData(type: "healthkit")
     }
     
     /////////////////////////
@@ -467,18 +467,21 @@ extension HomeController {
     //                     //
     /////////////////////////
     
-    func get_location_data() {
+    func getLocationData() {
         guard let location = locationManager?.currentLocation else {
             return
         }
         
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-        let current_time = dateFormatter.string(from: Date())
+        let currentTime = dateFormatter.string(from: Date())
         
         let latitude: String = String(location.coordinate.latitude)
         let longitude: String = String(location.coordinate.longitude)
-        dataToSend.location_data["location_data"]?.append(["unique_id":self.unique_id!, "time":current_time, "latitude":latitude, "longitude":longitude])
+        
+        guard let uniqueId = self.uniqueId else { return }
+        let entry = LocationData(uniqueId: uniqueId, time: currentTime, latitude: latitude, longitude: longitude)
+        userData.locationData.append(entry)
     }
 }
 
@@ -489,16 +492,16 @@ extension UIViewController {
     //             //
     /////////////////
     
-    func send_data(type: String) {
+    func sendData(type: String) {
         ////////////////////////////////////////
         //                                    //
         //  IF NOT CONNECTED TO WIFI, RETURN  //
         //                                    //
         ////////////////////////////////////////
-        let reachability = Reachability.init()!
+        let reachability = Reachability()!
         
-        guard reachability.currentReachabilityStatus == .reachableViaWiFi else {
-            //print("Not connected to wi-fi")
+        guard reachability.connection == .wifi else {
+            print("Not connected to wi-fi")
             return
         }
         
@@ -507,52 +510,58 @@ extension UIViewController {
         //  IF CONNECTED TO WIFI, SEND DATA  //
         //                                   //
         ///////////////////////////////////////
-        let stored_data = DataToSend.sharedInstance
-        var url_string: String?
-        var data_to_send = [String:[[String:String]]]()
+        let userData = UserData.shared
+        var urlString: String?
+        var json: Data?
+        let environment = Environment.shared
         
         switch type {
-        case "healthkit":
-            if (stored_data.hk_data["hk_data"]?.count)! > 0 {
-                data_to_send = stored_data.hk_data
-                url_string = "https://www.clinicalhealthtracker.com/web-service/insert-hk-data.php"
-                //url_string = "http://localhost:8888/web-service/insert-hk-data.php"
+        case "health":
+            if (userData.healthData.count) > 0 {
+                //urlString = environment.production.url + "insert-health-data.php"
+                urlString = environment.development.url + "insert-health-data.php"
+                
+                json = try? JSONEncoder().encode(userData.healthData)
             } else {
                 //print("no hk data to send")
                 return
             }
         case "location":
-            if (stored_data.location_data["location_data"]?.count)! > 0 {
-                data_to_send = stored_data.location_data
-                url_string = "https://www.clinicalhealthtracker.com/web-service/insert-location-data.php"
-                //url_string = "http://localhost:8888/web-service/insert-location-data.php"
+            if (userData.locationData.count) > 0 {
+                //urlString = environment.production.url + "insert-location-data.php"
+                urlString = environment.development.url + "insert-location-data.php"
+                
+                json = try? JSONEncoder().encode(userData.locationData)
             } else {
                 //print("no location data to send")
                 return
             }
         case "survey":
-            if (stored_data.survey_data["survey_data"]?.count)! > 0 {
-                data_to_send = stored_data.survey_data
-                url_string = "https://www.clinicalhealthtracker.com/web-service/insert-survey-data.php"
-                //url_string = "http://localhost:8888/web-service/insert-survey-data.php"
+            if (userData.surveyData.count) > 0 {
+                //urlString = environment.production.url + "insert-survey-data.php"
+                urlString = environment.development.url + "insert-survey-data.php"
+                
+                json = try? JSONEncoder().encode(userData.surveyData)
             } else {
                 //print("no survey data to send")
                 return
             }
-        case "walk_test":
-            if (stored_data.walk_test_data["walk_test_data"]?.count)! > 0 {
-                data_to_send = stored_data.walk_test_data
-                url_string = "https://www.clinicalhealthtracker.com/web-service/insert-walk-test-data.php"
-                //url_string = "http://localhost:8888/web-service/insert-walk-test-data.php"
+        case "walkTest":
+            if (userData.walkTestData.count) > 0 {
+                //urlString = environment.production.url + "insert-walk-test-data.php"
+                urlString = environment.development.url + "insert-walk-test-data.php"
+                
+                json = try? JSONEncoder().encode(userData.walkTestData)
             } else {
                 //print("no walk test data to send")
                 return
             }
-        case "height_weight":
-            if (stored_data.height_weight_data["height_weight_data"]?.count)! > 0 {
-                data_to_send = stored_data.height_weight_data
-                url_string = "https://www.clinicalhealthtracker.com/web-service/insert-height-weight-data.php"
-                //url_string = "http://localhost:8888/web-service/insert-height-weight-data.php"
+        case "heightWeight":
+            if (userData.heightWeightData.count) > 0 {
+                //urlString = environment.production.url + "insert-height-weight-data.php"
+                urlString = environment.development.url + "insert-height-weight-data.php"
+                
+                json = try? JSONEncoder().encode(userData.heightWeightData)
             } else {
                 //print("no height weight data to send")
                 return
@@ -566,66 +575,82 @@ extension UIViewController {
         //  CONVERT DICTIONARY TO JSON, SEND JSON VIA POST REQUEST  //
         //                                                          //
         //////////////////////////////////////////////////////////////
-        do {
-            let json_data = try JSONSerialization.data(withJSONObject: data_to_send, options: .prettyPrinted)
-            
-            let request: URLRequest = {
-                let url = URL(string: url_string!)
-                var request = URLRequest(url: url!)
+        
+        guard urlString != nil else {
+            print("urlString is nil")
+            return
+        }
+        
+        guard let url = URL(string: urlString!) else {
+            print("Could not generate URL from urlString")
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        
+        guard json != nil else {
+            return
+        }
+        
+        request.httpBody = json
+        
+        let session = URLSession.shared
+        session.dataTask(with: request, completionHandler: { (data, response, error) in
+            guard (error == nil) else {
+                print("Error: \(error!.localizedDescription)")
+                return
+            }
                 
-                request.httpMethod = "POST"
-                request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
-                request.httpBody = json_data
-                return request
-            }()
-            
-            let session = URLSession(configuration: URLSessionConfiguration.default)
-            
-            let task = session.dataTask(with: request, completionHandler: { (data, response, error) in
-                if error != nil {
-                    //print("error =>", error.debugDescription)
+            if let httpResponse = response as? HTTPURLResponse {
+                let statusCode = httpResponse.statusCode
+                    
+                guard statusCode == 200 else {
+                    print("Error: status code is \(statusCode)")
                     return
                 }
+            }
                 
-                do {
-                    let data = try JSONSerialization.jsonObject(with: data!, options: []) as! [String: Any]
-                    let err = data["error"] as! Bool
+            guard let data = data else {
+                print("Error: no data")
+                return
+            }
+                
+            do {
+                let apiResponse = try JSONDecoder().decode(ApiResponse.self, from: data)
                     
-                    if err {
-                        //print(data["message"]!)
-                        return
+                if (apiResponse.error) {
+                    print("Error: \(apiResponse.message)")
+                    return
+                } else {
+                    print("Success: \(apiResponse.message)")
                     //////////////////////////////////////////////////////
                     //                                                  //
                     //  IF SUCCESSFUL, DELETE PREVIOUS DATA FROM PHONE  //
                     //                                                  //
                     //////////////////////////////////////////////////////
-                    } else {
-                        //print(data["message"]!)
                         
+                    DispatchQueue.main.async {
                         switch type {
-                        case "healthkit":
-                            stored_data.hk_data["hk_data"]?.removeAll()
+                        case "health":
+                            userData.healthData.removeAll()
                         case "location":
-                            stored_data.location_data["location_data"]?.removeAll()
+                            userData.locationData.removeAll()
                         case "survey":
-                            stored_data.survey_data["survey_data"]?.removeAll()
-                        case "walk_test":
-                            stored_data.walk_test_data["walk_test_data"]?.removeAll()
-                        case "height_weight":
-                            stored_data.height_weight_data["height_weight_data"]?.removeAll()
+                            userData.surveyData.removeAll()
+                        case "walkTest":
+                            userData.walkTestData.removeAll()
+                        case "heightWeight":
+                            userData.heightWeightData.removeAll()
                         default:
                             return
                         }
                     }
-                } catch {
-                    //print("error =>", error.localizedDescription) //e.g. The data couldn’t be read because it isn’t in the correct format
-                    return
                 }
-            })
-            
-            task.resume()
-        } catch {
-            //print(error.localizedDescription)
-        }
+            } catch {
+                //print("Error: \(error.localizedDescription)")
+                return
+            }
+        }).resume()
     }
 }

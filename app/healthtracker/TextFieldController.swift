@@ -114,7 +114,9 @@ class TextFieldController: StepController, UITextFieldDelegate {
     }
     
     @objc func handleNext() {
-        let unique_id = UserDefaults.standard.object(forKey: "unique_id") as? String
+        guard let uniqueId = UserDefaults.standard.object(forKey: "uniqueId") as? String else {
+            return
+        }
         let title = survey.title
             
         let dateFormatter = DateFormatter()
@@ -122,9 +124,12 @@ class TextFieldController: StepController, UITextFieldDelegate {
         let time = dateFormatter.string(from: Date())
             
         let question = survey.steps[currentStep].title
-        let answer = textField.text
+        guard let answer = textField.text else {
+            return
+        }
             
-        answers.append(["unique_id":unique_id!, "title":title, "time":time, "question":question, "answer":answer!])
+        let entry = SurveyData(uniqueId: uniqueId, time: time, title: title, question: question, answer: answer)
+        answers.append(entry)
         
         handleButtons()
     }

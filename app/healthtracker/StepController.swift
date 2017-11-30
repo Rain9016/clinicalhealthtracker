@@ -11,7 +11,7 @@ import UIKit
 class StepController: UIViewController {
     var survey: Survey!
     var currentStep: Int!
-    var answers: [[String:String]]!
+    var answers: [SurveyData]!
     
     ////////////////////////////
     //                        //
@@ -110,8 +110,8 @@ class StepController: UIViewController {
     @objc func handleButtons() {
         let nextStep = currentStep + 1
         guard nextStep < survey.steps.count else {
-            let data_to_send = DataToSend.sharedInstance
-            data_to_send.survey_data["survey_data"]?.append(contentsOf: answers)
+            let userData = UserData.shared
+            userData.surveyData.append(contentsOf: answers)
             
             let activityCompleteController = ActivityCompleteController()
             activityCompleteController.activity = "survey"

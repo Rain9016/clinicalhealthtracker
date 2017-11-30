@@ -17,7 +17,7 @@ class PermissionController: UIViewController {
     var heading = ""
     var content = ""
     var unicodeEscaped = ""
-    var permission_requested = false
+    var permissionRequested = false
     
     let headingLabel: UILabel = {
         let label = UILabel()
@@ -49,7 +49,7 @@ class PermissionController: UIViewController {
     }()
     
     @objc func handleButton() {
-        if (!permission_requested) {
+        if (!permissionRequested) {
             switch self.heading {
             case "Location Services":
                 guard CLLocationManager.locationServicesEnabled() else {
@@ -68,7 +68,7 @@ class PermissionController: UIViewController {
                 button.setTitle("Finish", for: .normal)
                 button.layer.borderWidth = 0
                 
-                permission_requested = true
+                permissionRequested = true
                 return
             case "Notifications":
                 if #available(iOS 10.0, *) {
@@ -88,7 +88,7 @@ class PermissionController: UIViewController {
             button.setTitle("Next", for: .normal)
             button.layer.borderWidth = 0
             
-            permission_requested = true
+            permissionRequested = true
         } else {
             self.pages.remove(at: 0)
                 
@@ -101,7 +101,7 @@ class PermissionController: UIViewController {
                     
                 self.navigationController?.pushViewController(controller, animated: true)
             } else {
-                UserDefaults.standard.set(true, forKey: "permissions_requested")
+                UserDefaults.standard.set(true, forKey: "permissionsRequested")
                 dismiss(animated: true, completion: nil)
             }
         }

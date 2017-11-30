@@ -32,9 +32,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
-        if UserDefaults.standard.object(forKey: "permissions_requested") != nil {
+        if UserDefaults.standard.object(forKey: "permissionsRequested") != nil {
             let notificationCenter = NotificationCenter.default
-            let notification = Notification(name: Notification.Name("send_hk_data"), object: nil)
+            let notification = Notification(name: Notification.Name("sendHealthData"), object: nil)
             notificationCenter.post(notification)
         
             UIApplication.shared.applicationIconBadgeNumber = 0

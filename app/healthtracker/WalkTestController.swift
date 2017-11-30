@@ -193,20 +193,23 @@ class WalkTestController: UIViewController {
         //steps_label.text = "steps: \(pedometerManager.steps)"
         //distance_label.text = "distance: \(pedometerManager.distance)"
         
-        let unique_id = UserDefaults.standard.object(forKey: "unique_id") as? String
+        guard let uniqueId = UserDefaults.standard.object(forKey: "uniqueId") as? String else {
+            return
+        }
         
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
         let time = dateFormatter.string(from: Date())
         
-        let data_to_send = DataToSend.sharedInstance
-        data_to_send.walk_test_data["walk_test_data"]?.append(["unique_id":unique_id!, "time":time, "steps":String(pedometerManager.steps), "distance":String(pedometerManager.distance), "laps":String(self.laps)])
+        let userData = UserData.shared
+        let entry = WalkTestData(uniqueId: uniqueId, time: time, steps: String(pedometerManager.steps), distance: String(pedometerManager.distance), laps: String(self.laps))
+        userData.walkTestData.append(entry)
         
         reset()
         UIApplication.shared.endBackgroundTask(taskID)
         
         let activityCompleteController = ActivityCompleteController()
-        activityCompleteController.activity = "walk_test"
+        activityCompleteController.activity = "walkTest"
         self.navigationController?.pushViewController(activityCompleteController, animated: true)
     }
     

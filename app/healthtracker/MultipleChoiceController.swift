@@ -119,7 +119,10 @@ class MultipleChoiceController: StepController, UITableViewDelegate, UITableView
     }
     
     @objc func handleNext() {
-        let unique_id = UserDefaults.standard.object(forKey: "unique_id") as? String
+        guard let uniqueId = UserDefaults.standard.object(forKey: "uniqueId") as? String else {
+            return
+        }
+        
         let title = survey.title
             
         let dateFormatter = DateFormatter()
@@ -127,9 +130,12 @@ class MultipleChoiceController: StepController, UITableViewDelegate, UITableView
         let time = dateFormatter.string(from: Date())
             
         let question = survey.steps[currentStep].title
-        let answer = survey.steps[currentStep].multiple_choice?.answers[selectedAnswer]
-            
-        answers.append(["unique_id":unique_id!, "title":title, "time":time, "question":question, "answer":answer!])
+        guard let answer = survey.steps[currentStep].multiple_choice?.answers[selectedAnswer] else {
+            return
+        }
+        
+        let entry = SurveyData(uniqueId: uniqueId, time: time, title: title, question: question, answer: answer)
+        answers.append(entry)
         
         handleButtons()
     }
