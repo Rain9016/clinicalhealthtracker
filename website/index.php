@@ -44,11 +44,14 @@
 <title>Clinical Health Tracker</title>
 </head>
 <body>
+<!--
 <form method="post" action="index.php">
 welcome to health tracker<br>
 <input type="text" placeholder="username" name="username" required><br>
 <input type="password" placeholder="password" name="password" required><br>
-<button type="submit">log in</button> or <a href="sign-up.php">sign up a patient</a>
+<button type="submit">log in</button> or
 </form>
+-->
+<a href="sign-up.php">sign up a patient</a>
 </body>
 </html>
