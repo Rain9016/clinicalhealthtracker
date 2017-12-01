@@ -109,8 +109,8 @@ class LoginController: UIViewController, UITextFieldDelegate {
         
         let environment = Environment.shared
         
-        //let urlString = environment.production.url + "authenticate.php"
-        let urlString = environment.development.url + "authenticate.php"
+        let urlString = environment.production.url + "authenticate.php"
+        //let urlString = environment.development.url + "authenticate.php"
         
         guard let url = URL(string: urlString) else {
             print("Could not generate URL from urlString")

@@ -88,7 +88,6 @@ class HomeController: UIViewController, CLLocationManagerDelegate {
         return label
     }()
 
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.white
@@ -216,7 +215,7 @@ class HomeController: UIViewController, CLLocationManagerDelegate {
         } else if UserDefaults.standard.object(forKey: "lastHealthUpdate") != nil && !(hasLaunched) {
             self.lastHealthUpdate = UserDefaults.standard.object(forKey: "lastHealthUpdate") as! Date
             
-            getHealthData(startData: self.lastHealthUpdate)
+            getHealthData(startDate: self.lastHealthUpdate)
             sendData(type: "health")
         }
         
@@ -291,6 +290,7 @@ class HomeController: UIViewController, CLLocationManagerDelegate {
                     center.add(request, withCompletionHandler: { (error) in
                         if error != nil {
                             //print("Error: An error occured while creating local notification with identifier " + identifier)
+                            return
                         }
                     })
                 }
@@ -356,15 +356,15 @@ extension HomeController {
     //                      //
     //////////////////////////
     
-    func getHealthData(startData: Date? = nil) {
+    func getHealthData(startDate: Date? = nil) {
         guard (healthKitManager?.isAvailable())! else {
             return
         }
         
-        if let date = startData {
-            getStepData(startData: date) //get healthkit data in background
+        if let date = startDate {
+            getStepData(startDate: date) //get healthkit data in background
             self.semaphore.wait() //wait for healthkit data
-            getDistanceData(startData: date) //get distance data in background
+            getDistanceData(startDate: date) //get distance data in background
             self.semaphore.wait() //wait for distance data
         } else {
             getStepData() //get healthkit data in background
@@ -387,21 +387,22 @@ extension HomeController {
         }
     }
     
-    func getStepData(startData: Date? = nil) {
+    func getStepData(startDate: Date? = nil) {
         guard (healthKitManager?.isAvailable())! else {
             return
         }
         
         var predicate: NSPredicate?
         
-        if (startData != nil) {
-            predicate = HKQuery.predicateForSamples(withStart: startData, end: Date(), options: [])
+        if (startDate != nil) {
+            predicate = HKQuery.predicateForSamples(withStart: startDate, end: Date(), options: [])
         }
         
         let query = HKSampleQuery(sampleType: healthKitManager!.stepCount!, predicate: predicate, limit: Int(HKObjectQueryNoLimit), sortDescriptors: nil)
         { (query, results, error) in
             if error != nil {
-                //print("error =>", error.debugDescription)
+                //print(error?.localizedDescription)
+                return
             } else {
                 for entry in results as! [HKQuantitySample] {
                     let dateFormatter = DateFormatter()
@@ -428,21 +429,22 @@ extension HomeController {
         healthKitManager!.healthStore?.execute(query)
     }
     
-    func getDistanceData(startData: Date? = nil) {
+    func getDistanceData(startDate: Date? = nil) {
         guard (healthKitManager?.isAvailable())! else {
             return
         }
         
         var predicate: NSPredicate?
         
-        if (startData != nil) {
-            predicate = HKQuery.predicateForSamples(withStart: startData, end: Date(), options: [])
+        if (startDate != nil) {
+            predicate = HKQuery.predicateForSamples(withStart: startDate, end: Date(), options: [])
         }
         
         let query = HKSampleQuery(sampleType: healthKitManager!.distanceWalkingRunning!, predicate: predicate, limit: Int(HKObjectQueryNoLimit), sortDescriptors: nil)
         { (query, results, error) in
             if error != nil {
                 //print("error =>", error.debugDescription)
+                return
             } else {
                 for entry in results as! [HKQuantitySample] {
                     let distance = String(Int(entry.quantity.doubleValue(for: HKUnit.meter())))
@@ -457,7 +459,7 @@ extension HomeController {
     }
     
     @objc func sendHealthData() {
-        getHealthData(startData: self.lastHealthUpdate)
+        getHealthData(startDate: self.lastHealthUpdate)
         sendData(type: "healthkit")
     }
     
@@ -501,7 +503,7 @@ extension UIViewController {
         let reachability = Reachability()!
         
         guard reachability.connection == .wifi else {
-            print("Not connected to wi-fi")
+            //print("Not connected to wi-fi")
             return
         }
         
@@ -518,52 +520,52 @@ extension UIViewController {
         switch type {
         case "health":
             if (userData.healthData.count) > 0 {
-                //urlString = environment.production.url + "insert-health-data.php"
-                urlString = environment.development.url + "insert-health-data.php"
+                urlString = environment.production.url + "insert-health-data.php"
+                //urlString = environment.development.url + "insert-health-data.php"
                 
                 json = try? JSONEncoder().encode(userData.healthData)
             } else {
-                //print("no hk data to send")
+                //print("No health data to send")
                 return
             }
         case "location":
             if (userData.locationData.count) > 0 {
-                //urlString = environment.production.url + "insert-location-data.php"
-                urlString = environment.development.url + "insert-location-data.php"
+                urlString = environment.production.url + "insert-location-data.php"
+                //urlString = environment.development.url + "insert-location-data.php"
                 
                 json = try? JSONEncoder().encode(userData.locationData)
             } else {
-                //print("no location data to send")
+                //print("No location data to send")
                 return
             }
         case "survey":
             if (userData.surveyData.count) > 0 {
-                //urlString = environment.production.url + "insert-survey-data.php"
-                urlString = environment.development.url + "insert-survey-data.php"
+                urlString = environment.production.url + "insert-survey-data.php"
+                //urlString = environment.development.url + "insert-survey-data.php"
                 
                 json = try? JSONEncoder().encode(userData.surveyData)
             } else {
-                //print("no survey data to send")
+                //print("No survey data to send")
                 return
             }
         case "walkTest":
             if (userData.walkTestData.count) > 0 {
-                //urlString = environment.production.url + "insert-walk-test-data.php"
-                urlString = environment.development.url + "insert-walk-test-data.php"
+                urlString = environment.production.url + "insert-walk-test-data.php"
+                //urlString = environment.development.url + "insert-walk-test-data.php"
                 
                 json = try? JSONEncoder().encode(userData.walkTestData)
             } else {
-                //print("no walk test data to send")
+                //print("No walk test data to send")
                 return
             }
         case "heightWeight":
             if (userData.heightWeightData.count) > 0 {
-                //urlString = environment.production.url + "insert-height-weight-data.php"
-                urlString = environment.development.url + "insert-height-weight-data.php"
+                urlString = environment.production.url + "insert-height-weight-data.php"
+                //urlString = environment.development.url + "insert-height-weight-data.php"
                 
                 json = try? JSONEncoder().encode(userData.heightWeightData)
             } else {
-                //print("no height weight data to send")
+                //print("No height and weight data to send")
                 return
             }
         default:
@@ -577,12 +579,12 @@ extension UIViewController {
         //////////////////////////////////////////////////////////////
         
         guard urlString != nil else {
-            print("urlString is nil")
+            //print("urlString is nil")
             return
         }
         
         guard let url = URL(string: urlString!) else {
-            print("Could not generate URL from urlString")
+            //print("Could not generate URL from urlString")
             return
         }
         
@@ -598,7 +600,7 @@ extension UIViewController {
         let session = URLSession.shared
         session.dataTask(with: request, completionHandler: { (data, response, error) in
             guard (error == nil) else {
-                print("Error: \(error!.localizedDescription)")
+                //print("Error: \(error!.localizedDescription)")
                 return
             }
                 
@@ -606,13 +608,13 @@ extension UIViewController {
                 let statusCode = httpResponse.statusCode
                     
                 guard statusCode == 200 else {
-                    print("Error: status code is \(statusCode)")
+                    //print("Error: status code is \(statusCode)")
                     return
                 }
             }
                 
             guard let data = data else {
-                print("Error: no data")
+                //print("Error: no data")
                 return
             }
                 
@@ -620,10 +622,11 @@ extension UIViewController {
                 let apiResponse = try JSONDecoder().decode(ApiResponse.self, from: data)
                     
                 if (apiResponse.error) {
-                    print("Error: \(apiResponse.message)")
+                    //print("Error: \(apiResponse.message)")
                     return
                 } else {
-                    print("Success: \(apiResponse.message)")
+                    //print("Success: \(apiResponse.message)")
+                    
                     //////////////////////////////////////////////////////
                     //                                                  //
                     //  IF SUCCESSFUL, DELETE PREVIOUS DATA FROM PHONE  //
