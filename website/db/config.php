@@ -3,7 +3,7 @@
 //database
 DEFINE('HOST', 'localhost');
 DEFINE('USER', 'root');
-DEFINE('PASS', 'RapAP$af+8um');
+DEFINE('PASS', 'root');
 
 function dsn($db_name) {
     return "mysql:host=".HOST.";dbname=$db_name;charset=utf8";

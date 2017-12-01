@@ -1,6 +1,5 @@
 <?php
     require_once $_SERVER['DOCUMENT_ROOT'] . "/db/connect.php";
-    require_once 'functions.php';
 
     /* CONNECT TO DB */
     $db_name = "trial_data";
