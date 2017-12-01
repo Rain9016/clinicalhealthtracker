@@ -1,15 +1,16 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'] . "/db/connect.php";
 
-function get_user($unique_id) {
+function getUser($unique_id) {
     $db_name = "trial_data";
     $db = connect($db_name);
 
     $query = "SELECT first_name FROM patients WHERE unique_id=:unique_id";
+    $stmt = $db->prepare($query);
+
     $query_params = array(':unique_id'=>$unique_id);
 
     try {
-        $stmt = $db->prepare($query);
         $stmt->execute($query_params);
     } catch (PDOException $e) {
         //die($e->getMessage()); //DELETE!
@@ -19,23 +20,23 @@ function get_user($unique_id) {
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($result) {
-        return $result['first_name'];
+        return true;
     } else {
         return false;
     }
 }
 
-function insert_hk_data($data) {
+function insertHealthData($data) {
     $db_name = "patient_data";
     $db = connect($db_name);
 
-    $query = "INSERT INTO hk_data (unique_id, start_time, end_time, steps, distance) VALUES (:unique_id, :start_time, :end_time, :steps, :distance)";
+    $query = "INSERT INTO health_data (unique_id, start_time, end_time, steps, distance) VALUES (:unique_id, :start_time, :end_time, :steps, :distance)";
+    $stmt = $db->prepare($query);
 
     foreach ($data as $entry) {
-        $query_params = array(':unique_id'=>$entry["unique_id"], ':start_time'=>$entry["start_time"], ':end_time'=>$entry["end_time"], ':steps'=>$entry["steps"], ':distance'=>$entry["distance"]);
+        $query_params = array(':unique_id'=>$entry["uniqueId"], ':start_time'=>$entry["startTime"], ':end_time'=>$entry["endTime"], ':steps'=>$entry["steps"], ':distance'=>$entry["distance"]);
 
         try {
-            $stmt = $db->prepare($query);
             $result = $stmt->execute($query_params);
         } catch (PDOException $e) {
             //die($e->getMessage()); //DELETE!
@@ -50,17 +51,17 @@ function insert_hk_data($data) {
     return true;
 }
 
-function insert_location_data($data) {
+function insertLocationData($data) {
     $db_name = "patient_data";
-    $db = connect($db_name);
+    $conn = connect($db_name);
 
     $query = "INSERT INTO location_data (unique_id, time, latitude, longitude) VALUES (:unique_id, :time, :latitude, :longitude)";
+    $stmt = $conn->prepare($query);
 
     foreach ($data as $entry) {
-        $query_params = array(':unique_id'=>$entry["unique_id"], ':time'=>$entry["time"], ':latitude'=>$entry["latitude"], ':longitude'=>$entry["longitude"]);
+        $query_params = array(':unique_id'=>$entry["uniqueId"], ':time'=>$entry["time"], ':latitude'=>$entry["latitude"], ':longitude'=>$entry["longitude"]);
 
         try {
-            $stmt = $db->prepare($query);
             $result = $stmt->execute($query_params);
         } catch (PDOException $e) {
             //die($e->getMessage()); //DELETE!
@@ -75,18 +76,17 @@ function insert_location_data($data) {
     return true;
 }
 
-function insert_survey_data($data) {
+function insertSurveyData($data) {
     $db_name = "patient_data";
     $db = connect($db_name);
 
     $query = "INSERT INTO survey_data (unique_id, title, time, question, answer) VALUES (:unique_id, :title, :time, :question, :answer)";
+    $stmt = $db->prepare($query);
 
     foreach ($data as $entry) {
-        $sanitizedAnswer = htmlspecialchars($entry["answer"]);
-        $query_params = array(':unique_id'=>$entry["unique_id"], ':title'=>$entry["title"], ':time'=>$entry["time"], ':question'=>$entry["question"], ':answer'=>$sanitizedAnswer);
+        $query_params = array(':unique_id'=>$entry["uniqueId"], ':title'=>$entry["title"], ':time'=>$entry["time"], ':question'=>$entry["question"], ':answer'=>$entry["answer"]);
 
         try {
-            $stmt = $db->prepare($query);
             $result = $stmt->execute($query_params);
         } catch (PDOException $e) {
             //die($e->getMessage()); //DELETE!
@@ -101,17 +101,17 @@ function insert_survey_data($data) {
     return true;
 }
 
-function insert_walk_test_data($data) {
+function insertWalkTestData($data) {
     $db_name = "patient_data";
     $db = connect($db_name);
 
     $query = "INSERT INTO walk_test_data (unique_id, time, steps, distance, laps) VALUES (:unique_id, :time, :steps, :distance, :laps)";
+    $stmt = $db->prepare($query);
 
     foreach ($data as $entry) {
-        $query_params = array(':unique_id'=>$entry["unique_id"], ':time'=>$entry["time"], ':steps'=>$entry["steps"], ':distance'=>$entry["distance"], ':laps'=>$entry["laps"]);
+        $query_params = array(':unique_id'=>$entry["uniqueId"], ':time'=>$entry["time"], ':steps'=>$entry["steps"], ':distance'=>$entry["distance"], ':laps'=>$entry["laps"]);
 
         try {
-            $stmt = $db->prepare($query);
             $result = $stmt->execute($query_params);
         } catch (PDOException $e) {
             //die($e->getMessage()); //DELETE!
@@ -126,17 +126,17 @@ function insert_walk_test_data($data) {
     return true;
 }
 
-function insert_height_weight_data($data) {
+function insertHeightWeightData($data) {
     $db_name = "patient_data";
     $db = connect($db_name);
 
     $query = "INSERT INTO height_weight_data (unique_id, time, height, weight) VALUES (:unique_id, :time, :height, :weight)";
+    $stmt = $db->prepare($query);
 
     foreach ($data as $entry) {
-        $query_params = array(':unique_id'=>$entry["unique_id"], ':time'=>$entry["time"], ':height'=>$entry["height"], ':weight'=>$entry["weight"]);
+        $query_params = array(':unique_id'=>$entry["uniqueId"], ':time'=>$entry["time"], ':height'=>$entry["height"], ':weight'=>$entry["weight"]);
 
         try {
-            $stmt = $db->prepare($query);
             $result = $stmt->execute($query_params);
         } catch (PDOException $e) {
             //die($e->getMessage()); //DELETE!

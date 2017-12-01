@@ -1,6 +1,5 @@
 <?php
     require_once $_SERVER['DOCUMENT_ROOT'] . "/db/connect.php";
-    require_once 'functions.php';
 
     /* CONNECT TO DB */
     $db_name = "trial_data";
@@ -67,7 +66,7 @@
             $isError = false;
 
             foreach ($results as $row) {
-                $answer = htmlspecialchars($_POST[$row['id']]);
+                $answer = $_POST[$row['id']];
                 $question_id = $row['id'];
 
                 $query = "INSERT INTO answers (answer, patient_unique_id, patient_id, question_id) VALUES (:answer, :patient_unique_id, :patient_id, :question_id)";

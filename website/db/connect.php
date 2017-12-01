@@ -9,6 +9,7 @@ function connect($db_name) {
 
         return $conn;
     } catch (PDOException $e) {
-        echo $e->getMessage(); //DELETE
+        echo "Error: Could not connect to db."; //DELETE
+        die();
     }
 }
