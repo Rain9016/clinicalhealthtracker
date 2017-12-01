@@ -703,7 +703,7 @@ class SurveyController: UIViewController, UITableViewDelegate, UITableViewDataSo
         beginButton.alpha = 0.2
     }
     
-    func handleBeginButton() {
+    @objc func handleBeginButton() {
         let survey = surveys[selectedSurvey]
         
         guard survey.steps.count > 0 else {
@@ -717,7 +717,7 @@ class SurveyController: UIViewController, UITableViewDelegate, UITableViewDataSo
             let instructionController = InstructionController()
             instructionController.survey = survey
             instructionController.currentStep = currentStep
-            instructionController.answers = [[String:String]]()
+            instructionController.answers = [SurveyData]()
             
             beginButton.isEnabled = false
             beginButton.alpha = 0.5;
@@ -728,7 +728,7 @@ class SurveyController: UIViewController, UITableViewDelegate, UITableViewDataSo
             let multipleChoiceController = MultipleChoiceController()
             multipleChoiceController.survey = survey
             multipleChoiceController.currentStep = currentStep
-            multipleChoiceController.answers = [[String:String]]()
+            multipleChoiceController.answers = [SurveyData]()
             
             beginButton.isEnabled = false
             beginButton.alpha = 0.5
@@ -739,7 +739,7 @@ class SurveyController: UIViewController, UITableViewDelegate, UITableViewDataSo
             let textFieldController = TextFieldController()
             textFieldController.survey = survey
             textFieldController.currentStep = currentStep
-            textFieldController.answers = [[String:String]]()
+            textFieldController.answers = [SurveyData]()
             
             beginButton.isEnabled = false
             beginButton.alpha = 0.5
@@ -750,7 +750,7 @@ class SurveyController: UIViewController, UITableViewDelegate, UITableViewDataSo
             let scaleController = ScaleController()
             scaleController.survey = survey
             scaleController.currentStep = currentStep
-            scaleController.answers = [[String:String]]()
+            scaleController.answers = [SurveyData]()
             
             beginButton.isEnabled = false
             beginButton.alpha = 0.5;

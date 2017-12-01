@@ -105,57 +105,92 @@ class LoginController: UIViewController, UITextFieldDelegate {
     }
     
     func authenticate() {
-        activityIndicator.showActivityIndicator(uiView: self.view)
+        self.activityIndicator.showActivityIndicator(uiView: self.view)
         
-        let request: URLRequest = {
-            let urlString = "https://www.clinicalhealthtracker.com/web-service/authenticate.php"
-            //let urlString = "http://localhost:8888/web-service/authenticate.php"
-            let url = URL(string: urlString)
-            var request = URLRequest(url: url!)
-            request.httpMethod = "POST"
-            
-            let postParameters = "unique_id=" + textField.text!;
-            
-            request.httpBody = postParameters.data(using: String.Encoding.utf8)
-            return request
-        }()
+        let environment = Environment.shared
         
-        let session = URLSession(configuration: URLSessionConfiguration.default)
+        let urlString = environment.production.url + "authenticate.php"
+        //let urlString = environment.development.url + "authenticate.php"
         
-        let task = session.dataTask(with: request, completionHandler: { (data, response, error) in
-            if error != nil {
-                //print("error", error.debugDescription)
+        guard let url = URL(string: urlString) else {
+            print("Could not generate URL from urlString")
+            return
+        }
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        
+        guard let uniqueId = textField.text else {
+            print("uniqueId is nil")
+            return
+        }
+        
+        let parameters = ["uniqueId": uniqueId]
+        
+        guard let json = try? JSONEncoder().encode(parameters) else {
+            print("parameters could not be encoded as JSON")
+            return
+        }
+        request.httpBody = json
+        
+        let session = URLSession.shared
+        
+        session.dataTask(with: request, completionHandler: { (data, response, error) in
+            if let error = error {
+                DispatchQueue.main.async {
+                    self.activityIndicator.hideActivityIndicator(uiView: self.view)
+                    self.sendAlert(title: "Error", message: error.localizedDescription)
+                }
                 return
+            }
+            
+            if let httpResponse = response as? HTTPURLResponse {
+                let statusCode = httpResponse.statusCode
+                
+                if (statusCode != 200) {
+                    DispatchQueue.main.async {
+                        self.activityIndicator.hideActivityIndicator(uiView: self.view)
+                        self.sendAlert(title: "Error", message: "Status Code: \(statusCode)")
+                    }
+                    return;
+                }
+            }
+            
+            guard let data = data else {
+                DispatchQueue.main.async {
+                    self.activityIndicator.hideActivityIndicator(uiView: self.view)
+                    self.sendAlert(title: "Error", message: "Could not retrieve a response from the API")
+                }
+                return;
             }
             
             /* https://developer.apple.com/swift/blog/?id=37 */
             do {
-                let data = try JSONSerialization.jsonObject(with: data!, options: []) as! [String: Any]
-                let err = data["error"] as! Bool
+                let apiResponse = try JSONDecoder().decode(ApiResponse.self, from: data)
                 
-                if err {
+                if (apiResponse.error) {
                     DispatchQueue.main.async {
                         self.activityIndicator.hideActivityIndicator(uiView: self.view)
-                        self.sendAlert(title: "Error", message: data["message"] as! String)
+                        self.sendAlert(title: "Error", message: apiResponse.message)
                     }
                     return
                 } else {
                     DispatchQueue.main.async {
                         self.activityIndicator.hideActivityIndicator(uiView: self.view)
-                        UserDefaults.standard.set(self.textField.text, forKey: "unique_id")
+                        UserDefaults.standard.set(self.textField.text, forKey: "uniqueId")
                         self.dismiss(animated: false, completion: nil)
                     }
                 }
             } catch {
-                //print("error", error.localizedDescription)
-                return
+                DispatchQueue.main.async {
+                    self.activityIndicator.hideActivityIndicator(uiView: self.view)
+                    self.sendAlert(title: "Error", message: "Could not decode JSON response")
+                }
+                return;
             }
-        })
-        
-        task.resume()
+        }).resume()
     }
     
-    func handleButton() {
+    @objc func handleButton() {
         if textField.text == "" {
             sendAlert(title: "Error", message: "Please enter your unique ID")
         } else {

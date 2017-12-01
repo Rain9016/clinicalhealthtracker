@@ -9,7 +9,7 @@
 import UIKit
 
 class HeightWeightController: UIViewController, UITextFieldDelegate {
-    var dataToSend = DataToSend.sharedInstance
+    var userData = UserData.shared
     
     let label: UILabel = {
         let label = UILabel()
@@ -100,7 +100,7 @@ class HeightWeightController: UIViewController, UITextFieldDelegate {
         self.view.addGestureRecognizer(tapGesture)
     }
     
-    func tap(gesture: UITapGestureRecognizer) {
+    @objc func tap(gesture: UITapGestureRecognizer) {
         heightField.resignFirstResponder()
         weightField.resignFirstResponder()
     }
@@ -134,23 +134,26 @@ class HeightWeightController: UIViewController, UITextFieldDelegate {
     //          //
     //////////////
     
-    func handleButton() {
+    @objc func handleButton() {
         if heightField.text == "" || weightField.text == "" {
             sendAlert(title: "Error", message: "Please fill out all fields")
         } else {
-            let unique_id = UserDefaults.standard.object(forKey: "unique_id") as? String
+            guard let uniqueId = UserDefaults.standard.object(forKey: "uniqueId") as? String else {
+                return
+            }
             
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-            let current_time = dateFormatter.string(from: Date())
+            let currentTime = dateFormatter.string(from: Date())
             
-            let height = heightField.text!
-            let weight = weightField.text!
+            guard let height = heightField.text else { return }
+            guard let weight = weightField.text else { return }
             
-            dataToSend.height_weight_data["height_weight_data"]?.append(["unique_id":unique_id!, "time":current_time, "height":height, "weight":weight])
+            let entry = HeightWeightData(uniqueId: uniqueId, time: currentTime, height: height, weight: weight)
+            userData.heightWeightData.append(entry)
             
             //send data
-            send_data(type: "height_weight")
+            sendData(type: "heightWeight")
             
             //dismiss view
             UserDefaults.standard.set(true, forKey: "heightWeightSubmitted")

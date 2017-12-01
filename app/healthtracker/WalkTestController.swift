@@ -46,7 +46,7 @@ class WalkTestController: UIViewController {
         return barButtonItem
     }()
     
-    func cancelButtonAction() {
+    @objc func cancelButtonAction() {
         UIApplication.shared.endBackgroundTask(taskID)
         stop()
         reset()
@@ -87,7 +87,7 @@ class WalkTestController: UIViewController {
     }
     
     /* [2] wait for introduction to finish, start 3 second countdown */
-    func intro_pt1_countdown() {
+    @objc func intro_pt1_countdown() {
         guard audioManager.isPlaying() else {
             timer.invalidate()
             
@@ -98,7 +98,7 @@ class WalkTestController: UIViewController {
     }
     
     /* [3] wait for 3 seconds, start pedometer updates, start 6 minute countdown */
-    func intro_pt2_countdown() {
+    @objc func intro_pt2_countdown() {
 
         //we're not waiting for audio to stop playing as the audio runs for a little longer than 3 seconds. We want to start the countdown as soon as the patient hears the word "Go".
         timer.invalidate()
@@ -109,7 +109,7 @@ class WalkTestController: UIViewController {
     }
     
     /* [4] 6 minute countdown */
-    func countdown() {
+    @objc func countdown() {
         //prints the amount of time the app has to run in the background, it seems to count down from 180. Though, when audio is played, it seems to bring the app into the foreground (signified by the large time remaining). When the audio stops playing, the background timer begins counting down from 180 again.
         //print(UIApplication.shared.backgroundTimeRemaining)
         
@@ -180,7 +180,7 @@ class WalkTestController: UIViewController {
     }
     
     /* [6] after 3 seconds has elapsed, stop pedometer, present activity complete controller */
-    func conclusion() {
+    @objc func conclusion() {
         stop()
         audioManager.playAudio(name: "conclusion")
         
@@ -193,20 +193,23 @@ class WalkTestController: UIViewController {
         //steps_label.text = "steps: \(pedometerManager.steps)"
         //distance_label.text = "distance: \(pedometerManager.distance)"
         
-        let unique_id = UserDefaults.standard.object(forKey: "unique_id") as? String
+        guard let uniqueId = UserDefaults.standard.object(forKey: "uniqueId") as? String else {
+            return
+        }
         
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
         let time = dateFormatter.string(from: Date())
         
-        let data_to_send = DataToSend.sharedInstance
-        data_to_send.walk_test_data["walk_test_data"]?.append(["unique_id":unique_id!, "time":time, "steps":String(pedometerManager.steps), "distance":String(pedometerManager.distance), "laps":String(self.laps)])
+        let userData = UserData.shared
+        let entry = WalkTestData(uniqueId: uniqueId, time: time, steps: String(pedometerManager.steps), distance: String(pedometerManager.distance), laps: String(self.laps))
+        userData.walkTestData.append(entry)
         
         reset()
         UIApplication.shared.endBackgroundTask(taskID)
         
         let activityCompleteController = ActivityCompleteController()
-        activityCompleteController.activity = "walk_test"
+        activityCompleteController.activity = "walkTest"
         self.navigationController?.pushViewController(activityCompleteController, animated: true)
     }
     

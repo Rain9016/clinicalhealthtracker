@@ -15,6 +15,7 @@
 		835140F61F2AE60400D014FF /* 6-minute-mark.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 835140EF1F2AE60400D014FF /* 6-minute-mark.mp3 */; };
 		835140F71F2AE60400D014FF /* stationary-encouragement.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 835140F01F2AE60400D014FF /* stationary-encouragement.mp3 */; };
 		835140F91F2AFB9D00D014FF /* conclusion.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 835140F81F2AFB9D00D014FF /* conclusion.mp3 */; };
+		836611651FCECB3900B38D71 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836611641FCECB3900B38D71 /* Environment.swift */; };
 		8388D1121EA52C74006475E5 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8388D1111EA52C74006475E5 /* Reachability.swift */; };
 		8388D1381EA54BF6006475E5 /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8388D1371EA54BF6006475E5 /* ActivityIndicator.swift */; };
 		83A439771F2A2EAD006FD53B /* HeightWeightController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A439761F2A2EAD006FD53B /* HeightWeightController.swift */; };
@@ -23,7 +24,7 @@
 		C3067D361E46BB21002C22A7 /* PermissionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3067D351E46BB21002C22A7 /* PermissionController.swift */; };
 		C3067D3D1E481769002C22A7 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3067D3C1E481769002C22A7 /* LocationManager.swift */; };
 		C3067D671E48BD39002C22A7 /* PedometerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3067D661E48BD39002C22A7 /* PedometerManager.swift */; };
-		C30EAC2E1E4C92EE00353701 /* DataToSend.swift in Sources */ = {isa = PBXBuildFile; fileRef = C30EAC2D1E4C92EE00353701 /* DataToSend.swift */; };
+		C30EAC2E1E4C92EE00353701 /* UserData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C30EAC2D1E4C92EE00353701 /* UserData.swift */; };
 		C30EAC301E51AFEA00353701 /* ActivityCompleteController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C30EAC2F1E51AFEA00353701 /* ActivityCompleteController.swift */; };
 		C31471DE1E3B19E5009E65F3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C31471DD1E3B19E5009E65F3 /* AppDelegate.swift */; };
 		C31471E51E3B19E5009E65F3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C31471E41E3B19E5009E65F3 /* Assets.xcassets */; };
@@ -60,6 +61,7 @@
 		835140EF1F2AE60400D014FF /* 6-minute-mark.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "6-minute-mark.mp3"; sourceTree = "<group>"; };
 		835140F01F2AE60400D014FF /* stationary-encouragement.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "stationary-encouragement.mp3"; sourceTree = "<group>"; };
 		835140F81F2AFB9D00D014FF /* conclusion.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = conclusion.mp3; sourceTree = "<group>"; };
+		836611641FCECB3900B38D71 /* Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
 		8388D1111EA52C74006475E5 /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		8388D1371EA54BF6006475E5 /* ActivityIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
 		83A439761F2A2EAD006FD53B /* HeightWeightController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HeightWeightController.swift; sourceTree = "<group>"; };
@@ -68,7 +70,7 @@
 		C3067D351E46BB21002C22A7 /* PermissionController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PermissionController.swift; sourceTree = "<group>"; };
 		C3067D3C1E481769002C22A7 /* LocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		C3067D661E48BD39002C22A7 /* PedometerManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PedometerManager.swift; sourceTree = "<group>"; };
-		C30EAC2D1E4C92EE00353701 /* DataToSend.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataToSend.swift; sourceTree = "<group>"; };
+		C30EAC2D1E4C92EE00353701 /* UserData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserData.swift; sourceTree = "<group>"; };
 		C30EAC2F1E51AFEA00353701 /* ActivityCompleteController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityCompleteController.swift; sourceTree = "<group>"; };
 		C31471DA1E3B19E5009E65F3 /* healthtracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = healthtracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C31471DD1E3B19E5009E65F3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -147,7 +149,7 @@
 				C3067D3C1E481769002C22A7 /* LocationManager.swift */,
 				C3067D661E48BD39002C22A7 /* PedometerManager.swift */,
 				C36EB6921E548891009FFD06 /* AudioManager.swift */,
-				C30EAC2D1E4C92EE00353701 /* DataToSend.swift */,
+				C30EAC2D1E4C92EE00353701 /* UserData.swift */,
 				C31471FE1E3B1B5F009E65F3 /* SurveyController.swift */,
 				C36EB6881E53D57D009FFD06 /* StepController.swift */,
 				C31471FA1E3B1B2B009E65F3 /* InstructionController.swift */,
@@ -161,6 +163,7 @@
 				8388D1111EA52C74006475E5 /* Reachability.swift */,
 				8388D1371EA54BF6006475E5 /* ActivityIndicator.swift */,
 				83A439761F2A2EAD006FD53B /* HeightWeightController.swift */,
+				836611641FCECB3900B38D71 /* Environment.swift */,
 			);
 			path = healthtracker;
 			sourceTree = "<group>";
@@ -229,11 +232,12 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0820;
-				LastUpgradeCheck = 0820;
+				LastUpgradeCheck = 0910;
 				TargetAttributes = {
 					C31471D91E3B19E5009E65F3 = {
 						CreatedOnToolsVersion = 8.2.1;
 						DevelopmentTeam = BPTF3Y8XNN;
+						LastSwiftMigration = 0910;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
@@ -316,8 +320,9 @@
 				C31471F71E3B1AFF009E65F3 /* HealthKitManager.swift in Sources */,
 				C31472071E3B1BB4009E65F3 /* TextFieldController.swift in Sources */,
 				C3067D671E48BD39002C22A7 /* PedometerManager.swift in Sources */,
+				836611651FCECB3900B38D71 /* Environment.swift in Sources */,
 				C31471F51E3B1ADE009E65F3 /* Extensions.swift in Sources */,
-				C30EAC2E1E4C92EE00353701 /* DataToSend.swift in Sources */,
+				C30EAC2E1E4C92EE00353701 /* UserData.swift in Sources */,
 				C36EB6891E53D57D009FFD06 /* StepController.swift in Sources */,
 				83A439771F2A2EAD006FD53B /* HeightWeightController.swift in Sources */,
 			);
@@ -335,7 +340,9 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -343,7 +350,11 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -366,7 +377,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -385,7 +396,9 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -393,7 +406,11 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -410,7 +427,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -432,7 +449,8 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.samuelgluck.healthtracker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -449,7 +467,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.samuelgluck.healthtracker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;

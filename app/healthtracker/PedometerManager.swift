@@ -17,8 +17,8 @@ class PedometerManager: NSObject {
     }()
     
     var pedometer: CMPedometer?
-    var steps = 0
-    var distance = 0
+    var steps: Int = 0
+    var distance: Float = 0
     
     override init() {
         super.init()
@@ -49,14 +49,21 @@ class PedometerManager: NSObject {
         let current_time = Date()
         
         pedometer.startUpdates(from: current_time) { (data: CMPedometerData?, error) -> Void in
+            guard let data = data else { return }
+            
             DispatchQueue.main.async(execute: { () -> Void in
                 if (error != nil) {
                     print(error.debugDescription)
                     return
                 }
                 
-                self.steps = data?.numberOfSteps as! Int
-                self.distance = data?.distance as! Int
+                if let steps = data.numberOfSteps as? Int {
+                    self.steps = steps
+                }
+                
+                if let distance = data.distance as? Float {
+                    self.distance = distance
+                }
             })
         }
     }

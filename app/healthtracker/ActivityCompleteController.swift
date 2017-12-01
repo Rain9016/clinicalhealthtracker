@@ -10,7 +10,7 @@ import UIKit
 
 class ActivityCompleteController: UIViewController {
     var activity: String!
-    let data_to_send = DataToSend.sharedInstance
+    let userData = UserData.shared
     
     let title_label: UILabel = {
         let label = UILabel()
@@ -26,8 +26,8 @@ class ActivityCompleteController: UIViewController {
         return label
     }()
     
-    func doneButtonAction() {
-        if (activity == "walk_test") {
+    @objc func doneButtonAction() {
+        if (activity == "walkTest") {
             /* if conclusion audio from walk test is playing */
             let audioManager = AudioManager.sharedInstance
             if (audioManager.isPlaying()) {
@@ -78,12 +78,12 @@ class ActivityCompleteController: UIViewController {
             title_label.text = "Questionnaire Complete"
             content_label.text = "Your answers will be recorded and analysed by your clinician."
             
-            send_data(type: "survey")
-        case "walk_test":
+            sendData(type: "survey")
+        case "walkTest":
             title_label.text = "Walk Test Complete"
             content_label.text = "Your results will be recorded and analysed by your clinician."
             
-            send_data(type: "walk_test")
+            sendData(type: "walkTest")
         default:
             return
         }

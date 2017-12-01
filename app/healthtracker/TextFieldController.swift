@@ -47,7 +47,7 @@ class TextFieldController: StepController, UITextFieldDelegate {
     }
     
     /* http://stackoverflow.com/questions/28394933/how-do-i-check-when-a-uitextfield-changes */
-    func textFieldDidChange() {
+    @objc func textFieldDidChange() {
         if (textField.text?.isEmpty)! {
             nextButton.isEnabled = false
             nextButton.alpha = 0.2
@@ -113,8 +113,10 @@ class TextFieldController: StepController, UITextFieldDelegate {
         }
     }
     
-    func handleNext() {
-        let unique_id = UserDefaults.standard.object(forKey: "unique_id") as? String
+    @objc func handleNext() {
+        guard let uniqueId = UserDefaults.standard.object(forKey: "uniqueId") as? String else {
+            return
+        }
         let title = survey.title
             
         let dateFormatter = DateFormatter()
@@ -122,14 +124,17 @@ class TextFieldController: StepController, UITextFieldDelegate {
         let time = dateFormatter.string(from: Date())
             
         let question = survey.steps[currentStep].title
-        let answer = textField.text
+        guard let answer = textField.text else {
+            return
+        }
             
-        answers.append(["unique_id":unique_id!, "title":title, "time":time, "question":question, "answer":answer!])
+        let entry = SurveyData(uniqueId: uniqueId, time: time, title: title, question: question, answer: answer)
+        answers.append(entry)
         
         handleButtons()
     }
     
-    func handleSkip() {
+    @objc func handleSkip() {
         handleButtons()
     }
     
@@ -195,7 +200,7 @@ class TextFieldController: StepController, UITextFieldDelegate {
         self.view.addGestureRecognizer(tapGesture)
     }
     
-    func tap(gesture: UITapGestureRecognizer) {
+    @objc func tap(gesture: UITapGestureRecognizer) {
         textField.resignFirstResponder()
     }
     

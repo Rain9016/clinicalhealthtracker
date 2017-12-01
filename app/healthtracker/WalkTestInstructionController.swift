@@ -43,11 +43,11 @@ class WalkTestInstructionController: UIViewController {
         return barButtonItem
     }()
     
-    func cancelButtonAction() {
+    @objc func cancelButtonAction() {
         dismiss(animated: true, completion: nil)
     }
     
-    func playNext() {
+    @objc func playNext() {
         if !audioManager.isPlaying() {
             audioManager.playAudio(name: "instruction-pt2")
                 

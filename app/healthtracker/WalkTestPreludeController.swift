@@ -52,14 +52,14 @@ class WalkTestPreludeController: UIViewController {
         return button
     }()
 
-    func instructionsButtonAction() {
+    @objc func instructionsButtonAction() {
         let instructionController = WalkTestInstructionController()
         
         let newNavigationController = UINavigationController(rootViewController: instructionController)
         present(newNavigationController, animated: true, completion: nil)
     }
     
-    func beginButtonAction() {
+    @objc func beginButtonAction() {
         let walkTestController = WalkTestController()
         let newNavigationController = UINavigationController(rootViewController: walkTestController)
         present(newNavigationController, animated: true, completion: nil)
