@@ -66,13 +66,14 @@ class InstructionController: StepController {
         let skipLabel = UILabel()
         skipLabel.text = "Skip this question"
         
-        let skipLabelWidth: CGFloat = view.frame.size.width
-        let skipLabelSize: CGSize = skipLabel.sizeThatFits(CGSize(width: skipLabelWidth, height: CGFloat.greatestFiniteMagnitude))
+        let skipLabelSize: CGSize = skipLabel.sizeThatFits(CGSize(width: view.frame.width, height: CGFloat.greatestFiniteMagnitude))
+        let skipLabelWidth = skipLabelSize.width + 10
+        let skipLabelHeight = skipLabelSize.height
         
         if (survey.steps[currentStep].subtitle != nil) {
-            skipButton.frame = CGRect(x: 0, y: 15 + label.frame.size.height + subtitleLabel.frame.size.height + 20 + content_label.frame.size.height + 20 + nextButton.frame.size.height + 5, width: view.frame.size.width, height: skipLabelSize.height)
+            skipButton.frame = CGRect(x: view.frame.width/2 - skipLabelWidth/2, y: 15 + label.frame.size.height + subtitleLabel.frame.size.height + 20 + content_label.frame.size.height + 20 + nextButton.frame.size.height + 5, width: skipLabelWidth, height: skipLabelHeight)
         } else {
-            skipButton.frame = CGRect(x: 0, y: 15 + label.frame.size.height + 20 + content_label.frame.size.height + 20 + nextButton.frame.size.height + 5, width: view.frame.size.width, height: skipLabelSize.height)
+            skipButton.frame = CGRect(x: view.frame.width/2 - skipLabelWidth/2, y: 15 + label.frame.size.height + 20 + content_label.frame.size.height + 20 + nextButton.frame.size.height + 5, width: skipLabelWidth, height: skipLabelHeight)
         }
         
         skipButton.setTitleColor(UIColor.init(r: 204, g: 0, b: 0), for: .normal)

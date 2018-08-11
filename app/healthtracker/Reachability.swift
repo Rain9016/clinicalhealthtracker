@@ -129,10 +129,10 @@ public class Reachability {
     fileprivate var previousFlags: SCNetworkReachabilityFlags?
     
     fileprivate var isRunningOnDevice: Bool = {
-        #if (arch(i386) || arch(x86_64)) && os(iOS)
-            return false
+        #if targetEnvironment(simulator)
+        return false
         #else
-            return true
+        return true
         #endif
     }()
     
@@ -275,9 +275,9 @@ fileprivate extension Reachability {
     
     var isOnWWANFlagSet: Bool {
         #if os(iOS)
-            return flags.contains(.isWWAN)
+        return flags.contains(.isWWAN)
         #else
-            return false
+        return false
         #endif
     }
     var isReachableFlagSet: Bool {

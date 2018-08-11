@@ -74,8 +74,10 @@ class StepController: UIViewController {
         label.numberOfLines = 0
         label.lineBreakMode = NSLineBreakMode.byWordWrapping
         
+        // if N\u{00A0}\u{2044}\u{00A0}A
+        
         if (survey.steps[currentStep].isSkippable) {
-            label.text = survey.steps[currentStep].title + " Otherwise if N\u{00A0}\u{2044}\u{00A0}A, press \"Skip this question\" at the bottom of the page."
+            label.text = survey.steps[currentStep].title + " Otherwise, press \"Skip this question\" at the bottom of the page."
         } else {
             label.text = survey.steps[currentStep].title
         }
@@ -139,7 +141,7 @@ class StepController: UIViewController {
             multipleChoiceController.answers = answers
             
             self.navigationController?.pushViewController(multipleChoiceController, animated: true)
-        } else if (survey.steps[nextStep].type == "text_field" || survey.steps[nextStep].type == "numeric") {
+        } else if (survey.steps[nextStep].type == "text_field" || survey.steps[nextStep].type == "numeric" || survey.steps[nextStep].type == "date") {
             let textFieldController = TextFieldController()
             textFieldController.survey = survey
             textFieldController.currentStep = nextStep
