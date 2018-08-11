@@ -17,6 +17,7 @@ class TextFieldController: StepController, UITextFieldDelegate {
     ////////////////////////
     
     let textField = UITextField()
+    var datePicker: UIDatePicker?
     
     func setupTextField() {
         textField.autocorrectionType = .no
@@ -29,10 +30,20 @@ class TextFieldController: StepController, UITextFieldDelegate {
         } else {
             textField.frame = CGRect(x: 15, y: 15 + label.frame.size.height + 15, width: view.frame.width - 15, height: 44)
         }
+        
         textField.placeholder = "Tap to write"
+        
         if (survey.steps[currentStep].type == "numeric") {
             textField.keyboardType = .numberPad
+        } else if (survey.steps[currentStep].type == "date") {
+            textField.placeholder = "Tap to select a date"
+            
+            datePicker = UIDatePicker()
+            datePicker?.datePickerMode = .date
+            datePicker?.addTarget(self, action: #selector(dateDidChange), for: .valueChanged)
+            textField.inputView = datePicker
         }
+        
         textField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
         
         let topBorder = CALayer()
@@ -52,6 +63,22 @@ class TextFieldController: StepController, UITextFieldDelegate {
             nextButton.isEnabled = false
             nextButton.alpha = 0.2
         } else {
+            nextButton.isEnabled = true
+            nextButton.alpha = 1
+        }
+    }
+    
+    @objc func dateDidChange() {
+        guard let datePicker = datePicker else {
+            return
+        }
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd MMMM yyyy"
+        
+        textField.text = dateFormatter.string(from: datePicker.date)
+        
+        if (!nextButton.isEnabled) {
             nextButton.isEnabled = true
             nextButton.alpha = 1
         }
@@ -90,13 +117,14 @@ class TextFieldController: StepController, UITextFieldDelegate {
         let skipLabel = UILabel()
         skipLabel.text = "Skip this question"
         
-        let skipLabelWidth: CGFloat = view.frame.size.width
-        let skipLabelSize: CGSize = skipLabel.sizeThatFits(CGSize(width: skipLabelWidth, height: CGFloat.greatestFiniteMagnitude))
+        let skipLabelSize: CGSize = skipLabel.sizeThatFits(CGSize(width: view.frame.width, height: CGFloat.greatestFiniteMagnitude))
+        let skipLabelWidth = skipLabelSize.width + 10
+        let skipLabelHeight = skipLabelSize.height
         
         if (survey.steps[currentStep].subtitle != nil) {
-            skipButton.frame = CGRect(x: 0, y: 15 + label.frame.size.height + subtitleLabel.frame.size.height + 15 + textField.frame.size.height + 20 + nextButton.frame.size.height + 5, width: view.frame.size.width, height: skipLabelSize.height)
+            skipButton.frame = CGRect(x: view.frame.width/2 - skipLabelWidth/2, y: 15 + label.frame.size.height + subtitleLabel.frame.size.height + 15 + textField.frame.size.height + 20 + nextButton.frame.size.height + 5, width: skipLabelWidth, height: skipLabelHeight)
         } else {
-            skipButton.frame = CGRect(x: 0, y: 15 + label.frame.size.height + 15 + textField.frame.size.height + 20 + nextButton.frame.size.height + 5, width: view.frame.size.width, height: skipLabelSize.height)
+            skipButton.frame = CGRect(x: view.frame.width/2 - skipLabelWidth/2, y: 15 + label.frame.size.height + 15 + textField.frame.size.height + 20 + nextButton.frame.size.height + 5, width: skipLabelWidth, height: skipLabelHeight)
         }
         
         skipButton.setTitleColor(UIColor.init(r: 204, g: 0, b: 0), for: .normal)
@@ -207,5 +235,18 @@ class TextFieldController: StepController, UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return(true)
+    }
+    
+    /* If a user is answering a question of type "date", display the current date when the user first clicks on the text field. */
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        if survey.steps[currentStep].type == "date", let text = textField.text, text.isEmpty {
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "dd MMMM yyyy"
+            
+            textField.text = dateFormatter.string(from: Date())
+        } else {
+            print("textField is not empty")
+        }
     }
 }

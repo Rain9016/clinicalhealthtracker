@@ -25,7 +25,7 @@ class HomeController: UIViewController, CLLocationManagerDelegate {
         
         return [firstPage, secondPage, thirdPage, fourthPage]
     }()
-
+    
     var healthKitManager: HealthKitManager?
     var locationManager: LocationManager?
     
@@ -40,7 +40,7 @@ class HomeController: UIViewController, CLLocationManagerDelegate {
     
     var hasLaunched = false
     var timer: Timer?
-    var updateInterval: TimeInterval = 60 * 5 /* every 5 minutes */
+    var updateInterval: TimeInterval = 60 * 1 /* every 5 minutes */
     
     /////////////////////////
     //                     //
@@ -87,7 +87,7 @@ class HomeController: UIViewController, CLLocationManagerDelegate {
         label.text = "Thank you for taking part in the study. You will be able to answer questionnaires and complete a 6 minute walk test from within this app. This data will be recorded by the app, along with your step data and location data, and will be uploaded to a secure database when you are connected to Wi-Fi. Please do not close this app - leave it running in the background. If you restart your phone please relaunch the app as soon as possible."
         return label
     }()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.white
@@ -158,7 +158,7 @@ class HomeController: UIViewController, CLLocationManagerDelegate {
         paddingBottom.topAnchor.constraint(equalTo: contentLabel.bottomAnchor, constant: 25).isActive = true
         paddingBottom.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
     }
-
+    
     
     override func viewDidAppear(_ animated: Bool) {
         //////////////////////////////////////////////////////
@@ -172,7 +172,7 @@ class HomeController: UIViewController, CLLocationManagerDelegate {
             present(loginController, animated: true, completion: nil)
             return
         }
-    
+        
         ///////////////////////////////////////////////////////////////////
         //                                                               //
         //  IF PERMISSIONS HAVE NOT BEEN REQUESTED, REQUEST PERMISSIONS  //
@@ -211,7 +211,7 @@ class HomeController: UIViewController, CLLocationManagerDelegate {
             sendData(type: "health")
             
             UserDefaults.standard.set(true, forKey: "healthHistorySent")
-        /* otherwise, get HealthKit data from the last time the patient's HealthKit data was updated up until now */
+            /* otherwise, get HealthKit data from the last time the patient's HealthKit data was updated up until now */
         } else if UserDefaults.standard.object(forKey: "lastHealthUpdate") != nil && !(hasLaunched) {
             self.lastHealthUpdate = UserDefaults.standard.object(forKey: "lastHealthUpdate") as! Date
             
@@ -234,7 +234,7 @@ class HomeController: UIViewController, CLLocationManagerDelegate {
             
             /* start updating location */
             locationManager?.startUpdatingLocation()
-        
+            
             /* update location */
             updateLocation()
             
@@ -303,11 +303,11 @@ class HomeController: UIViewController, CLLocationManagerDelegate {
                     notification.alertBody = "Please open Health Tracker to send your step count and distances walked to the database"
                     notification.soundName = UILocalNotificationDefaultSoundName
                     notification.applicationIconBadgeNumber = 1
-                
+                    
                     //create notification triger
                     notification.fireDate = Date().addingTimeInterval(60 * 60 * 24 * 7)
                     notification.repeatInterval = NSCalendar.Unit.weekOfYear
-                
+                    
                     //schedule notification
                     UIApplication.shared.scheduleLocalNotification(notification)
                 }
@@ -373,15 +373,24 @@ extension HomeController {
             self.semaphore.wait() //wait for distance data
         }
         
+        //HACK (the number of steps recorded may not match the number of distances recorded)
+        var number = 0
+        
+        if (distance.count < healthData.count) {
+            number = distance.count
+        } else {
+            number = healthData.count
+        }
+        
         if (healthData.count > 0) {
             //combine healthkit data (containing steps) with distance data
-            for i in 0..<healthData.count {
+            for i in 0..<number {
                 healthData[i].distance = distance[i]
             }
             
             //add it to dataToSend object
             userData.healthData.append(contentsOf: healthData)
-        
+            
             healthData.removeAll()
             distance.removeAll()
         }
@@ -603,24 +612,24 @@ extension UIViewController {
                 //print("Error: \(error!.localizedDescription)")
                 return
             }
-                
+            
             if let httpResponse = response as? HTTPURLResponse {
                 let statusCode = httpResponse.statusCode
-                    
+                
                 guard statusCode == 200 else {
                     //print("Error: status code is \(statusCode)")
                     return
                 }
             }
-                
+            
             guard let data = data else {
                 //print("Error: no data")
                 return
             }
-                
+            
             do {
                 let apiResponse = try JSONDecoder().decode(ApiResponse.self, from: data)
-                    
+                
                 if (apiResponse.error) {
                     //print("Error: \(apiResponse.message)")
                     return
@@ -632,7 +641,7 @@ extension UIViewController {
                     //  IF SUCCESSFUL, DELETE PREVIOUS DATA FROM PHONE  //
                     //                                                  //
                     //////////////////////////////////////////////////////
-                        
+                    
                     DispatchQueue.main.async {
                         switch type {
                         case "health":
