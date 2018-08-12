@@ -40,7 +40,7 @@ class HomeController: UIViewController, CLLocationManagerDelegate {
     
     var hasLaunched = false
     var timer: Timer?
-    var updateInterval: TimeInterval = 60 * 1 /* every 5 minutes */
+    var updateInterval: TimeInterval = 60 * 5 /* every 5 minutes */
     
     /////////////////////////
     //                     //
